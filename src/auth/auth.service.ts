@@ -15,19 +15,17 @@ export class AuthService {
     private readonly configService: ConfigService,
   ) {}
 
-  async loginUser(data: ParameterStartInterface, date: string) {
-    return this.vk.api.messages.send({
-      message: await this.getTextLogin(data, date),
+  async loginUser(data: ParameterStartInterface) {
+    await this.vk.api.messages.send({
+      message: await this.getTextLogin(data),
       chat_id: VKChatsEnum.LOGS_CHAT,
       random_id: getRandomId(),
       disable_mentions: true,
     });
+    return { result: true };
   }
 
-  private async getTextLogin(
-    data: ParameterStartInterface,
-    date: string,
-  ): Promise<string> {
+  private async getTextLogin(data: ParameterStartInterface): Promise<string> {
     const user = await this.vk.api.users.get({
       user_id: data.vk_user_id,
     });
@@ -38,7 +36,7 @@ export class AuthService {
         ? 'Dev'
         : 'Prod'
     })\n\n
-Время: ${DateUtils.getDateFormatNumber(date)}\nIP: ${data.ip}\n\n
+Время: ${DateUtils.getDateFormatNumber(data.date)}\nIP: ${data.ip}\n\n
 vk_ref — ${VkUtils.getRef(data.vk_ref)} (${data.vk_ref})
 vk_platform — ${VkUtils.getPlatform(data.vk_platform)} (${data.vk_platform})\n\n
 #login #id${data.vk_user_id} #login_${data.vk_user_id}`;

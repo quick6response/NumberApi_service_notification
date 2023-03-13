@@ -24,4 +24,6 @@ export class ParameterStartInterface {
   ip: string;
 
   userAgent: string;
+
+  date: string;
 }

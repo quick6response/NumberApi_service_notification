@@ -10,13 +10,13 @@ async function bootstrap() {
       options: {
         urls: [
           {
-            hostname: 'localhost',
-            port: 5672,
-            password: 'rmpassword',
-            username: 'rmuser',
+            hostname: process.env.RABBITMQ_HOST,
+            port: +process.env.RABBITMQ_PORT,
+            password: process.env.RABBITMQ_DEFAULT_PASS,
+            username: process.env.RABBITMQ_DEFAULT_USER,
           },
         ],
-        queue: 'vk_queue',
+        queue: 'vk_notification_queue',
         queueOptions: {
           durable: true,
         },
@@ -26,6 +26,6 @@ async function bootstrap() {
   await app
     .listen()
     .then((result) => console.log(`Start MicroRabbit ${result}`))
-    .catch((error) => console.error('Error Start'));
+    .catch((error) => console.error('Error Start', error));
 }
 bootstrap();

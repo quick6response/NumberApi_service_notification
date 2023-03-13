@@ -1,10 +1,11 @@
-import { Controller } from '@nestjs/common';
-import { Ctx, EventPattern, Payload, RmqContext } from '@nestjs/microservices';
+import { MessagePattern, Payload } from '@nestjs/microservices';
+import { UsersCreateInterface } from './interface/users.create.interface';
+import { UsersService } from './users.service';
 
-@Controller('users')
 export class UsersController {
-  @EventPattern('notifications')
-  getNotifications(@Payload() data: number[], @Ctx() context: RmqContext) {
-    console.log(`Pattern: ${context.getPattern()}`);
+  constructor(private readonly usersService: UsersService) {}
+  @MessagePattern('users.new')
+  usersNew(@Payload() data: UsersCreateInterface) {
+    return this.usersService.notificationNewUser(data);
   }
 }
