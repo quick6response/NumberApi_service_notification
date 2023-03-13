@@ -1,0 +1,23 @@
+version: "3.8"
+services:
+  rabbitmq:
+    container_name: rabbitmq
+    image: rabbitmq:3.11.10-management
+    hostname: rabbitmq
+    restart: always
+    ports:
+        - 5672:5672
+        - 15673:15672
+    environment:
+      - RABBITMQ_DEFAULT_USER=${RABBITMQ_DEFAULT_USER}
+      - RABBITMQ_DEFAULT_PASS=${RABBITMQ_DEFAULT_PASS}
+    volumes:
+        - ~/.docker-conf/rabbitmq/data/:/var/lib/rabbitmq/
+        - ~/.docker-conf/rabbitmq/log/:/var/log/rabbitmq
+    networks:
+      - network1
+
+networks:
+  network1:
+    name: my-network
+    external: true
