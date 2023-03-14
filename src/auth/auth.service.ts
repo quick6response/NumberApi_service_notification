@@ -4,7 +4,7 @@ import { InjectVkApi } from 'nestjs-vk';
 import { getRandomId, VK } from 'vk-io';
 import { UsersUser } from 'vk-io/lib/api/schemas/objects';
 import { VKChatsEnum } from '../common/config/vk.chats.config';
-import { ParameterStartInterface } from '../common/interface/parameter.start.interface';
+import { ParameterStartDto } from '../common/dto/parameter.start.dto';
 import { DateUtils } from '../common/utils/date.utils';
 import { VkUtils } from '../common/utils/vk.utils';
 import { UsersCreateInterface } from '../users/interface/users.create.interface';
@@ -17,7 +17,7 @@ export class AuthService {
     private readonly configService: ConfigService,
   ) {}
 
-  async loginUser(data: ParameterStartInterface) {
+  async loginUser(data: ParameterStartDto) {
     await this.vk.api.messages.send({
       message: await this.getTextLogin(data),
       chat_id: VKChatsEnum.LOGS_CHAT,
@@ -50,7 +50,7 @@ vk_platform — ${VkUtils.getPlatform(data.vk_platform)} (${data.vk_platform})\n
 #registerUser #id${data.vk_user_id} #registerUser_${data.vk_user_id}`;
   }
 
-  private async getTextLogin(data: ParameterStartInterface): Promise<string> {
+  private async getTextLogin(data: ParameterStartDto): Promise<string> {
     const user = await this.getInfoUserVk(data.vk_user_id);
     return `@id${data.vk_user_id} (${user.first_name} ${
       user.last_name
