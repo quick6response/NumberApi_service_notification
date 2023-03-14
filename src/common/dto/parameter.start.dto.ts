@@ -1,4 +1,4 @@
-export class ParameterStartInterface {
+export class ParameterStartDto {
   vk_access_token_settings: string;
 
   vk_app_id: number;
