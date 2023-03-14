@@ -7,6 +7,8 @@ import { AuthController } from './auth/auth.controller';
 import { AuthModule } from './auth/auth.module';
 import { AuthService } from './auth/auth.service';
 import config from './common/config/config';
+import { NumbersModule } from './numbers/numbers.module';
+import { NumbersService } from './numbers/numbers.service';
 import { UsersController } from './users/users.controller';
 import { UsersModule } from './users/users.module';
 import { UsersService } from './users/users.service';
@@ -31,8 +33,9 @@ import { UsersService } from './users/users.service';
       }),
       imports: [ConfigModule],
     }),
+    NumbersModule,
   ],
   controllers: [AppController, AuthController, UsersController],
-  providers: [AppService, UsersService, AuthService],
+  providers: [AppService, UsersService, AuthService, NumbersService],
 })
 export class AppModule {}
