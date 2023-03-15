@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectVkApi } from 'nestjs-vk';
 import { getRandomId, VK } from 'vk-io';
 import { VKChatsEnum } from '../common/config/vk.chats.config';
-import { DateUtils } from '../common/utils/date.utils';
+import { dateUtils } from '../common/utils/date.utils';
 import { VkService } from '../vk/vk.service';
 import { NumberFindDto } from './dto/number.find.dto';
 
@@ -32,7 +32,7 @@ export class NumbersService {
       parameters.numberId
     }) ${parameters?.isUpdate ? '(Информация была обновлена)' : ''}
 
-Время: ${DateUtils.getDateFormatNumber(parameters.date)}
+Время: ${dateUtils.getDateFormatNumber(parameters.date)}
 IP: ${parameters.ip}
 
 #number ${
