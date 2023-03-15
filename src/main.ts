@@ -25,7 +25,7 @@ async function bootstrap() {
   );
   await app
     .listen()
-    .then((result) => console.log(`Start MicroRabbit ${result}`))
-    .catch((error) => console.error('Error Start', error));
+    .then(() => console.log(`Start microservice`))
+    .catch((error) => console.error('Error Start microservice', error));
 }
 bootstrap();
