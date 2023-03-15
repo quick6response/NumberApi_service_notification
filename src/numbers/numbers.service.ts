@@ -1,9 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { InjectVkApi } from 'nestjs-vk';
 import { getRandomId, VK } from 'vk-io';
-import { UsersUser } from 'vk-io/lib/api/schemas/objects';
 import { VKChatsEnum } from '../common/config/vk.chats.config';
 import { DateUtils } from '../common/utils/date.utils';
+import { VkService } from '../vk/vk.service';
 import { NumberFindDto } from './dto/number.find.dto';
 
 @Injectable()
@@ -11,6 +11,7 @@ export class NumbersService {
   constructor(
     @InjectVkApi()
     private readonly vk: VK,
+    private readonly vkHelpService: VkService,
   ) {}
 
   async getInfoNumber(parameters: NumberFindDto) {
@@ -24,12 +25,12 @@ export class NumbersService {
   }
 
   private async getTextNumberInfo(parameters: NumberFindDto) {
-    const user = await this.getInfoUserVk(parameters.vk_user_id);
+    const user = await this.vkHelpService.getInfoUserVk(parameters.vk_user_id);
     return `@id${parameters.vk_user_id} (${user.first_name} ${
       user.last_name
     }) пробил номер ${this.convertToFormat(parameters.number)} (№${
       parameters.numberId
-    }) ${parameters?.isUpdate ? '(Информация о номере была обновлена)' : ''}
+    }) ${parameters?.isUpdate ? '(Информация была обновлена)' : ''}
 
 Время: ${DateUtils.getDateFormatNumber(parameters.date)}
 IP: ${parameters.ip}
@@ -37,12 +38,6 @@ IP: ${parameters.ip}
 #number ${
       parameters?.isNewNumber ? '#number_new' : ''
     } #79194348991 #id778047801`;
-  }
-  private async getInfoUserVk(idVk: number): Promise<UsersUser> {
-    const user = await this.vk.api.users.get({
-      user_id: idVk,
-    });
-    return user[0];
   }
 
   /**
