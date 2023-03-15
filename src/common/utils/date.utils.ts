@@ -1,8 +1,8 @@
-export const DateUtils = {
+export const dateUtils = {
   getDateFormatNumber: (date: string, isSeconds = true): string => {
-    return `${DateUtils.convertDateToFormat(
+    return `${dateUtils.convertDateToFormat(
       date,
-    )} в ${DateUtils.convertTimeToFormat(date, isSeconds)}`;
+    )} в ${dateUtils.convertTimeToFormat(date, isSeconds)}`;
   },
   /**
    * Делаем из даты формат 04.01.2023
