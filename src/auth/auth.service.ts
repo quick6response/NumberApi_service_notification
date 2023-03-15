@@ -5,7 +5,7 @@ import { InjectVkApi } from 'nestjs-vk';
 import { getRandomId, VK } from 'vk-io';
 import { VKChatsEnum } from '../common/config/vk.chats.config';
 import { ParameterStartDto } from '../common/dto/parameter.start.dto';
-import { DateUtils } from '../common/utils/date.utils';
+import { dateUtils } from '../common/utils/date.utils';
 import { VkUtils } from '../common/utils/vk.utils';
 import { UsersCreateInterface } from '../users/interface/users.create.interface';
 import { VkService } from '../vk/vk.service';
@@ -47,7 +47,7 @@ export class AuthService {
     return `@id${data.vk_user_id} (${user.first_name} ${
       user.last_name
     }) зарегистрировался в приложение (${data.userId}).\n\n
-Время: ${DateUtils.getDateFormatNumber(data.date)}\nIP: ${data.ip}\n\n
+Время: ${dateUtils.getDateFormatNumber(data.date)}\nIP: ${data.ip}\n\n
 vk_ref — ${VkUtils.getRef(data.vk_ref)} (${data.vk_ref})
 vk_platform — ${VkUtils.getPlatform(data.vk_platform)} (${data.vk_platform})\n\n
 #registerUser #id${data.vk_user_id} #registerUser_${data.vk_user_id}`;
@@ -62,7 +62,7 @@ vk_platform — ${VkUtils.getPlatform(data.vk_platform)} (${data.vk_platform})\n
         ? 'Dev'
         : 'Prod'
     })\n\n
-Время: ${DateUtils.getDateFormatNumber(data.date)}\nIP: ${data.ip}\n\n
+Время: ${dateUtils.getDateFormatNumber(data.date)}\nIP: ${data.ip}\n\n
 vk_ref — ${VkUtils.getRef(data.vk_ref)} (${data.vk_ref})
 vk_platform — ${VkUtils.getPlatform(data.vk_platform)} (${data.vk_platform})\n\n
 #login #id${data.vk_user_id} #login_${data.vk_user_id}`;
