@@ -26,7 +26,9 @@ import { VkHelpModule } from './vk/vk.help.module';
     AuthModule,
     ConfigModule.forRoot({
       load: [config],
-      envFilePath: ['.env', '.env.local'],
+      envFilePath: `.env.${
+        process.env.NODE_ENV !== 'production' ? 'dev' : 'prod'
+      }`,
       isGlobal: true,
     }),
     ClientsModule.registerAsync([
@@ -38,10 +40,10 @@ import { VkHelpModule } from './vk/vk.help.module';
           options: {
             urls: [
               {
-                hostname: configService.get<string>('RABBITMQ_HOST'),
-                port: configService.get<number>('RABBITMQ_PORT'),
-                password: configService.get<string>('RABBITMQ_DEFAULT_PASS'),
-                username: configService.get<string>('RABBITMQ_DEFAULT_USER'),
+                hostname: configService.get<string>('RABBIT_HOST'),
+                port: configService.get<number>('RABBIT_PORT'),
+                password: configService.get<string>('RABBIT_PASSWORD'),
+                username: configService.get<string>('RABBIT_USER'),
               },
             ],
             queueOptions: {
@@ -83,4 +85,8 @@ import { VkHelpModule } from './vk/vk.help.module';
     DonutUpdate,
   ],
 })
-export class AppModule {}
+export class AppModule {
+  constructor() {
+    console.log(process.env.NODE_ENV);
+  }
+}

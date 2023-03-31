@@ -1,5 +1,6 @@
 import { NestFactory } from '@nestjs/core';
 import { MicroserviceOptions, Transport } from '@nestjs/microservices';
+import * as process from 'process';
 import { AppModule } from './app.module';
 
 async function bootstrap() {
@@ -10,10 +11,10 @@ async function bootstrap() {
       options: {
         urls: [
           {
-            hostname: process.env.RABBITMQ_HOST,
-            port: +process.env.RABBITMQ_PORT,
-            password: process.env.RABBITMQ_DEFAULT_PASS,
-            username: process.env.RABBITMQ_DEFAULT_USER,
+            hostname: process.env.RABBIT_HOST,
+            port: +process.env.RABBIT_PORT,
+            password: process.env.RABBIT_PASSWORD,
+            username: process.env.RABBIT_USER,
           },
         ],
         queue: 'vk_notification_queue',
@@ -23,6 +24,7 @@ async function bootstrap() {
       },
     },
   );
+
   await app
     .listen()
     .then(() => console.log(`Start microservice`))

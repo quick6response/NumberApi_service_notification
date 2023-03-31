@@ -7,12 +7,13 @@ import { AuthService } from './auth.service';
 @Controller('auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
-  @MessagePattern('auth.login')
+
+  @MessagePattern({ auth: 'login' })
   async login(@Payload() data: ParameterStartDto) {
     return this.authService.loginUser(data);
   }
 
-  @MessagePattern('auth.registration')
+  @MessagePattern({ auth: 'register' })
   async registration(@Payload() data: UsersCreateInterface) {
     return this.authService.registrationUser(data);
   }

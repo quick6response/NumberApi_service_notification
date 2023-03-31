@@ -1,12 +1,15 @@
-# compiled output
+# Env files
+# .env.prod
+.docker
+# Compiled output
 /dist
+/dist-seeder
 /node_modules
 
 # Logs
 logs
 *.log
 npm-debug.log*
-pnpm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 lerna-debug.log*
@@ -32,5 +35,9 @@ lerna-debug.log*
 !.vscode/settings.json
 !.vscode/tasks.json
 !.vscode/launch.json
-!.vscode/extensions.json!/.env.local
-!/.env.prod
+!.vscode/extensions.json
+
+# Elastic Beanstalk Files
+.elasticbeanstalk/*
+!.elasticbeanstalk/*.cfg.yml
+!.elasticbeanstalk/*.global.yml/documentation/

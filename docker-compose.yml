@@ -1,0 +1,20 @@
+version: "3.8"
+services:
+  notification:
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    restart: always
+    command: ["node", "dist/main"]
+    volumes:
+      - .:/app
+      - /app/node_modules
+    environment:
+      FLASK_ENV: production
+    env_file:
+      - .env.prod
+
+networks:
+  default:
+    name: network-numberapi
+    external: true
