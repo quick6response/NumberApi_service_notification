@@ -37,7 +37,7 @@ IP: ${parameters.ip}
 
 #number ${
       parameters?.isNewNumber ? '#number_new' : ''
-    } #79194348991 #id778047801`;
+    } #number${parameters.number} #id${parameters.vk_user_id}`;
   }
 
   /**
