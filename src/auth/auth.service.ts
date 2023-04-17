@@ -1,4 +1,5 @@
-import { CACHE_MANAGER, Inject, Injectable } from '@nestjs/common';
+import { CACHE_MANAGER } from '@nestjs/cache-manager';
+import { Inject, Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { Cache } from 'cache-manager';
 import { InjectVkApi } from 'nestjs-vk';
@@ -7,8 +8,9 @@ import { VKChatsEnum } from '../common/config/vk.chats.config';
 import { ParameterStartDto } from '../common/dto/parameter.start.dto';
 import { dateUtils } from '../common/utils/date.utils';
 import { VkUtils } from '../common/utils/vk.utils';
-import { UsersCreateInterface } from '../users/interface/users.create.interface';
 import { VkService } from '../vk/vk.service';
+import { AuthLoginDto } from './dto/auth.login.dto';
+import { AuthRegisterDto } from './dto/auth.register.dto';
 
 @Injectable()
 export class AuthService {
@@ -20,7 +22,7 @@ export class AuthService {
     private readonly vkHelpService: VkService,
   ) {}
 
-  async loginUser(data: ParameterStartDto) {
+  async loginUser(data: AuthLoginDto) {
     await this.vk.api.messages.send({
       message: await this.getTextLogin(data),
       chat_id: VKChatsEnum.LOGS_CHAT,
@@ -30,7 +32,7 @@ export class AuthService {
     return { result: true };
   }
 
-  async registrationUser(parameters: UsersCreateInterface) {
+  async registrationUser(parameters: AuthRegisterDto) {
     await this.vk.api.messages.send({
       chat_id: VKChatsEnum.LOGS_CHAT,
       message: await this.getTextRegistration(parameters),
@@ -40,9 +42,7 @@ export class AuthService {
     return { result: true };
   }
 
-  private async getTextRegistration(
-    data: UsersCreateInterface,
-  ): Promise<string> {
+  private async getTextRegistration(data: AuthRegisterDto): Promise<string> {
     const user = await this.vkHelpService.getInfoUserVk(data.vk_user_id);
     return `@id${data.vk_user_id} (${user.first_name} ${
       user.last_name

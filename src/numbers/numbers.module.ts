@@ -7,5 +7,6 @@ import { NumbersService } from './numbers.service';
   controllers: [NumbersController],
   providers: [NumbersService],
   imports: [VkHelpModule],
+  exports: [NumbersService],
 })
 export class NumbersModule {}
