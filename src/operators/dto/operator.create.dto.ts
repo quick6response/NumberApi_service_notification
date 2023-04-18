@@ -6,8 +6,9 @@ import {
   MaxLength,
   MinLength,
 } from 'class-validator';
+import { ParameterStartDto } from '../../common/dto/parameter.start.dto';
 
-export class OperatorCreateDto {
+export class OperatorCreateDto extends ParameterStartDto {
   @IsString({ message: 'Должно быть строкой' })
   @MinLength(1, {
     message: 'Должно быть длиннее $constraint1 символов',

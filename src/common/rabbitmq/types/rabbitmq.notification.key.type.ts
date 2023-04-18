@@ -1,5 +1,10 @@
+import { AuthRegisterDto } from '../../../auth/dto/auth.register.dto';
 import { CommentCreateDto } from '../../../comments/dto/comment.create.dto';
+import { CommentDeleteDto } from '../../../comments/dto/comment.delete.dto';
+import { NumberFindDto } from '../../../numbers/dto/number.find.dto';
+import { NumberFindErrorDto } from '../../../numbers/dto/number.find.error.dto';
 import { OperatorCreateDto } from '../../../operators/dto/operator.create.dto';
+import { UserNumberNotificationDto } from '../../../user-number/dto/user.number.notification.dto';
 import { ParameterStartDateDto } from './parameter.start.date.dto';
 
 export type RabbitmqNotificationKey = keyof RabbitmqNotificationKeyType;
@@ -11,35 +16,27 @@ export type RabbitmqNotificationKeyType = {
   /**
    * Регистрация
    */
-  auth_register_user: ParameterStartDateDto & { userId: number };
+  auth_register_user: AuthRegisterDto;
 
   /**
    * Удаление комментария
    */
-  comment_delete: ParameterStartDateDto & { commentId: number; number: string };
+  comment_delete: CommentDeleteDto;
 
   /**
    * Создание комментария
    */
-  comment_create: ParameterStartDateDto &
-    Required<Pick<CommentCreateDto, 'text' | 'number' | 'isAnon'>> & {
-      commentId: number;
-    };
+  comment_create: CommentCreateDto;
 
   /**
    * поиск номера
    */
-  number_find: ParameterStartDateDto & {
-    number: string;
-    numberId: number;
-    isNewNumber: boolean;
-    isUpdate?: boolean;
-  };
+  number_find: NumberFindDto;
   /**
    * Ошибка поиск номера.
    * TODO: Добавить передачу текста ошибки
    */
-  number_find_error: ParameterStartDateDto & { error: unknown };
+  number_find_error: NumberFindErrorDto;
 
   /**
    * Создание нового оператора
@@ -49,9 +46,5 @@ export type RabbitmqNotificationKeyType = {
   /**
    * Поиск номера человека пользователя
    */
-  users_number_get: ParameterStartDateDto & {
-    number: string;
-    isAnon: boolean;
-    isBlock: boolean;
-  };
+  users_number_get: UserNumberNotificationDto;
 };

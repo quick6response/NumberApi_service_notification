@@ -20,6 +20,7 @@ import { DonutService } from './donut/donut.service';
 import { DonutUpdate } from './donut/donut.update';
 import { NumbersModule } from './numbers/numbers.module';
 import { NumbersService } from './numbers/numbers.service';
+import { OperatorsModule } from './operators/operators.module';
 import { UserNumberController } from './user-number/user.number.controller';
 import { UserNumberModule } from './user-number/user.number.module';
 import { UserNumberService } from './user-number/user.number.service';
@@ -100,6 +101,7 @@ import { VkHelpModule } from './vk/vk.help.module';
     VkHelpModule,
     DonutModule,
     CommentsModule,
+    OperatorsModule,
   ],
 })
 export class AppModule {

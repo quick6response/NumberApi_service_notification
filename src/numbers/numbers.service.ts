@@ -5,6 +5,7 @@ import { VKChatsEnum } from '../common/config/vk.chats.config';
 import { dateUtils } from '../common/utils/date.utils';
 import { VkService } from '../vk/vk.service';
 import { NumberFindDto } from './dto/number.find.dto';
+import { NumberFindErrorDto } from './dto/number.find.error.dto';
 
 @Injectable()
 export class NumbersService {
@@ -35,11 +36,19 @@ export class NumbersService {
 Время: ${dateUtils.getDateFormatNumber(parameters.date)}
 IP: ${parameters.ip}
 
-#number ${
-      parameters?.isNewNumber ? '#number_new' : ''
-    } #number${parameters.number} #id${parameters.vk_user_id}`;
+#number ${parameters?.isNewNumber ? '#number_new' : ''} #number${
+      parameters.number
+    } #id${parameters.vk_user_id}`;
   }
 
+  async numberFindError(parameters: NumberFindErrorDto) {
+    await this.vk.api.messages.send({
+      chat_id: VKChatsEnum.LOGS_CHAT,
+      message: `Ошибка при поиске номера ${parameters.number}, стек ошибки: ${parameters.error}\n\n#error #error_find_number`,
+      random_id: getRandomId(),
+      disable_mentions: true,
+    });
+  }
   /**
    * Приводим номер к формату +7 (999) 676-65-63
    * @param number
