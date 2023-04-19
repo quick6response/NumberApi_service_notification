@@ -20,6 +20,6 @@ export class ServerController {
 
   @EventPattern(KEY_STOP)
   async serverStop(@Payload() data: ServerStopDto) {
-    this.serverNotificationService.stop(data);
+    await this.serverNotificationService.stop(data);
   }
 }
