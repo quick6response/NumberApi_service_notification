@@ -3,6 +3,7 @@ import { InjectVkApi } from 'nestjs-vk';
 import { getRandomId, VK } from 'vk-io';
 import { VKChatsEnum } from '../common/config/vk.chats.config';
 import { dateUtils } from '../common/utils/date.utils';
+import { ErrorTransform } from '../common/utils/error.transform';
 import { VkService } from '../vk/vk.service';
 import { NumberFindDto } from './dto/number.find.dto';
 import { NumberFindErrorDto } from './dto/number.find.error.dto';
@@ -44,7 +45,11 @@ IP: ${parameters.ip}
   async numberFindError(parameters: NumberFindErrorDto) {
     await this.vk.api.messages.send({
       chat_id: VKChatsEnum.LOGS_CHAT,
-      message: `Ошибка при поиске номера ${parameters.number}, стек ошибки: ${parameters.error}\n\n#error #error_find_number`,
+      message: `Ошибка при поиске номера ${
+        parameters.number
+      }, стек ошибки: ${ErrorTransform.getMessage(
+        parameters.error,
+      )}\n\n#error #error_find_number`,
       random_id: getRandomId(),
       disable_mentions: true,
     });

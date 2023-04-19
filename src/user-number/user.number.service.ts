@@ -3,7 +3,6 @@ import { Inject, Injectable } from '@nestjs/common';
 import { Cache } from 'cache-manager';
 import { InjectVkApi } from 'nestjs-vk';
 import { getRandomId, VK } from 'vk-io';
-import { VKChatsEnum } from '../common/config/vk.chats.config';
 import { dateUtils } from '../common/utils/date.utils';
 import { VkService } from '../vk/vk.service';
 import { UserNumberNotificationDto } from './dto/user.number.notification.dto';
@@ -22,7 +21,7 @@ export class UserNumberService {
    */
   async notificationFindNumber(parameters: UserNumberNotificationDto) {
     await this.vk.api.messages.send({
-      chat_id: VKChatsEnum.LOGS_CHAT,
+      user_id: parameters.userId,
       message: await this.getTextNotificationFind(parameters),
       random_id: getRandomId(),
       disable_mentions: true,
@@ -30,13 +29,12 @@ export class UserNumberService {
   }
 
   private async getTextNotificationFind(parameters: UserNumberNotificationDto) {
-    const user = await this.vkHelpService.getInfoUserVk(parameters.vk_user_id);
+    const user = await this.vkHelpService.getInfoUserVk(parameters.userId);
     return `💬🔔 Привет, ${
       user.first_name
-    }, кто-то просмотрел информацию о Вашем номере телефона (${parameters.number.slice(
-      7,
-      12,
-    )}).
+    }, кто-то просмотрел информацию о Вашем номере телефона (${
+      parameters.number.slice(7, 9) + `-` + parameters.number.slice(9, 12)
+    }).
 Время ${dateUtils.getDateFormatNumber(parameters.date)}
 `;
   }

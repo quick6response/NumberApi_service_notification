@@ -25,6 +25,29 @@ async function bootstrap() {
   );
 
   // app.useGlobalPipes(
+  //   new ValidationPipe({
+  //     whitelist: true,
+  //     enableDebugMessages: true,
+  //     forbidUnknownValues: false,
+  //     validationError: {
+  //       target: true,
+  //       value: true,
+  //     },
+  //     forbidNonWhitelisted: true,
+  //     validateCustomDecorators: true,
+  //     skipUndefinedProperties: true,
+  //
+  //     transform: true,
+  //     exceptionFactory: (array) => {
+  //       const message = array.map((error) => {
+  //         return `${error.property} - ${Object.values(error.constraints).join(
+  //           ', ',
+  //         )}`;
+  //       });
+  //       throw new RpcException(message);
+  //     },
+  //   }),
+  // );
 
   app
     .listen()

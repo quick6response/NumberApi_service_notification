@@ -1,7 +1,8 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { ClientsModule, Transport } from '@nestjs/microservices';
-import { VkModule } from 'nestjs-vk';
+import { InjectVkApi, VkModule } from 'nestjs-vk';
+import { getRandomId, VK } from 'vk-io';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { AuthController } from './auth/auth.controller';
@@ -13,7 +14,8 @@ import { CommentsModule } from './comments/comments.module';
 import { CommentsService } from './comments/comments.service';
 import { CacheModule } from './common/cache/cache.module';
 import config from './common/config/config';
-import { RabbitmqModule } from './common/rabbitmq/rabbitmq.module';
+import { VKChatsEnum } from './common/config/vk.chats.config';
+import { dateUtils } from './common/utils/date.utils';
 import { DonutController } from './donut/donut.controller';
 import { DonutModule } from './donut/donut.module';
 import { DonutService } from './donut/donut.service';
@@ -21,6 +23,7 @@ import { DonutUpdate } from './donut/donut.update';
 import { NumbersModule } from './numbers/numbers.module';
 import { NumbersService } from './numbers/numbers.service';
 import { OperatorsModule } from './operators/operators.module';
+import { ServerModule } from './server/server.module';
 import { UserNumberController } from './user-number/user.number.controller';
 import { UserNumberModule } from './user-number/user.number.module';
 import { UserNumberService } from './user-number/user.number.service';
@@ -61,7 +64,6 @@ import { VkHelpModule } from './vk/vk.help.module';
       }`,
       isGlobal: true,
     }),
-    RabbitmqModule,
     ClientsModule.registerAsync([
       {
         name: 'DONUT_SERVICE',
@@ -102,10 +104,18 @@ import { VkHelpModule } from './vk/vk.help.module';
     DonutModule,
     CommentsModule,
     OperatorsModule,
+    ServerModule,
   ],
 })
 export class AppModule {
-  constructor() {
-    console.log(process.env.NODE_ENV);
+  constructor(@InjectVkApi() private readonly vk: VK) {
+    this.vk.api.messages.send({
+      chat_id: VKChatsEnum.LOGS_CHAT,
+      message: `Запущен обработчик уведомлений!\n
+Время: ${dateUtils.getDateFormatNumber(
+        new Date().toISOString(),
+      )}\n\n#notification #notification_start`,
+      random_id: getRandomId(),
+    });
   }
 }

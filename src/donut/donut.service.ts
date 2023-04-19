@@ -61,7 +61,7 @@ export class DonutService {
     }) оформил подписку VK Donut.\n#donut_create #donutSubscriptionCreate #id${
       ctx.userId
     }`;
-    await this.sendMessageUser(user.id, textUser);
+    // await this.sendMessageUser(user.id, textUser);
     await this.sendMessageChat(textChat);
 
     this.client.emit('donut.create', { userId: user.id });
@@ -78,7 +78,7 @@ export class DonutService {
     }) продлил подписку VK Donut.\n#donut_prolonged #donutSubscriptionProlonged #id${
       ctx.userId
     }`;
-    await this.sendMessageUser(user.id, textUser);
+    // await this.sendMessageUser(user.id, textUser);
     await this.sendMessageChat(textChat);
 
     this.client.emit('donut.prolonged', { userId: user.id });
@@ -95,7 +95,7 @@ export class DonutService {
     }) истекла подписка VK Donut.\n#donut_expired #donutSubscriptionExpired #id${
       ctx.userId
     }`;
-    await this.sendMessageUser(user.id, textUser);
+    // await this.sendMessageUser(user.id, textUser);
     await this.sendMessageChat(textChat);
 
     this.client.emit('donut.expired', { userId: user.id });
@@ -112,7 +112,7 @@ export class DonutService {
     }) отменена подписка VK Donut.\n#donut_cancelled #donutSubscriptionСancelled #id${
       ctx.userId
     }`;
-    await this.sendMessageUser(user.id, textUser);
+    // await this.sendMessageUser(user.id, textUser);
     await this.sendMessageChat(textChat);
   }
 
