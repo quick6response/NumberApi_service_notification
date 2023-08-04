@@ -1,7 +1,7 @@
-import { CacheModule as NestCacheModule, Module } from '@nestjs/common';
+import { CacheModule as NestCacheModule } from '@nestjs/cache-manager';
+import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import * as redisStore from 'cache-manager-redis-store';
-import { RedisClientOptions } from 'redis';
+import { redisStore } from 'cache-manager-redis-store';
 
 /**
  * CacheModule от Nest не умеет глобально регистрироваться,
@@ -9,18 +9,19 @@ import { RedisClientOptions } from 'redis';
  */
 @Module({
   imports: [
-    NestCacheModule.registerAsync<RedisClientOptions>({
-      imports: [ConfigModule],
-      inject: [ConfigService],
+    NestCacheModule.registerAsync<any>({
       isGlobal: true,
-      useFactory: (configService: ConfigService) => ({
-        store: redisStore,
-        host: configService.get('REDIS_HOST'),
-        port: configService.get('REDIS_PORT'),
-        password: configService.get('REDIS_PASSWORD'),
-
-        ttl: 60 * 10, // кеш на 10 минут
-      }),
+      imports: [ConfigModule],
+      useFactory: async (configService: ConfigService) => {
+        const store = await redisStore({
+          url: configService.get('REDIS_URL'),
+          ttl: 60 * 1000 * 10,
+        });
+        return {
+          store: () => store,
+        };
+      },
+      inject: [ConfigService],
     }),
   ],
   exports: [NestCacheModule],

@@ -10,10 +10,10 @@ async function bootstrap() {
       options: {
         urls: [
           {
-            hostname: process.env.RABBIT_HOST,
-            port: +process.env.RABBIT_PORT,
-            password: process.env.RABBIT_PASSWORD,
-            username: process.env.RABBIT_USER,
+            hostname: process.env.RABBITMQ_HOST,
+            port: +process.env.RABBITMQ_PORT,
+            password: process.env.RABBITMQ_PASSWORD,
+            username: process.env.RABBITMQ_USER,
           },
         ],
         queue: 'vk_notification_queue',
@@ -52,6 +52,9 @@ async function bootstrap() {
   app
     .listen()
     .then(() => console.log(`Start microservice`))
-    .catch((error) => console.error('Error Start microservice', error));
+    .catch((error) => {
+      console.error('Error Start microservice', error);
+      app.close();
+    });
 }
 bootstrap();

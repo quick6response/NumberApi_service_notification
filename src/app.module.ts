@@ -73,10 +73,10 @@ import { VkHelpModule } from './vk/vk.help.module';
           options: {
             urls: [
               {
-                hostname: configService.get<string>('RABBIT_HOST'),
-                port: configService.get<number>('RABBIT_PORT'),
-                password: configService.get<string>('RABBIT_PASSWORD'),
-                username: configService.get<string>('RABBIT_USER'),
+                hostname: configService.get<string>('RABBITMQ_HOST'),
+                port: configService.get<number>('RABBITMQ_PORT'),
+                password: configService.get<string>('RABBITMQ_PASSWORD'),
+                username: configService.get<string>('RABBITMQ_USER'),
               },
             ],
             queueOptions: {
