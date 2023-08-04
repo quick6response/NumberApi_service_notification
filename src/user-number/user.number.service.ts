@@ -30,11 +30,20 @@ export class UserNumberService {
 
   private async getTextNotificationFind(parameters: UserNumberNotificationDto) {
     const user = await this.vkHelpService.getInfoUserVk(parameters.userId);
-    return `💬🔔 Привет, ${
-      user.first_name
-    }, кто-то просмотрел информацию о Вашем номере телефона (${
-      parameters.number.slice(7, 9) + `-` + parameters.number.slice(9, 12)
-    }).
+    if (!parameters.isBlock)
+      return `💬🔔${
+        user.first_name
+      }, кто-то просмотрел информацию о Вашем номере телефона (${
+        parameters.number.slice(7, 9) + `-` + parameters.number.slice(9, 12)
+      }).\n
+Время ${dateUtils.getDateFormatNumber(parameters.date)}
+`;
+    else
+      return `💬⛔${
+        user.first_name
+      }, кто-то пытался просмотреть информацию о Вашем номере телефона (${
+        parameters.number.slice(7, 9) + `-` + parameters.number.slice(9, 12)
+      }).\n
 Время ${dateUtils.getDateFormatNumber(parameters.date)}
 `;
   }
