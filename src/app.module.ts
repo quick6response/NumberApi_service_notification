@@ -13,7 +13,6 @@ import { CommentsKeyboardService } from './comments/comments.keyboard.service';
 import { CommentsModule } from './comments/comments.module';
 import { CommentsService } from './comments/comments.service';
 import { CacheModule } from './common/cache/cache.module';
-import config from './common/config/config';
 import { VKChatsEnum } from './common/config/vk.chats.config';
 import { dateUtils } from './common/utils/date.utils';
 import { DonutController } from './donut/donut.controller';
@@ -58,11 +57,9 @@ import { VkHelpModule } from './vk/vk.help.module';
     AuthModule,
     UserNumberModule,
     ConfigModule.forRoot({
-      load: [config],
-      envFilePath: `.env.${
-        process.env.NODE_ENV !== 'production' ? 'dev' : 'prod'
-      }`,
+      envFilePath: `.env.${process.env.NODE_ENV || 'development'}`,
       isGlobal: true,
+      cache: true,
     }),
     ClientsModule.registerAsync([
       {

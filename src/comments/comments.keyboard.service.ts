@@ -5,14 +5,14 @@ import { Keyboard } from 'vk-io';
 @Injectable()
 export class CommentsKeyboardService {
   constructor(private readonly configService: ConfigService) {}
-  getCommentNew() {
+  getCommentNew(appId: number) {
     const builder = Keyboard.keyboard([
       // Одна кнопка
       [
         Keyboard.applicationButton({
           label: 'Перейти в сервис',
           hash: 'admin/moderation',
-          appId: this.configService.get<number>('APP_ID'),
+          appId: appId,
         }),
       ],
     ]).inline();

@@ -1,6 +1,7 @@
 import { AuthRegisterDto } from '../../../auth/dto/auth.register.dto';
 import { CommentCreateDto } from '../../../comments/dto/comment.create.dto';
 import { CommentDeleteDto } from '../../../comments/dto/comment.delete.dto';
+import { ModerationCommentDto } from '../../../comments/dto/moderation.comment.dto';
 import { NumberFindDto } from '../../../numbers/dto/number.find.dto';
 import { NumberFindErrorDto } from '../../../numbers/dto/number.find.error.dto';
 import { OperatorCreateDto } from '../../../operators/dto/operator.create.dto';
@@ -10,6 +11,7 @@ import { UserNumberNotificationDto } from '../../../user-number/dto/user.number.
 import { ParameterStartDateDto } from './parameter.start.date.dto';
 
 export type RabbitmqNotificationKey = keyof RabbitmqNotificationKeyType;
+
 export type RabbitmqNotificationKeyType = {
   /**
    * Логин пользователя
@@ -58,4 +60,9 @@ export type RabbitmqNotificationKeyType = {
    * Остановка сервера
    */
   server_stop: ServerStopDto;
+
+  /**
+   * Изменение статуса комментария в модерации
+   */
+  moderation_comment_number: ModerationCommentDto;
 };
