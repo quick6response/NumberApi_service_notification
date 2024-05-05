@@ -1,5 +1,6 @@
 import { Ctx, InjectVkApi, On, Update } from 'nestjs-vk';
 import { DonutSubscriptionContext, DonutWithdrawContext, VK } from 'vk-io';
+import { DonutSubscriptionPriceContext } from 'vk-io/lib/structures/contexts/donut-subscription-price';
 import { DonutService } from './donut.service';
 
 @Update()
@@ -63,6 +64,11 @@ export class DonutUpdate {
   @On('donut_subscription_cancelled')
   cancelled(@Ctx() ctx: DonutSubscriptionContext) {
     return this.donutService.cancelled(ctx);
+  }
+
+  @On('donut_subscription_price_changed')
+  priceChanged(@Ctx() ctx: DonutSubscriptionPriceContext) {
+    return this.donutService.subscriptionPriceChanged(ctx);
   }
 
   // @Hears(/^\/?(donut_money_withdraw_error)$/i)
