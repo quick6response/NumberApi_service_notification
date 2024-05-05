@@ -9,6 +9,7 @@ import {
   VK,
 } from 'vk-io';
 import { MessagesSendParams } from 'vk-io/lib/api/schemas/params';
+import { DonutSubscriptionPriceContext } from 'vk-io/lib/structures/contexts/donut-subscription-price';
 import { VKChatsEnum } from '../common/config/vk.chats.config';
 import { dateUtils } from '../common/utils/date.utils';
 import { VkService } from '../vk/vk.service';
@@ -134,6 +135,23 @@ export class DonutService {
       ctx.reason
     }.\n#donut_money_withdraw_error #donutMoneyWithdrawError`;
     await this.sendMessageChat(textChat);
+  }
+
+  // todo дописать метод на верный текст и верное событие для отправки
+  async subscriptionPriceChanged(ctx: DonutSubscriptionPriceContext) {
+    const date = new Date().toString();
+    const user = await this.vkHelpService.getInfoUserVk(ctx.userId);
+    const textUser = `&#128553; ${user.first_name}, подписка VK Donut истекла. Все преимущества были выключены.`;
+    const textChat = `[${dateUtils.getDateFormatNumber(date)}] &#128553; @id${
+      ctx.userId
+    } (${user.first_name} ${
+      user.last_name
+    }) истекла подписка VK Donut.\n#donut_subscription_price_changed #donutsubscriptionPriceChanged #id${
+      ctx.userId
+    }`;
+    // await this.sendMessageUser(user.id, textUser);
+    await this.sendMessageChat(textChat);
+    this.client.emit('donut.subscriptionPriceChanged', { userId: user.id });
   }
 
   private async sendMessageChat(
