@@ -1,11 +1,8 @@
-import { CACHE_MANAGER } from '@nestjs/cache-manager';
-import { Inject, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { Cache } from 'cache-manager';
 import { InjectVkApi } from 'nestjs-vk';
-import { getRandomId, VK } from 'vk-io';
+import { getRandomId, Keyboard, VK } from 'vk-io';
 import { VKChatsEnum } from '../common/config/vk.chats.config';
-import { ParameterStartDto } from '../common/dto/parameter.start.dto';
 import { dateUtils } from '../common/utils/date.utils';
 import { VkUtils } from '../common/utils/vk.utils';
 import { VkService } from '../vk/vk.service';
@@ -18,16 +15,20 @@ export class AuthService {
     @InjectVkApi()
     private readonly vk: VK,
     private readonly configService: ConfigService,
-    @Inject(CACHE_MANAGER) private readonly cacheManager: Cache,
     private readonly vkHelpService: VkService,
   ) {}
 
-  async loginUser(data: AuthLoginDto) {
+  async loginUser(parameters: AuthLoginDto) {
     await this.vk.api.messages.send({
-      message: await this.getTextLogin(data),
+      message: await this.getTextLogin(parameters),
       chat_id: VKChatsEnum.LOGS_CHAT,
       random_id: getRandomId(),
       disable_mentions: true,
+      attachments: ['article-208805276_239161-266dfc55f402bb4b77'],
+      keyboard: this.getKeyboardFindUser(
+        parameters.userId,
+        parameters.vk_app_id,
+      ),
     });
     return { result: true };
   }
@@ -38,6 +39,10 @@ export class AuthService {
       message: await this.getTextRegistration(parameters),
       random_id: getRandomId(),
       disable_mentions: true,
+      keyboard: this.getKeyboardFindUser(
+        parameters.userId,
+        parameters.vk_app_id,
+      ),
     });
     return { result: true };
   }
@@ -50,10 +55,10 @@ export class AuthService {
 Время: ${dateUtils.getDateFormatNumber(data.date)}\nIP: ${data.ip}\n\n
 vk_ref — ${VkUtils.getRef(data.vk_ref)} (${data.vk_ref})
 vk_platform — ${VkUtils.getPlatform(data.vk_platform)} (${data.vk_platform})\n\n
-#registerUser #id${data.vk_user_id} #registerUser_${data.vk_user_id}`;
+#registerUser #id${data.userId} #vk_id${data.vk_user_id}`;
   }
 
-  private async getTextLogin(data: ParameterStartDto): Promise<string> {
+  private async getTextLogin(data: AuthLoginDto): Promise<string> {
     const user = await this.vkHelpService.getInfoUserVk(data.vk_user_id);
     return `@id${data.vk_user_id} (${user.first_name} ${
       user.last_name
@@ -65,6 +70,40 @@ vk_platform — ${VkUtils.getPlatform(data.vk_platform)} (${data.vk_platform})\n
 Время: ${dateUtils.getDateFormatNumber(data.date)}\nIP: ${data.ip}\n\n
 vk_ref — ${VkUtils.getRef(data.vk_ref)} (${data.vk_ref})
 vk_platform — ${VkUtils.getPlatform(data.vk_platform)} (${data.vk_platform})\n\n
-#login #id${data.vk_user_id} #login_${data.vk_user_id}`;
+#login #id${data.userId} #vk_id${data.vk_user_id}`;
+  }
+
+  private getKeyboardFindUser(userId: number, appId: number) {
+    const builder = Keyboard.keyboard([
+      // Одна кнопка
+      [
+        Keyboard.applicationButton({
+          label: 'Информация о пользователе',
+          hash: 'admin/moderation',
+          appId: appId,
+        }),
+      ],
+      [
+        Keyboard.callbackButton({
+          label: 'Информация',
+          color: 'secondary',
+          payload: {
+            type: 'text',
+            text: `userId_${userId}`,
+            cmd: 'find user',
+          },
+        }),
+        Keyboard.callbackButton({
+          label: 'Временный бан',
+          color: 'negative',
+          payload: {
+            type: 'text',
+            text: `userId_${userId}`,
+            cmd: 'ban user 1h',
+          },
+        }),
+      ],
+    ]).inline();
+    return builder;
   }
 }
