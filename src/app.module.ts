@@ -14,6 +14,8 @@ import { CommentsModule } from './comments/comments.module';
 import { CommentsService } from './comments/comments.service';
 import { CacheModule } from './common/cache/cache.module';
 import { VKChatsEnum } from './common/config/vk.chats.config';
+import { rabbitNameConfig } from './common/rabbitmq/config/rabbit.name.config';
+import { rabbitQueueConfig } from './common/rabbitmq/config/rabbitmq.queue.config';
 import { dateUtils } from './common/utils/date.utils';
 import { DonutController } from './donut/donut.controller';
 import { DonutModule } from './donut/donut.module';
@@ -63,7 +65,7 @@ import { VkHelpModule } from './vk/vk.help.module';
     }),
     ClientsModule.registerAsync([
       {
-        name: 'DONUT_SERVICE',
+        name: rabbitNameConfig.SERVICE_API,
         inject: [ConfigService],
         useFactory: (configService: ConfigService) => ({
           transport: Transport.RMQ,
@@ -79,7 +81,7 @@ import { VkHelpModule } from './vk/vk.help.module';
             queueOptions: {
               durable: true,
             },
-            queue: 'vk_donut_queue',
+            queue: rabbitQueueConfig.NAME_NUMBER_API_QUEUE,
           },
         }),
       },
