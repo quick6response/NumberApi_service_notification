@@ -46,13 +46,12 @@ export class DonutUpdate {
   // }
 
   @On('donut_subscription_create')
-  async create(@Ctx() ctx: DonutSubscriptionContext) {
+  create(@Ctx() ctx: DonutSubscriptionContext) {
     return this.donutService.create(ctx);
   }
 
   @On('donut_subscription_prolonged')
   prolonged(@Ctx() ctx: DonutSubscriptionContext) {
-    if (!ctx.isProlonged) return;
     return this.donutService.prolonged(ctx);
   }
 
