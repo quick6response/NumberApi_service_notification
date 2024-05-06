@@ -1,6 +1,5 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import { ClientsModule, Transport } from '@nestjs/microservices';
 import { InjectVkApi, VkModule } from 'nestjs-vk';
 import { getRandomId, VK } from 'vk-io';
 import { AppController } from './app.controller';
@@ -14,8 +13,8 @@ import { CommentsModule } from './comments/comments.module';
 import { CommentsService } from './comments/comments.service';
 import { CacheModule } from './common/cache/cache.module';
 import { VKChatsEnum } from './common/config/vk.chats.config';
-import { rabbitNameConfig } from './common/rabbitmq/config/rabbit.name.config';
-import { rabbitQueueConfig } from './common/rabbitmq/config/rabbitmq.queue.config';
+import { MainApiClientModule } from './common/rabbitmq/main.api.client.module';
+import { RabbitmqApiMainService } from './common/rabbitmq/service/rabbitmq.api.main.service';
 import { dateUtils } from './common/utils/date.utils';
 import { DonutController } from './donut/donut.controller';
 import { DonutModule } from './donut/donut.module';
@@ -31,6 +30,7 @@ import { UserNumberService } from './user-number/user.number.service';
 import { UsersController } from './users/users.controller';
 import { UsersModule } from './users/users.module';
 import { UsersService } from './users/users.service';
+import { VkMainMiddleware } from './vk.main.middleware';
 import { VkHelpModule } from './vk/vk.help.module';
 
 @Module({
@@ -52,8 +52,9 @@ import { VkHelpModule } from './vk/vk.help.module';
     CommentsService,
     CommentsKeyboardService,
     UserNumberService,
+    VkMainMiddleware,
+    RabbitmqApiMainService,
   ],
-
   imports: [
     UsersModule,
     AuthModule,
@@ -63,39 +64,26 @@ import { VkHelpModule } from './vk/vk.help.module';
       isGlobal: true,
       cache: true,
     }),
-    ClientsModule.registerAsync([
-      {
-        name: rabbitNameConfig.SERVICE_API,
-        inject: [ConfigService],
-        useFactory: (configService: ConfigService) => ({
-          transport: Transport.RMQ,
-          options: {
-            urls: [
-              {
-                hostname: configService.get<string>('RABBITMQ_HOST'),
-                port: configService.get<number>('RABBITMQ_PORT'),
-                password: configService.get<string>('RABBITMQ_PASSWORD'),
-                username: configService.get<string>('RABBITMQ_USER'),
-              },
-            ],
-            queueOptions: {
-              durable: true,
-            },
-            queue: rabbitQueueConfig.NAME_NUMBER_API_QUEUE,
-          },
-        }),
-      },
-    ]),
+    MainApiClientModule,
+    VkModule.forManagers({
+      useSessionManager: false,
+      useSceneManager: false,
+      useHearManager: false,
+    }),
     VkModule.forRootAsync({
       inject: [ConfigService],
-      useFactory: (configService: ConfigService) => ({
+      useFactory: async (configService: ConfigService) => ({
         token: configService.get<string>('VK_GROUP_TOKEN'),
         options: {
           pollingGroupId: +configService.get('VK_GROUP_ID'),
           apiMode: 'sequential',
         },
+        // launchOptions: false,
+        // notReplyMessage: true,
+        // middlewaresBefore: [mainMiddleware.middlewaresBefore],
+        // middlewaresAfter: [mainMiddleware.middlewaresAfter],
       }),
-      imports: [ConfigModule, DonutModule],
+      imports: [ConfigModule],
     }),
     CacheModule,
     NumbersModule,
@@ -104,7 +92,9 @@ import { VkHelpModule } from './vk/vk.help.module';
     CommentsModule,
     OperatorsModule,
     ServerModule,
+    MainApiClientModule,
   ],
+  exports: [VkMainMiddleware],
 })
 export class AppModule {
   constructor(@InjectVkApi() private readonly vk: VK) {
