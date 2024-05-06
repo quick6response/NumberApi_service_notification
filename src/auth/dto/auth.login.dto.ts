@@ -1,7 +1,7 @@
-import {
-  RabbitmqNotificationKey,
-  RabbitmqNotificationKeyType,
-} from '../../common/rabbitmq/types/rabbitmq.notification.key.type';
+import { IsNumber } from 'class-validator';
+import { ParameterStartDateDto } from '../../common/rabbitmq/types/parameter.start.date.dto';
 
-const KEY_LOGIN: RabbitmqNotificationKey = 'auth_login_user';
-export type AuthLoginDto = RabbitmqNotificationKeyType[typeof KEY_LOGIN];
+export class AuthLoginDto extends ParameterStartDateDto {
+  @IsNumber()
+  userId: number;
+}
