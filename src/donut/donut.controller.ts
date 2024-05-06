@@ -6,13 +6,18 @@ import { DonutUserDto } from './dto/donut.user.dto';
 @Controller('donut')
 export class DonutController {
   constructor(private readonly donutService: DonutService) {}
-  @MessagePattern('donut.subscriptionIssuance')
+  @MessagePattern('donut_subscriptionIssuance')
   async subscriptionIssuance(@Payload() data: DonutUserDto) {
     return this.donutService.subscriptionIssuance(data);
   }
 
-  @MessagePattern('donut.subscriptionExpired')
+  @MessagePattern('donut_subscriptionExpired')
   async subscriptionExpired(@Payload() data: DonutUserDto) {
     return this.donutService.subscriptionExpired(data);
   }
+  // todo событие о изменение стоимости подписки
+  // @MessagePattern('donut_subscriptionExpired')
+  // async subscriptionExpired(@Payload() data: DonutUserDto) {
+  //   return this.donutService.subscriptionExpired(data);
+  // }
 }
