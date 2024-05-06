@@ -1,6 +1,7 @@
 import { NestFactory } from '@nestjs/core';
 import { MicroserviceOptions, Transport } from '@nestjs/microservices';
 import { AppModule } from './app.module';
+import { rabbitQueueConfig } from './common/rabbitmq/config/rabbitmq.queue.config';
 
 async function bootstrap() {
   const app = await NestFactory.createMicroservice<MicroserviceOptions>(
@@ -16,7 +17,7 @@ async function bootstrap() {
             username: process.env.RABBITMQ_USER,
           },
         ],
-        queue: 'vk_notification_queue',
+        queue: rabbitQueueConfig.NAME_YOUR_QUEUE,
         queueOptions: {
           durable: true,
         },
