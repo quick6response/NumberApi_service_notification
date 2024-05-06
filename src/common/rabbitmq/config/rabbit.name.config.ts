@@ -1,4 +1,4 @@
 export const rabbitNameConfig = {
-  NOTIFICATION: 'NOTIFICATIONS_SERVICE',
-  DONUT: 'DONUT_SERVICE',
+  // главный сервис, который выдает и выполняет команды
+  SERVICE_API: 'SERVICE_API',
 } as const;
