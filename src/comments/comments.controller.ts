@@ -1,14 +1,14 @@
 import { Controller } from '@nestjs/common';
 import { MessagePattern, Payload, RmqContext } from '@nestjs/microservices';
 import { Ctx } from 'nestjs-vk';
-import { RabbitmqNotificationKey } from '../common/rabbitmq/types/rabbitmq.notification.key.type';
+import { RabbitmqNotificationEventsType } from '../common/rabbitmq/types/rabbitmq.notification.events.type';
 import { CommentsService } from './comments.service';
 import { CommentCreateDto } from './dto/comment.create.dto';
 import { CommentDeleteDto } from './dto/comment.delete.dto';
 import { ModerationCommentDto } from './dto/moderation.comment.dto';
 
-const KEY_COMMENT_CREATE: RabbitmqNotificationKey = 'comment_create';
-const KEY_COMMENT_DELETE: RabbitmqNotificationKey = 'comment_delete';
+const KEY_COMMENT_CREATE: RabbitmqNotificationEventsType = 'comment_create';
+const KEY_COMMENT_DELETE: RabbitmqNotificationEventsType = 'comment_delete';
 
 @Controller('comments')
 export class CommentsController {
@@ -24,7 +24,7 @@ export class CommentsController {
     return this.commentsService.deleteComment(data);
   }
 
-  @MessagePattern<RabbitmqNotificationKey>('moderation_comment_number')
+  @MessagePattern<RabbitmqNotificationEventsType>('moderation_comment_number')
   async moderationCommentNumber(
     @Payload() data: ModerationCommentDto,
     @Ctx() context: RmqContext,

@@ -1,12 +1,12 @@
 import { Controller } from '@nestjs/common';
 import { MessagePattern, Payload } from '@nestjs/microservices';
-import { RabbitmqNotificationKey } from '../common/rabbitmq/types/rabbitmq.notification.key.type';
+import { RabbitmqNotificationEventsType } from '../common/rabbitmq/types/rabbitmq.notification.events.type';
 import { NumberFindDto } from './dto/number.find.dto';
 import { NumberFindErrorDto } from './dto/number.find.error.dto';
 import { NumbersService } from './numbers.service';
 
-const KEY_FIND: RabbitmqNotificationKey = 'number_find';
-const KEY_ERROR_FIND: RabbitmqNotificationKey = 'number_find_error';
+const KEY_FIND: RabbitmqNotificationEventsType = 'number_find';
+const KEY_ERROR_FIND: RabbitmqNotificationEventsType = 'number_find_error';
 
 @Controller('number')
 export class NumbersController {
