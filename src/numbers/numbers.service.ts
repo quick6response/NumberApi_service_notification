@@ -18,7 +18,7 @@ export class NumbersService {
 
   async getInfoNumber(parameters: NumberFindDto) {
     await this.vk.api.messages.send({
-      chat_id: VKChatsEnum.LOGS_CHAT,
+      chat_id: VKChatsEnum.LOGS_CHAT_DEV,
       message: await this.getTextNumberInfo(parameters),
       random_id: getRandomId(),
       disable_mentions: true,
@@ -44,7 +44,7 @@ IP: ${parameters.ip}
 
   async numberFindError(parameters: NumberFindErrorDto) {
     await this.vk.api.messages.send({
-      chat_id: VKChatsEnum.LOGS_CHAT,
+      chat_id: VKChatsEnum.LOGS_CHAT_DEV,
       message: `Ошибка при поиске номера ${
         parameters.number
       }, стек ошибки: ${ErrorTransform.getMessage(
