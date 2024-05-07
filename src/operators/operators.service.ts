@@ -11,7 +11,7 @@ export class OperatorsService {
   async notificationOperatorCreateAuto(parameters: OperatorCreateDto) {
     return this.vk.api.messages.send({
       message: `Создан новый оператор в базе:\n\nНазвание: ${parameters.name}\nФото: ${parameters.photo}`,
-      chat_id: VKChatsEnum.LOGS_CHAT,
+      chat_id: VKChatsEnum.LOGS_CHAT_DEV,
       random_id: getRandomId(),
     });
   }
