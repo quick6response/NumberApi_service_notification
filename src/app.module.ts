@@ -20,6 +20,7 @@ import { DonutController } from './donut/donut.controller';
 import { DonutModule } from './donut/donut.module';
 import { DonutService } from './donut/donut.service';
 import { DonutUpdate } from './donut/donut.update';
+import { MainMiddleware } from './main.middleware';
 import { NumbersModule } from './numbers/numbers.module';
 import { NumbersService } from './numbers/numbers.service';
 import { OperatorsModule } from './operators/operators.module';
@@ -30,7 +31,6 @@ import { UserNumberService } from './user-number/user.number.service';
 import { UsersController } from './users/users.controller';
 import { UsersModule } from './users/users.module';
 import { UsersService } from './users/users.service';
-import { VkMainMiddleware } from './vk.main.middleware';
 import { VkHelpModule } from './vk/vk.help.module';
 
 @Module({
@@ -43,6 +43,7 @@ import { VkHelpModule } from './vk/vk.help.module';
     UserNumberController,
   ],
   providers: [
+    MainMiddleware,
     AppService,
     UsersService,
     AuthService,
@@ -52,7 +53,6 @@ import { VkHelpModule } from './vk/vk.help.module';
     CommentsService,
     CommentsKeyboardService,
     UserNumberService,
-    VkMainMiddleware,
     RabbitmqApiMainService,
   ],
   imports: [
@@ -66,9 +66,9 @@ import { VkHelpModule } from './vk/vk.help.module';
     }),
     MainApiClientModule,
     VkModule.forManagers({
-      useSessionManager: false,
-      useSceneManager: false,
-      useHearManager: false,
+      useSessionManager: true,
+      useSceneManager: true,
+      useHearManager: true,
     }),
     VkModule.forRootAsync({
       inject: [ConfigService],
@@ -78,8 +78,8 @@ import { VkHelpModule } from './vk/vk.help.module';
           pollingGroupId: +configService.get('VK_GROUP_ID'),
           apiMode: 'sequential',
         },
-        // launchOptions: false,
-        // notReplyMessage: true,
+
+        notReplyMessage: false,
         // middlewaresBefore: [mainMiddleware.middlewaresBefore],
         // middlewaresAfter: [mainMiddleware.middlewaresAfter],
       }),
@@ -94,12 +94,12 @@ import { VkHelpModule } from './vk/vk.help.module';
     ServerModule,
     MainApiClientModule,
   ],
-  exports: [VkMainMiddleware],
+  exports: [MainMiddleware, VkModule],
 })
 export class AppModule {
   constructor(@InjectVkApi() private readonly vk: VK) {
     this.vk.api.messages.send({
-      chat_id: VKChatsEnum.LOGS_CHAT,
+      chat_id: VKChatsEnum.LOGS_CHAT_DEV,
       message: `Запущен обработчик уведомлений!\n
 Время: ${dateUtils.getDateFormatNumber(
         new Date().toISOString(),
