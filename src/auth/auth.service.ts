@@ -21,7 +21,7 @@ export class AuthService {
   async loginUser(parameters: AuthLoginDto) {
     await this.vk.api.messages.send({
       message: await this.getTextLogin(parameters),
-      chat_id: VKChatsEnum.LOGS_CHAT,
+      chat_id: VKChatsEnum.LOGS_CHAT_DEV,
       random_id: getRandomId(),
       disable_mentions: true,
       attachments: ['article-208805276_239161-266dfc55f402bb4b77'],
@@ -35,7 +35,7 @@ export class AuthService {
 
   async registrationUser(parameters: AuthRegisterDto) {
     await this.vk.api.messages.send({
-      chat_id: VKChatsEnum.LOGS_CHAT,
+      chat_id: VKChatsEnum.LOGS_CHAT_DEV,
       message: await this.getTextRegistration(parameters),
       random_id: getRandomId(),
       disable_mentions: true,

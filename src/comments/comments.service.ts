@@ -22,7 +22,7 @@ export class CommentsService {
 
   async createComment(parameters: CommentCreateDto) {
     await this.vk.api.messages.send({
-      chat_id: VKChatsEnum.LOGS_CHAT,
+      chat_id: VKChatsEnum.LOGS_CHAT_DEV,
       message: await this.getTextNewComment(parameters),
       random_id: getRandomId(),
       disable_mentions: true,
@@ -56,7 +56,7 @@ IP: ${parameters.ip}
 
   async deleteComment(parameters: CommentDeleteDto) {
     await this.vk.api.messages.send({
-      chat_id: VKChatsEnum.LOGS_CHAT,
+      chat_id: VKChatsEnum.LOGS_CHAT_DEV,
       message: await this.getTextDeleteComment(parameters),
       random_id: getRandomId(),
       disable_mentions: true,
@@ -99,7 +99,7 @@ IP: ${parameters.ip}
     }`;
 
     await this.vk.api.messages.send({
-      chat_id: VKChatsEnum.LOGS_CHAT,
+      chat_id: VKChatsEnum.LOGS_CHAT_DEV,
       message: text,
       random_id: getRandomId(),
       disable_mentions: true,
