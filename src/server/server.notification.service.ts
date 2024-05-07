@@ -11,7 +11,7 @@ export class ServerNotificationService {
   constructor(@InjectVkApi() private readonly vk: VK) {}
   async start(data: ServerStartDto) {
     return this.vk.api.messages.send({
-      chat_id: VKChatsEnum.LOGS_CHAT,
+      chat_id: VKChatsEnum.LOGS_CHAT_DEV,
       message: `Сервер API успешно запущен!\n
 Время запуска: ${dateUtils.getDateFormatNumber(
         data.date,
@@ -24,7 +24,7 @@ export class ServerNotificationService {
 
   async stop(data: ServerStopDto) {
     return this.vk.api.messages.send({
-      chat_id: VKChatsEnum.LOGS_CHAT,
+      chat_id: VKChatsEnum.LOGS_CHAT_DEV,
       message: `Сервер API был остановлен!\n
 Время остановки: ${dateUtils.getDateFormatNumber(
         data.date,
