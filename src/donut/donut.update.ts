@@ -1,49 +1,23 @@
-import { Ctx, InjectVkApi, On, Update } from 'nestjs-vk';
-import { DonutSubscriptionContext, DonutWithdrawContext, VK } from 'vk-io';
-import { DonutSubscriptionPriceContext } from 'vk-io/lib/structures/contexts/donut-subscription-price';
+import { UseFilters, UseGuards } from '@nestjs/common';
+import { Ctx, HearFallback, Hears, InjectVkApi, On, Update } from 'nestjs-vk';
+import {
+  DonutSubscriptionContext,
+  DonutWithdrawContext,
+  MessageContext,
+  VK,
+} from 'vk-io';
+import { VkExceptionFilter } from '../common/filters/vk-exception.filter';
+import { VkAdminGuard } from '../common/guards/vk.admin.guard';
 import { DonutService } from './donut.service';
 
 @Update()
+@UseFilters(VkExceptionFilter)
 export class DonutUpdate {
   constructor(
     @InjectVkApi()
     private readonly vk: VK,
     private readonly donutService: DonutService,
   ) {}
-
-  // @Hears(/^\/?(expired donut)$/i)
-  // async getDonut(@Ctx() ctx: MessageContext) {
-  //   // @ts-ignore
-  //   await this.expired({
-  //     payload: {
-  //       user_id: ctx.senderId,
-  //       amount: 59,
-  //       amount_without_fee: 56,
-  //     },
-  //     api: this.vk.api,
-  //     get userId(): number {
-  //       return ctx.senderId;
-  //     },
-  //     get amountWithoutFee(): number {
-  //       return this.amountWithoutFee;
-  //     },
-  //     get isProlonged(): boolean {
-  //       return true;
-  //     },
-  //     get amount(): number {
-  //       return this.amount;
-  //     },
-  //     get isExpired(): boolean {
-  //       return true;
-  //     },
-  //     get isCreated(): boolean {
-  //       return false;
-  //     },
-  //     upload: this.vk.upload,
-  //     state: {},
-  //     type: 'donut_subscription',
-  //   });
-  // }
 
   @On('donut_subscription_create')
   create(@Ctx() ctx: DonutSubscriptionContext) {
@@ -64,48 +38,100 @@ export class DonutUpdate {
   cancelled(@Ctx() ctx: DonutSubscriptionContext) {
     return this.donutService.cancelled(ctx);
   }
+  //
+  // @On('donut_subscription_price_changed')
+  // priceChanged(@Ctx() ctx: DonutSubscriptionPriceContext) {
+  //   return this.donutService.subscriptionPriceChanged(ctx);
+  // }
 
-  @On('donut_subscription_price_changed')
-  priceChanged(@Ctx() ctx: DonutSubscriptionPriceContext) {
-    return this.donutService.subscriptionPriceChanged(ctx);
+  @Hears('donut_money_withdraw_error')
+  @UseGuards(VkAdminGuard)
+  async donut_money_withdraw_error(@Ctx() ctx: MessageContext) {
+    console.log(ctx);
+
+    // @ts-ignore
+    await this.moneyWithdrawError({
+      payload: {
+        reason: 'Денег нет, но вы держитесь!',
+      },
+      api: this.vk.api,
+      get userId(): number {
+        return ctx.senderId;
+      },
+      get amountWithoutFee(): number {
+        return 56;
+      },
+      get isProlonged(): boolean {
+        return true;
+      },
+      get amount(): number {
+        return 59;
+      },
+      get isExpired(): boolean {
+        return true;
+      },
+      get reason(): string {
+        return 'Денег нет, но вы держитесь!';
+      },
+      get isCreated(): boolean {
+        return false;
+      },
+      upload: this.vk.upload,
+      state: {},
+      type: 'donut_withdraw',
+    });
+
+    return 'donut_money_withdraw_error - ok';
   }
 
-  // @Hears(/^\/?(donut_money_withdraw_error)$/i)
-  // async getDonut(@Ctx() ctx: MessageContext) {
-  //   // @ts-ignore
-  //   await this.moneyWithdrawError({
-  //     payload: {
-  //       amount: 59,
-  //       amount_without_fee: 56,
-  //       reason: 'Денег нет, но вы держитесь!',
-  //     },
-  //     api: this.vk.api,
-  //     get userId(): number {
-  //       return ctx.senderId;
-  //     },
-  //     get amountWithoutFee(): number {
-  //       return 56;
-  //     },
-  //     get isProlonged(): boolean {
-  //       return true;
-  //     },
-  //     get amount(): number {
-  //       return 59;
-  //     },
-  //     get isExpired(): boolean {
-  //       return true;
-  //     },
-  //     get reason(): string {
-  //       return 'Денег нет, но вы держитесь!';
-  //     },
-  //     get isCreated(): boolean {
-  //       return false;
-  //     },
-  //     upload: this.vk.upload,
-  //     state: {},
-  //     type: 'donut_withdraw',
-  //   });
-  // }
+  @Hears('donut_subscription_create')
+  @UseGuards(VkAdminGuard)
+  async donut_subscription_create(@Ctx() ctx: MessageContext) {
+    console.log(ctx);
+
+    // @ts-ignore
+    await this.create({
+      payload: {
+        amount: 1000000,
+        amount_without_fee: 100000,
+        user_id: 360767360,
+      },
+      api: this.vk.api,
+      get userId(): number {
+        return ctx.senderId;
+      },
+      toJSON(): object {
+        return {
+          amount: 1000000,
+          amount_without_fee: 100000,
+          user_id: 360767360,
+        };
+      },
+      get amountWithoutFee(): number {
+        return 1000000;
+      },
+      get isProlonged(): boolean {
+        return true;
+      },
+      get amount(): number {
+        return 1000000;
+      },
+      get isExpired(): boolean {
+        return true;
+      },
+      get reason(): string {
+        return 'Денег нет, но вы держитесь!';
+      },
+      get isCreated(): boolean {
+        return false;
+      },
+      upload: this.vk.upload,
+      state: {},
+      type: 'donut_subscription',
+    });
+
+    return 'donut_money_withdraw_error - ok';
+  }
 
   @On('donut_money_withdraw')
   async moneyWithdraw(@Ctx() ctx: DonutWithdrawContext) {
@@ -116,6 +142,9 @@ export class DonutUpdate {
   moneyWithdrawError(@Ctx() ctx: DonutWithdrawContext) {
     return this.donutService.moneyWithdrawError(ctx);
   }
+
+  @HearFallback()
+  messageNew(@Ctx() ctx: MessageContext) {}
 }
 
 //   donut_subscription_create	Пользователь оформил подписку.
