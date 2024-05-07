@@ -1,6 +1,5 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { ClientProxy } from '@nestjs/microservices';
 import { InjectVkApi } from 'nestjs-vk';
 import {
   DonutSubscriptionContext,
@@ -11,63 +10,120 @@ import {
 import { MessagesSendParams } from 'vk-io/lib/api/schemas/params';
 import { DonutSubscriptionPriceContext } from 'vk-io/lib/structures/contexts/donut-subscription-price';
 import { VKChatsEnum } from '../common/config/vk.chats.config';
+import { RabbitmqApiMainService } from '../common/rabbitmq/service/rabbitmq.api.main.service';
 import { dateUtils } from '../common/utils/date.utils';
-import { VkService } from '../vk/vk.service';
-import { DonutUserDto } from './dto/donut.user.dto';
+import { UserVkInterface, VkService } from '../vk/vk.service';
+import { DonutUserEventDto } from './dto/donut.user.event.dto';
 
 @Injectable()
 export class DonutService {
+  private readonly logger = new Logger(DonutService.name);
+
   constructor(
     @InjectVkApi() private readonly vk: VK,
     private readonly configService: ConfigService,
     private readonly vkHelpService: VkService,
-    @Inject('DONUT_SERVICE') private client: ClientProxy,
+    private readonly rabbitmqMainApiService: RabbitmqApiMainService,
   ) {}
 
   /**
-   * Подписка выдана сервером
+   * Подписка выдана сервисом
    */
-  async subscriptionIssuance(data: DonutUserDto) {
+  async subscriptionIssuance(data: DonutUserEventDto) {
     const user = await this.vkHelpService.getInfoUserVk(data.userId);
     const textChat = `Пользователю @id${data.userId} (${user.first_name} ${
       user.last_name
     }) была выдана подписка VK Donut.
     \nВремя: ${dateUtils.getDateFormatNumber(data.date)}
     \n#donut_issuance #subscriptionIssuance #id${data.userId}`;
-    await this.sendMessageChat(textChat, VKChatsEnum.LOGS_CHAT);
+    const textUser = `&#129395; ${user.first_name}, благодарим Вас за оформление подписки VK Donut! О преимуществах подписки, можно узнать в [https://vk.com/@id_called-donut|статье].\nНе забудьте вступить в чат для донов.`;
+
+    await this.sendMessageUser(user.id, textUser);
+    await this.sendMessageChat(textChat, [VKChatsEnum.LOGS_CHAT_DEV]);
   }
 
   /**
-   * Подписка убрана сервером
+   * Подписка отключена сервисом
    */
-  async subscriptionExpired(data: DonutUserDto) {
+  async subscriptionExpired(data: DonutUserEventDto) {
     const user = await this.vkHelpService.getInfoUserVk(data.userId);
     const textChat = `Подписка у пользователя @id${data.userId} (${
       user.first_name
     } ${user.last_name}) была выключена.
     \nВремя: ${dateUtils.getDateFormatNumber(data.date)}
-    \n#donut_Expired #subscriptionExpired #id${data.userId}`;
-    await this.sendMessageChat(textChat, VKChatsEnum.LOGS_CHAT);
+    \n#donut_Expired #subscriptionExpired #id${data.userId} #vk_id${data.userVkId}`;
+    await this.sendMessageChat(textChat, [VKChatsEnum.LOGS_CHAT_DEV]);
   }
 
   //
   async create(ctx: DonutSubscriptionContext) {
-    const date = new Date().toString();
-    const user = await this.vkHelpService.getInfoUserVk(ctx.userId);
-    const textUser = `&#129395; ${user.first_name}, благодарим Вас за оформление подписки VK Donut! О преимуществах подписки, можно узнать в [https://vk.com/@id_called-donut|статье].\nНе забудьте вступить в чат для донов.`;
-    const textChat = `[${dateUtils.getDateFormatNumber(date)}] &#129395; @id${
-      ctx.userId
-    } (${user.first_name} ${
-      user.last_name
-    }) оформил подписку VK Donut.\n#donut_create #donutSubscriptionCreate #id${
-      ctx.userId
-    }`;
-    // await this.sendMessageUser(user.id, textUser);
-    await this.sendMessageChat(textChat);
+    const date = Date.now();
+    let errorSendRabbit = false;
+    try {
+      this.rabbitmqMainApiService.emit('donut.create', {
+        userId: ctx.userId,
+        amount: ctx.amount,
+        amountWithoutFee: ctx.amountWithoutFee,
+        json: ctx.toJSON(),
+      });
+    } catch (e) {
+      this.logger.error(
+        `Не удалось отправить событие в RabbitMQ о выдачи подписки пользователю ${ctx.userId}`,
+        e,
+      );
+      // задержка 5 секунд перед повтором попытки
+      await new Promise((resolve) => setTimeout(resolve, 5000));
+      try {
+        this.rabbitmqMainApiService.emit('donut.create', {
+          userId: ctx.userId,
+          amount: ctx.amount,
+          amountWithoutFee: ctx.amountWithoutFee,
+          json: ctx.toJSON(),
+        });
+      } catch {
+        errorSendRabbit = true;
+        const textChatError = `‼ [${dateUtils.getDateFormatNumber(date)}] @id${
+          ctx.userId
+        } оформил подписку VK Donut, но я не могу отправить событие в RabbitMQ.\n\nСумма: ${ctx.amount} (${ctx.amountWithoutFee} с комиссией)\n\nТекст ошибки: ${e}\n\n#donut_create_error #donutSubscriptionCreateError #vk_id${
+          ctx.userId
+        }`;
+        await this.sendMessageChat(textChatError, [
+          VKChatsEnum.LOGS_CHAT_DEV,
+          VKChatsEnum.ADMIN_CHAT_DEV,
+        ]);
+      }
+    }
+    // у нас возникла ошибка rabbit, мы не смогли отправить событие
+    if (errorSendRabbit) {
+      return;
+    }
 
-    this.client.emit('donut.create', { userId: user.id });
+    let textChat;
+    try {
+      const user = await this.vkHelpService.getInfoUserVk(ctx.userId);
+
+      textChat = this.getTextSuccessSubscription(date, ctx, user);
+    } catch (err) {
+      textChat = this.getTextSuccessSubscription(date, ctx);
+    }
+
+    await this.sendMessageChat(textChat, [
+      VKChatsEnum.LOGS_CHAT_DEV,
+      VKChatsEnum.ADMIN_CHAT_DEV,
+    ]);
   }
 
+  private getTextSuccessSubscription(
+    date: number,
+    ctx: DonutSubscriptionContext,
+    user?: UserVkInterface,
+  ) {
+    return `[${dateUtils.getDateFormatNumber(date)}] &#129395; @id${
+      ctx.userId
+    } ${user ? `(${user.first_name} ${user.last_name})` : ''} оформил подписку VK Donut.\n\nСумма: ${ctx.amount} (${ctx.amountWithoutFee} с комиссией)\n\n#donut_create #donutSubscriptionCreate #vk_id${
+      ctx.userId
+    }`;
+  }
   async prolonged(ctx: DonutSubscriptionContext) {
     const date = new Date().toString();
     const user = await this.vkHelpService.getInfoUserVk(ctx.userId);
@@ -82,7 +138,10 @@ export class DonutService {
     // await this.sendMessageUser(user.id, textUser);
     await this.sendMessageChat(textChat);
 
-    this.client.emit('donut.prolonged', { userId: user.id });
+    this.rabbitmqMainApiService.emit('donut.prolonged', {
+      userId: user.id,
+      json: ctx.toJSON(),
+    });
   }
 
   async expired(ctx: DonutSubscriptionContext) {
@@ -99,7 +158,10 @@ export class DonutService {
     // await this.sendMessageUser(user.id, textUser);
     await this.sendMessageChat(textChat);
 
-    this.client.emit('donut.expired', { userId: user.id });
+    this.rabbitmqMainApiService.emit('donut.expired', {
+      userId: user.id,
+      json: ctx.toJSON(),
+    });
   }
 
   async cancelled(ctx: DonutSubscriptionContext) {
@@ -115,6 +177,11 @@ export class DonutService {
     }`;
     // await this.sendMessageUser(user.id, textUser);
     await this.sendMessageChat(textChat);
+
+    this.rabbitmqMainApiService.emit('donut.expired', {
+      userId: user.id,
+      json: ctx.toJSON(),
+    });
   }
 
   async moneyWithdraw(ctx: DonutWithdrawContext) {
@@ -151,26 +218,30 @@ export class DonutService {
     }`;
     // await this.sendMessageUser(user.id, textUser);
     await this.sendMessageChat(textChat);
-    this.client.emit('donut.subscriptionPriceChanged', { userId: user.id });
+    this.rabbitmqMainApiService.emit('donut.subscriptionPriceChanged', {
+      userId: user.id,
+      json: ctx.toJSON(),
+    });
   }
 
   private async sendMessageChat(
     text: string,
-    chatId?: VKChatsEnum,
+    chatIds: VKChatsEnum[] = [VKChatsEnum.LOGS_CHAT_DEV],
     options?: MessagesSendParams,
   ) {
+    const peersId = chatIds.map((chatId) => 2e9 + chatId);
     try {
       return this.vk.api.messages.send({
         message: text,
-        chat_id: chatId ?? VKChatsEnum.ADMIN_CHAT,
         random_id: getRandomId(),
         disable_mentions: true,
+        peer_ids: peersId,
         ...options,
       });
     } catch (error) {
       return this.vk.api.messages.send({
         message: `Ошибка отправки сообщения о донате. ${error?.message}`,
-        chat_id: VKChatsEnum.LOGS_CHAT,
+        chat_id: VKChatsEnum.LOGS_CHAT_DEV,
         random_id: getRandomId(),
         disable_mentions: false,
       });
@@ -199,7 +270,7 @@ export class DonutService {
     } catch (error) {
       return this.vk.api.messages.send({
         message: `Ошибка отправки сообщения о донате пользователю @id${userId}. ${error?.message}`,
-        chat_id: VKChatsEnum.LOGS_CHAT,
+        chat_id: VKChatsEnum.LOGS_CHAT_DEV,
         random_id: getRandomId(),
       });
     }
