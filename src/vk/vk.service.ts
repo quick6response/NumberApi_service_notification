@@ -35,7 +35,7 @@ export class VkService {
   }
 }
 
-interface UserVkInterface {
+export interface UserVkInterface {
   id: number;
   first_name: string;
   last_name: string;
