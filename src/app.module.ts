@@ -8,7 +8,6 @@ import { AuthController } from './auth/auth.controller';
 import { AuthModule } from './auth/auth.module';
 import { AuthService } from './auth/auth.service';
 import { CommentsController } from './comments/comments.controller';
-import { CommentsKeyboardService } from './comments/comments.keyboard.service';
 import { CommentsModule } from './comments/comments.module';
 import { CommentsService } from './comments/comments.service';
 import { CacheModule } from './common/cache/cache.module';
@@ -51,7 +50,6 @@ import { VkHelpModule } from './vk/vk.help.module';
     DonutService,
     DonutUpdate,
     CommentsService,
-    CommentsKeyboardService,
     UserNumberService,
     RabbitmqApiMainService,
   ],
