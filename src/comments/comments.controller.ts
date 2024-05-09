@@ -1,34 +1,44 @@
 import { Controller } from '@nestjs/common';
-import { MessagePattern, Payload, RmqContext } from '@nestjs/microservices';
-import { Ctx } from 'nestjs-vk';
+import { MessagePattern, Payload } from '@nestjs/microservices';
+import { MainConstantEventName } from '@quick_response/number_api_event/dist/_types';
 import { RabbitmqNotificationEventsType } from '../common/rabbitmq/types/rabbitmq.notification.events.type';
 import { CommentsService } from './comments.service';
-import { CommentCreateDto } from './dto/comment.create.dto';
-import { CommentDeleteDto } from './dto/comment.delete.dto';
-import { ModerationCommentDto } from './dto/moderation.comment.dto';
-
-const KEY_COMMENT_CREATE: RabbitmqNotificationEventsType = 'comment_create';
-const KEY_COMMENT_DELETE: RabbitmqNotificationEventsType = 'comment_delete';
+import {
+  VkCommentCreateDto,
+  VkCommentDeleteDto,
+  VkCommentEditDto,
+} from './dto/vk.comment.dto';
+import { VkModerationCommentDto } from './dto/vk.moderation.comment.dto';
 
 @Controller('comments')
 export class CommentsController {
-  private processedMessageIds: Record<string, boolean> = {};
   constructor(private readonly commentsService: CommentsService) {}
-  @MessagePattern(KEY_COMMENT_CREATE)
-  async commentCreate(@Payload() data: CommentCreateDto) {
-    return this.commentsService.createComment(data);
+
+  @MessagePattern<RabbitmqNotificationEventsType>(
+    MainConstantEventName.notification.comment_create,
+  )
+  async commentCreate(@Payload() data: VkCommentCreateDto) {
+    return this.commentsService.commentCreate(data);
   }
 
-  @MessagePattern(KEY_COMMENT_DELETE)
-  async commentDelete(@Payload() data: CommentDeleteDto) {
-    return this.commentsService.deleteComment(data);
+  @MessagePattern<RabbitmqNotificationEventsType>(
+    MainConstantEventName.notification.comment_delete,
+  )
+  async commentDelete(@Payload() data: VkCommentDeleteDto) {
+    return this.commentsService.commentDelete(data);
   }
 
-  @MessagePattern<RabbitmqNotificationEventsType>('moderation_comment_number')
-  async moderationCommentNumber(
-    @Payload() data: ModerationCommentDto,
-    @Ctx() context: RmqContext,
-  ) {
+  @MessagePattern<RabbitmqNotificationEventsType>(
+    MainConstantEventName.notification.comment_edit,
+  )
+  async commentEdit(@Payload() data: VkCommentEditDto) {
+    return this.commentsService.commentEdit(data);
+  }
+
+  @MessagePattern<RabbitmqNotificationEventsType>(
+    MainConstantEventName.notification.comment_moderation_number,
+  )
+  async moderationCommentNumber(@Payload() data: VkModerationCommentDto) {
     await this.commentsService.moderationCommentNumber(data);
   }
 }
