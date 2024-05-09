@@ -1,24 +1,20 @@
 import { Controller } from '@nestjs/common';
 import { MessagePattern, Payload } from '@nestjs/microservices';
-import { RabbitmqNotificationEventsType } from '../common/rabbitmq/types/rabbitmq.notification.events.type';
+import { MainConstantEventName } from '@quick_response/number_api_event/dist/_types';
 import { AuthService } from './auth.service';
-import { AuthLoginDto } from './dto/auth.login.dto';
-import { AuthRegisterDto } from './dto/auth.register.dto';
-
-const KEY_LOGIN: RabbitmqNotificationEventsType = 'auth_login_user';
-const KEY_REGISTER: RabbitmqNotificationEventsType = 'auth_register_user';
+import { VkAuthRegistrationDto } from './dto/vk.auth.dto';
 
 @Controller('auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
-  @MessagePattern(KEY_LOGIN)
-  async login(@Payload() data: AuthLoginDto) {
+  @MessagePattern(MainConstantEventName.notification.auth_login_user)
+  async login(@Payload() data: VkAuthRegistrationDto) {
     return this.authService.loginUser(data);
   }
 
-  @MessagePattern(KEY_REGISTER)
-  async registration(@Payload() data: AuthRegisterDto) {
+  @MessagePattern(MainConstantEventName.notification.auth_register_user)
+  async registration(@Payload() data: VkAuthRegistrationDto) {
     return this.authService.registrationUser(data);
   }
 }
