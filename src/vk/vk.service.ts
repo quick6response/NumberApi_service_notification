@@ -7,6 +7,7 @@ import { VK } from 'vk-io';
 @Injectable()
 export class VkService {
   private readonly logger = new Logger(VkService.name);
+
   constructor(
     @InjectVkApi()
     private readonly vk: VK,
