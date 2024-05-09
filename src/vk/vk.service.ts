@@ -1,11 +1,12 @@
 import { CACHE_MANAGER } from '@nestjs/cache-manager';
-import { Inject, Injectable } from '@nestjs/common';
+import { Inject, Injectable, Logger } from '@nestjs/common';
 import { Cache } from 'cache-manager';
 import { InjectVkApi } from 'nestjs-vk';
 import { VK } from 'vk-io';
 
 @Injectable()
 export class VkService {
+  private readonly logger = new Logger(VkService.name);
   constructor(
     @InjectVkApi()
     private readonly vk: VK,
@@ -18,20 +19,53 @@ export class VkService {
    * @private
    */
   async getInfoUserVk(idVk: number): Promise<UserVkInterface> {
-    const userCache = await this.cacheManager.get<UserVkInterface>(
-      `user_vk_id${idVk}`,
-    );
-    const userVk =
-      userCache ||
-      ((
-        await this.vk.api.users.get({
-          user_id: idVk,
-        })
-      )[0] as UserVkInterface);
-    if (!userCache)
-      await this.cacheManager.set(`user_vk_id${idVk}`, userVk, 1000 * 60 * 60);
+    try {
+      const userCache = await this.getCacheUserVk(idVk);
 
-    return userVk;
+      if (userCache !== null) {
+        return userCache;
+      }
+
+      const [userVk] = (await this.vk.api.users.get({
+        user_id: idVk,
+      })) as UserVkInterface[];
+
+      if (!userCache && !userVk) {
+        await this.setCacheUserVk(idVk, userVk);
+      }
+
+      return userVk;
+    } catch (err) {
+      this.logger.error(`Error get info user vk ${idVk}`, err);
+      return {
+        can_access_closed: false,
+        first_name: 'не определено',
+        id: idVk,
+        is_closed: false,
+        last_name: 'не определено',
+      };
+    }
+  }
+
+  private async setCacheUserVk(idVk: number, userVk: UserVkInterface) {
+    try {
+      await this.cacheManager.set(`user_vk_id${idVk}`, userVk, 1000 * 60 * 60);
+    } catch (err) {
+      this.logger.error(`Error set cache user vk ${idVk}`, err);
+      return null;
+    }
+  }
+
+  private async getCacheUserVk(idVk: number) {
+    try {
+      const userCache = await this.cacheManager.get<UserVkInterface>(
+        `user_vk_id${idVk}`,
+      );
+      return userCache;
+    } catch (err) {
+      this.logger.error(`Error get cache user vk ${idVk}`, err);
+      return null;
+    }
   }
 }
 
