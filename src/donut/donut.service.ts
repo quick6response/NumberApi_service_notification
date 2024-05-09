@@ -5,6 +5,7 @@ import {
   DonutSubscriptionContext,
   DonutWithdrawContext,
   getRandomId,
+  Keyboard,
   VK,
 } from 'vk-io';
 import { MessagesSendParams } from 'vk-io/lib/api/schemas/params';
@@ -36,12 +37,29 @@ export class DonutService {
     }) была выдана подписка VK Donut.
     \nВремя: ${dateUtils.getDateFormatNumber(data.date)}
     \n#donut_issuance #subscriptionIssuance #id${data.userId}`;
-    const textUser = `&#129395; ${user.first_name}, благодарим Вас за оформление подписки VK Donut! О преимуществах подписки, можно узнать в [https://vk.com/@id_called-donut|статье].\nНе забудьте вступить в чат для донов.`;
+    const textUser = `&#129395; ${user.first_name}, благодарим Вас за оформление подписки VK Donut!\nО преимуществах подписки, можно узнать в [https://vk.com/@id_called-donut|статье].\nЕщё у нас есть беседа для обладателей подписки VK Donut`;
 
-    await this.sendMessageUser(user.id, textUser);
+    await this.sendMessageUser(user.id, textUser, {
+      keyboard: this.getKeyboardAboutBenefits(),
+    });
     await this.sendMessageChat(textChat, [VKChatsEnum.LOGS_CHAT_DEV]);
   }
 
+  private getKeyboardAboutBenefits() {
+    const builder = Keyboard.keyboard([
+      // Одна кнопка
+      [
+        Keyboard.callbackButton({
+          label: 'Подробнее про подписку VK Donut',
+          color: 'secondary',
+          payload: {
+            type: 'text',
+            cmd: 'donut about',
+          },
+        }),
+      ],
+    ]).inline();
+  }
   /**
    * Подписка отключена сервисом
    */
@@ -50,12 +68,12 @@ export class DonutService {
     const textChat = `Подписка у пользователя @id${data.userId} (${
       user.first_name
     } ${user.last_name}) была выключена.
-    \nВремя: ${dateUtils.getDateFormatNumber(data.date)}
-    \n#donut_Expired #subscriptionExpired #id${data.userId} #vk_id${data.userVkId}`;
+    \n\nВремя: ${dateUtils.getDateFormatNumber(data.date)}
+    \n\n#donut_Expired #subscriptionExpired #id${data.userId} #vk_id${data.userVkId}`;
     await this.sendMessageChat(textChat, [VKChatsEnum.LOGS_CHAT_DEV]);
   }
 
-  //
+  // оформление подписки вк донут
   async create(ctx: DonutSubscriptionContext) {
     const date = Date.now();
     let errorSendRabbit = false;
