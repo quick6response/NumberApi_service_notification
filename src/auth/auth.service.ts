@@ -6,8 +6,7 @@ import { VKChatsEnum } from '../common/config/vk.chats.config';
 import { dateUtils } from '../common/utils/date.utils';
 import { VkUtils } from '../common/utils/vk.utils';
 import { VkService } from '../vk/vk.service';
-import { AuthLoginDto } from './dto/auth.login.dto';
-import { AuthRegisterDto } from './dto/auth.register.dto';
+import { VkAuthLoginDto, VkAuthRegistrationDto } from './dto/vk.auth.dto';
 
 @Injectable()
 export class AuthService {
@@ -18,7 +17,7 @@ export class AuthService {
     private readonly vkHelpService: VkService,
   ) {}
 
-  async loginUser(parameters: AuthLoginDto) {
+  async loginUser(parameters: VkAuthLoginDto) {
     await this.vk.api.messages.send({
       message: await this.getTextLogin(parameters),
       chat_id: VKChatsEnum.LOGS_CHAT_DEV,
@@ -33,7 +32,7 @@ export class AuthService {
     return { result: true };
   }
 
-  async registrationUser(parameters: AuthRegisterDto) {
+  async registrationUser(parameters: VkAuthRegistrationDto) {
     await this.vk.api.messages.send({
       chat_id: VKChatsEnum.LOGS_CHAT_DEV,
       message: await this.getTextRegistration(parameters),
@@ -47,7 +46,9 @@ export class AuthService {
     return { result: true };
   }
 
-  private async getTextRegistration(data: AuthRegisterDto): Promise<string> {
+  private async getTextRegistration(
+    data: VkAuthRegistrationDto,
+  ): Promise<string> {
     const user = await this.vkHelpService.getInfoUserVk(data.vk_user_id);
     return `@id${data.vk_user_id} (${user.first_name} ${
       user.last_name
@@ -58,7 +59,7 @@ vk_platform — ${VkUtils.getPlatform(data.vk_platform)} (${data.vk_platform})\n
 #registerUser #id${data.userId} #vk_id${data.vk_user_id}`;
   }
 
-  private async getTextLogin(data: AuthLoginDto): Promise<string> {
+  private async getTextLogin(data: VkAuthLoginDto): Promise<string> {
     const user = await this.vkHelpService.getInfoUserVk(data.vk_user_id);
     return `@id${data.vk_user_id} (${user.first_name} ${
       user.last_name
