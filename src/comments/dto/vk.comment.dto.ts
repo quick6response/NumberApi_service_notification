@@ -1,8 +1,9 @@
 import {
   CommentCreateDtoInterface,
+  CommentDtoInterface,
+  CommentEditChangeColumns,
   CommentEditDtoInterface,
 } from '@quick_response/number_api_event';
-import { CommentDtoInterface } from '@quick_response/number_api_event/dist/microservice/notification/dto/Comment/comment.dto.interface';
 import { IsBoolean, IsDate, IsNumber, IsString } from 'class-validator';
 import { ParameterStartDto } from '../../common/dto/parameter.start.dto';
 import { CommentStatusEnum } from '../type/comment.status.enum';
@@ -45,4 +46,5 @@ export class VkCommentEditDto
 {
   prevComment: VkCommentDto;
   nextComment: VkCommentDto;
+  changes: CommentEditChangeColumns[];
 }
