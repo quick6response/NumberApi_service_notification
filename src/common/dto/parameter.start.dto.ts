@@ -1,9 +1,9 @@
+import { ParameterRequestVkUserEventInterface } from '@quick_response/number_api_event/dist/_types';
 import { IsNumber, IsString } from 'class-validator';
 
-export class ParameterStartDto {
+export class ParameterStartDto implements ParameterRequestVkUserEventInterface {
   @IsString()
   vk_access_token_settings: string;
-
   @IsNumber()
   vk_app_id: number;
   @IsNumber()
@@ -28,6 +28,6 @@ export class ParameterStartDto {
   ip: string;
   @IsString()
   userAgent: string;
-  @IsString()
-  date: string;
+  @IsNumber()
+  date: number;
 }
