@@ -1,7 +1,7 @@
 import {
   AuthLoginDtoInterface,
   AuthRegistrationDtoInterface,
-} from '@quick_response/number_api_event/dist/_types';
+} from '@quick_response/number_api_event';
 import { IsNumber } from 'class-validator';
 import { ParameterStartDateDto } from '../../common/rabbitmq/types/parameter.start.date.dto';
 

@@ -1,6 +1,6 @@
 import { Controller } from '@nestjs/common';
 import { MessagePattern, Payload } from '@nestjs/microservices';
-import { MainConstantEventName } from '@quick_response/number_api_event/dist/_types';
+import { MainConstantEventName } from '@quick_response/number_api_event';
 import { AuthService } from './auth.service';
 import { VkAuthRegistrationDto } from './dto/vk.auth.dto';
 

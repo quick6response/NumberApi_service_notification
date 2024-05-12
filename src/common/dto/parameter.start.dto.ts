@@ -1,4 +1,4 @@
-import { ParameterRequestVkUserEventInterface } from '@quick_response/number_api_event/dist/_types';
+import { ParameterRequestVkUserEventInterface } from '@quick_response/number_api_event';
 import { IsNumber, IsString } from 'class-validator';
 
 export class ParameterStartDto implements ParameterRequestVkUserEventInterface {
