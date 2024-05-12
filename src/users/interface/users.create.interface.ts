@@ -1,5 +1,5 @@
-import { ParameterStartDto } from '../../common/dto/parameter.start.dto';
+import { ParameterRequestUserDto } from '../../common/dto/parameter.request.user.dto';
 
-export type UsersCreateInterface = ParameterStartDto & {
+export type UsersCreateInterface = ParameterRequestUserDto & {
   userId: number;
 };
