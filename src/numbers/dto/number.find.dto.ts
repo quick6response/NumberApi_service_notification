@@ -1,10 +1,10 @@
 import { IsBoolean, IsNumber, IsString } from 'class-validator';
-import { ParameterStartDto } from '../../common/dto/parameter.start.dto';
+import { ParameterRequestUserDto } from '../../common/dto/parameter.request.user.dto';
 
 /**
  * Для поиска номера
  */
-export class NumberFindDto extends ParameterStartDto {
+export class NumberFindDto extends ParameterRequestUserDto {
   @IsNumber()
   numberId: number;
   @IsString()
