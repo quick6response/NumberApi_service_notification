@@ -1,9 +1,12 @@
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
+import { ClientPlatformEnum } from '@quick_response/number_api_event';
+import { getClientInfoByPlatform } from '@quick_response/number_api_event/dist/microservice/notification/types/parameter.client.info.type';
 import { InjectVkApi } from 'nestjs-vk';
 import { getRandomId, Keyboard, VK } from 'vk-io';
 import { VKChatsEnum } from '../common/config/vk.chats.config';
 import { dateUtils } from '../common/utils/date.utils';
+import { messageTagVkMiniAppsActionUtils } from '../common/utils/message.tag.utils';
 import { VkUtils } from '../common/utils/vk.utils';
 import { VkService } from '../vk/vk.service';
 import { VkAuthLoginDto, VkAuthRegistrationDto } from './dto/vk.auth.dto';
@@ -18,60 +21,91 @@ export class AuthService {
   ) {}
 
   async loginUser(parameters: VkAuthLoginDto) {
-    await this.vk.api.messages.send({
-      message: await this.getTextLogin(parameters),
-      chat_id: VKChatsEnum.LOGS_CHAT_DEV,
-      random_id: getRandomId(),
-      disable_mentions: true,
-      attachments: ['article-208805276_239161-266dfc55f402bb4b77'],
-      keyboard: this.getKeyboardFindUser(
-        parameters.userId,
-        parameters.vk_app_id,
-      ),
-    });
+    if (parameters.clientPlatform === ClientPlatformEnum.VK) {
+      const { clientInfo } = getClientInfoByPlatform(
+        parameters.clientPlatform,
+        parameters.clientInfo,
+      );
+      await this.vk.api.messages.send({
+        message: await this.getTextLogin(parameters),
+        chat_id: VKChatsEnum.LOGS_CHAT_DEV,
+        random_id: getRandomId(),
+        disable_mentions: true,
+        attachments: ['article-208805276_239161-266dfc55f402bb4b77'],
+        keyboard: this.getKeyboardFindUser(
+          parameters.user.id,
+          clientInfo.vk_app_id,
+        ),
+      });
+    }
     return { result: true };
   }
 
   async registrationUser(parameters: VkAuthRegistrationDto) {
-    await this.vk.api.messages.send({
-      chat_id: VKChatsEnum.LOGS_CHAT_DEV,
-      message: await this.getTextRegistration(parameters),
-      random_id: getRandomId(),
-      disable_mentions: true,
-      keyboard: this.getKeyboardFindUser(
-        parameters.userId,
-        parameters.vk_app_id,
-      ),
-    });
+    if (parameters.clientPlatform === ClientPlatformEnum.VK) {
+      const { clientInfo } = getClientInfoByPlatform(
+        parameters.clientPlatform,
+        parameters.clientInfo,
+      );
+
+      await this.vk.api.messages.send({
+        chat_id: VKChatsEnum.LOGS_CHAT_DEV,
+        message: await this.getTextRegistration(parameters),
+        random_id: getRandomId(),
+        disable_mentions: true,
+        keyboard: this.getKeyboardFindUser(
+          parameters.user.id,
+          clientInfo.vk_app_id,
+        ),
+      });
+    }
     return { result: true };
   }
 
   private async getTextRegistration(
-    data: VkAuthRegistrationDto,
+    parameters: VkAuthRegistrationDto,
   ): Promise<string> {
-    const user = await this.vkHelpService.getInfoUserVk(data.vk_user_id);
-    return `@id${data.vk_user_id} (${user.first_name} ${
-      user.last_name
-    }) зарегистрировался в приложение (${data.userId}).\n\n
-Время: ${dateUtils.getDateFormatNumber(data.date)}\nIP: ${data.ip}\n\n
-vk_ref — ${VkUtils.getRef(data.vk_ref)} (${data.vk_ref})
-vk_platform — ${VkUtils.getPlatform(data.vk_platform)} (${data.vk_platform})\n\n
-#registerUser #id${data.userId} #vk_id${data.vk_user_id}`;
+    if (parameters.clientPlatform === ClientPlatformEnum.VK) {
+      const { clientInfo } = getClientInfoByPlatform(
+        parameters.clientPlatform,
+        parameters.clientInfo,
+      );
+
+      const user = await this.vkHelpService.getInfoUserVk(
+        clientInfo.vk_user_id,
+      );
+      return `@id${clientInfo.vk_user_id} (${user.first_name} ${
+        user.last_name
+      }) зарегистрировался в приложение (${parameters.user.id}).\n\n
+Время: ${dateUtils.getDateFormatNumber(parameters.date)}\nIP: ${clientInfo.ip}\n\n
+vk_ref — ${VkUtils.getRef(clientInfo.vk_ref)} (${clientInfo.vk_ref})
+vk_platform — ${VkUtils.getPlatform(clientInfo.vk_platform)} (${clientInfo.vk_platform})\n\n
+${messageTagVkMiniAppsActionUtils.getTagAuth('registration')} ${messageTagVkMiniAppsActionUtils.getTagUserAction(parameters.user.id, clientInfo.vk_user_id)}`;
+    }
   }
 
-  private async getTextLogin(data: VkAuthLoginDto): Promise<string> {
-    const user = await this.vkHelpService.getInfoUserVk(data.vk_user_id);
-    return `@id${data.vk_user_id} (${user.first_name} ${
-      user.last_name
-    }) авторизация в приложение (${
-      data.vk_app_id === this.configService.get<number>('APP_ID')
-        ? 'Dev'
-        : 'Prod'
-    })\n\n
-Время: ${dateUtils.getDateFormatNumber(data.date)}\nIP: ${data.ip}\n\n
-vk_ref — ${VkUtils.getRef(data.vk_ref)} (${data.vk_ref})
-vk_platform — ${VkUtils.getPlatform(data.vk_platform)} (${data.vk_platform})\n\n
-#login #id${data.userId} #vk_id${data.vk_user_id}`;
+  private async getTextLogin(parameters: VkAuthLoginDto): Promise<string> {
+    if (parameters.clientPlatform === ClientPlatformEnum.VK) {
+      const { clientInfo } = getClientInfoByPlatform(
+        parameters.clientPlatform,
+        parameters.clientInfo,
+      );
+
+      const user = await this.vkHelpService.getInfoUserVk(
+        clientInfo.vk_user_id,
+      );
+      return `@id${user.id} (${user.first_name} ${
+        user.last_name
+      }) авторизация в приложение (${
+        clientInfo.vk_app_id == this.configService.get<number>('APP_ID')
+          ? 'Dev'
+          : 'Prod'
+      })\n\n
+Время: ${dateUtils.getDateFormatNumber(parameters.date)}\nIP: ${clientInfo.ip}\n\n
+vk_ref — ${VkUtils.getRef(clientInfo.vk_ref)} (${clientInfo.vk_ref})
+vk_platform — ${VkUtils.getPlatform(clientInfo.vk_platform)} (${clientInfo.vk_platform})\n\n
+${messageTagVkMiniAppsActionUtils.getTagAuth('registration')} ${messageTagVkMiniAppsActionUtils.getTagUserAction(parameters.user.id, clientInfo.vk_user_id)}`;
+    }
   }
 
   private getKeyboardFindUser(userId: number, appId: number) {
