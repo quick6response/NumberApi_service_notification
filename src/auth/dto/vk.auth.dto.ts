@@ -1,13 +1,13 @@
 import {
-  AuthLoginDtoInterface,
-  AuthRegistrationDtoInterface,
+  AuthLoginDto,
+  AuthRegistrationDto,
 } from '@quick_response/number_api_event';
 import { IsNumber } from 'class-validator';
 import { ParameterStartDateDto } from '../../common/rabbitmq/types/parameter.start.date.dto';
 
 export class VkAuthLoginDto
   extends ParameterStartDateDto
-  implements AuthLoginDtoInterface
+  implements AuthLoginDto
 {
   @IsNumber()
   userId: number;
@@ -15,7 +15,7 @@ export class VkAuthLoginDto
 
 export class VkAuthRegistrationDto
   extends ParameterStartDateDto
-  implements AuthRegistrationDtoInterface
+  implements AuthRegistrationDto
 {
   @IsNumber()
   userId: number;
