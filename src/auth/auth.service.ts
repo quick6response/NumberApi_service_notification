@@ -1,7 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { ClientPlatformEnum } from '@quick_response/number_api_event';
-import { getClientInfoByPlatform } from '@quick_response/number_api_event/dist/microservice/notification/types/parameter.client.info.type';
+import {
+  ClientPlatformEnum,
+  getClientInfoByPlatform,
+} from '@quick_response/number_api_event';
 import { InjectVkApi } from 'nestjs-vk';
 import { getRandomId, Keyboard, VK } from 'vk-io';
 import { VKChatsEnum } from '../common/config/vk.chats.config';
@@ -80,7 +82,7 @@ export class AuthService {
 Время: ${dateUtils.getDateFormatNumber(parameters.date)}\nIP: ${clientInfo.ip}\n\n
 vk_ref — ${VkUtils.getRef(clientInfo.vk_ref)} (${clientInfo.vk_ref})
 vk_platform — ${VkUtils.getPlatform(clientInfo.vk_platform)} (${clientInfo.vk_platform})\n\n
-${messageTagVkMiniAppsActionUtils.getTagAuth('registration')} ${messageTagVkMiniAppsActionUtils.getTagUserAction(parameters.user.id, clientInfo.vk_user_id)}`;
+${messageTagVkMiniAppsActionUtils.getTagPlatform()} ${messageTagVkMiniAppsActionUtils.getTagAuth('registration')} ${messageTagVkMiniAppsActionUtils.getTagUserAction(parameters.user.id, clientInfo.vk_user_id)}`;
     }
   }
 
@@ -104,7 +106,7 @@ ${messageTagVkMiniAppsActionUtils.getTagAuth('registration')} ${messageTagVkMini
 Время: ${dateUtils.getDateFormatNumber(parameters.date)}\nIP: ${clientInfo.ip}\n\n
 vk_ref — ${VkUtils.getRef(clientInfo.vk_ref)} (${clientInfo.vk_ref})
 vk_platform — ${VkUtils.getPlatform(clientInfo.vk_platform)} (${clientInfo.vk_platform})\n\n
-${messageTagVkMiniAppsActionUtils.getTagAuth('registration')} ${messageTagVkMiniAppsActionUtils.getTagUserAction(parameters.user.id, clientInfo.vk_user_id)}`;
+${messageTagVkMiniAppsActionUtils.getTagPlatform()} ${messageTagVkMiniAppsActionUtils.getTagAuth('login')} ${messageTagVkMiniAppsActionUtils.getTagUserAction(parameters.user.id, clientInfo.vk_user_id)}`;
     }
   }
 
