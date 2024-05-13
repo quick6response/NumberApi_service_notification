@@ -1,8 +1,8 @@
 import { Module } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { ClientsModule, Transport } from '@nestjs/microservices';
+import { RabbitmqQueueConfig } from '@quick_response/number_api_event';
 import { rabbitNameConfig } from './config/rabbit.name.config';
-import { rabbitQueueConfig } from './config/rabbitmq.queue.config';
 import { RabbitmqApiMainService } from './service/rabbitmq.api.main.service';
 
 @Module({
@@ -29,7 +29,7 @@ import { RabbitmqApiMainService } from './service/rabbitmq.api.main.service';
             queueOptions: {
               durable: true,
             },
-            queue: rabbitQueueConfig.NAME_NUMBER_API_QUEUE,
+            queue: RabbitmqQueueConfig.mainServiceApi,
           },
         }),
       },

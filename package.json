@@ -28,7 +28,7 @@
     "@nestjs/mapped-types": "^2.0.5",
     "@nestjs/microservices": "^10.3.8",
     "@nestjs/platform-express": "^10.3.8",
-    "@quick_response/number_api_event": "1.1.1-beta40",
+    "@quick_response/number_api_event": "^1.2.0",
     "@vk-io/hear": "^1.1.1",
     "@vk-io/scenes": "^1.2.1",
     "@vk-io/session": "^2.2.1",

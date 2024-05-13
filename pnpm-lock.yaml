@@ -27,8 +27,8 @@ dependencies:
     specifier: ^10.3.8
     version: 10.3.8(@nestjs/common@10.3.8)(@nestjs/core@10.3.8)
   '@quick_response/number_api_event':
-    specifier: 1.1.1-beta40
-    version: 1.1.1-beta40
+    specifier: 1.2.0
+    version: 1.2.0
   '@vk-io/hear':
     specifier: ^1.1.1
     version: 1.1.1(vk-io@4.9.1)
@@ -1206,8 +1206,8 @@ packages:
     engines: {node: ^12.20.0 || ^14.18.0 || >=16.0.0}
     dev: true
 
-  /@quick_response/number_api_event@1.1.1-beta40:
-    resolution: {integrity: sha512-L8/D3fKiCOGRE0JwBg8OeRn+7/IED27O9XjKwvSwG57Ba1JYs5WV4RMVg2zqMAcbEeRQ6cemiionUUy00ALT1g==}
+  /@quick_response/number_api_event@1.2.0:
+    resolution: {integrity: sha512-ujNbal3F9hn4UR49ZnBaHpd6T0V7X7ZpdAmbIpt1lA0koan7MiZcSImm1KNyIXz0TNaklPRSjsoRtm9gL1YHkA==}
     engines: {node: '>= 16'}
     dev: false
 

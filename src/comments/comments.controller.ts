@@ -1,6 +1,7 @@
 import { Controller } from '@nestjs/common';
-import { MessagePattern, Payload } from '@nestjs/microservices';
+import { MessagePattern, Payload, RmqContext } from '@nestjs/microservices';
 import { MainConstantEventName } from '@quick_response/number_api_event';
+import { Ctx } from 'nestjs-vk';
 import { RabbitmqNotificationEventsType } from '../common/rabbitmq/types/rabbitmq.notification.events.type';
 import { CommentsService } from './comments.service';
 import {
@@ -17,28 +18,64 @@ export class CommentsController {
   @MessagePattern<RabbitmqNotificationEventsType>(
     MainConstantEventName.notification.comment_create,
   )
-  async commentCreate(@Payload() data: VkCommentCreateDto) {
-    return this.commentsService.commentCreate(data);
+  async commentCreate(
+    @Payload() data: VkCommentCreateDto,
+    @Ctx() context: RmqContext,
+  ) {
+    const channel = context.getChannelRef();
+    const originalMessage = context.getMessage();
+    const call = await this.commentsService.commentCreate(data);
+
+    if (call.result) {
+      return channel.ack(originalMessage);
+    }
   }
 
   @MessagePattern<RabbitmqNotificationEventsType>(
     MainConstantEventName.notification.comment_delete,
   )
-  async commentDelete(@Payload() data: VkCommentDeleteDto) {
-    return this.commentsService.commentDelete(data);
+  async commentDelete(
+    @Payload() data: VkCommentDeleteDto,
+    @Ctx() context: RmqContext,
+  ) {
+    const channel = context.getChannelRef();
+    const originalMessage = context.getMessage();
+    const call = await this.commentsService.commentDelete(data);
+
+    if (call.result) {
+      return channel.ack(originalMessage);
+    }
   }
 
   @MessagePattern<RabbitmqNotificationEventsType>(
     MainConstantEventName.notification.comment_edit,
   )
-  async commentEdit(@Payload() data: VkCommentEditDto) {
-    return this.commentsService.commentEdit(data);
+  async commentEdit(
+    @Payload() data: VkCommentEditDto,
+    @Ctx() context: RmqContext,
+  ) {
+    const channel = context.getChannelRef();
+    const originalMessage = context.getMessage();
+    const call = await this.commentsService.commentEdit(data);
+
+    if (call.result) {
+      return channel.ack(originalMessage);
+    }
   }
 
   @MessagePattern<RabbitmqNotificationEventsType>(
     MainConstantEventName.notification.comment_moderation_number,
   )
-  async moderationCommentNumber(@Payload() data: VkModerationCommentDto) {
-    await this.commentsService.moderationCommentNumber(data);
+  async moderationCommentNumber(
+    @Payload() data: VkModerationCommentDto,
+    @Ctx() context: RmqContext,
+  ) {
+    const channel = context.getChannelRef();
+    const originalMessage = context.getMessage();
+    const call = await this.commentsService.moderationCommentNumber(data);
+
+    if (call.result) {
+      return channel.ack(originalMessage);
+    }
   }
 }

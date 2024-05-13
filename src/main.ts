@@ -1,7 +1,7 @@
 import { NestFactory } from '@nestjs/core';
 import { MicroserviceOptions, Transport } from '@nestjs/microservices';
+import { RabbitmqQueueConfig } from '@quick_response/number_api_event';
 import { AppModule } from './app.module';
-import { rabbitQueueConfig } from './common/rabbitmq/config/rabbitmq.queue.config';
 
 async function bootstrap() {
   const app = await NestFactory.createMicroservice<MicroserviceOptions>(
@@ -9,6 +9,7 @@ async function bootstrap() {
     {
       transport: Transport.RMQ,
       options: {
+        noAck: false,
         urls: [
           {
             hostname: process.env.RABBITMQ_HOST,
@@ -17,7 +18,7 @@ async function bootstrap() {
             username: process.env.RABBITMQ_USER,
           },
         ],
-        queue: rabbitQueueConfig.NAME_YOUR_QUEUE,
+        queue: RabbitmqQueueConfig.notification,
         queueOptions: {
           durable: true,
         },
