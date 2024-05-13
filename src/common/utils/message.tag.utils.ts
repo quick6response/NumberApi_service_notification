@@ -14,6 +14,9 @@ export class MessageTagUtils {
   getTagAuth(type: 'login' | 'registration') {
     return type === 'login' ? '#login' : '#registration';
   }
+  getTagPlatform() {
+    return '#vk_mini_apps';
+  }
 }
 
 export const messageTagVkMiniAppsActionUtils = new MessageTagUtils();
