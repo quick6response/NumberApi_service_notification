@@ -1,3 +1,3 @@
-import { ParameterStartDto } from '../../dto/parameter.start.dto';
+import { ParameterRequestUserDto } from '../../dto/parameter.request.user.dto';
 
-export class ParameterStartDateDto extends ParameterStartDto {}
+export class ParameterStartDateDto extends ParameterRequestUserDto {}

@@ -1,14 +1,15 @@
 import {
-  CommentCreateDtoInterface,
+  CommentCreateDto,
   CommentDtoInterface,
   CommentEditChangeColumns,
-  CommentEditDtoInterface,
+  CommentEditDto,
 } from '@quick_response/number_api_event';
+import { Type } from 'class-transformer';
 import { IsBoolean, IsDate, IsNumber, IsString } from 'class-validator';
-import { ParameterStartDto } from '../../common/dto/parameter.start.dto';
+import { ParameterRequestUserDto } from '../../common/dto/parameter.request.user.dto';
 import { CommentStatusEnum } from '../type/comment.status.enum';
 
-export class VkCommentDto implements CommentDtoInterface {
+export class CommentDto implements CommentDtoInterface {
   @IsNumber()
   commentId: number;
   @IsString()
@@ -32,19 +33,22 @@ export class VkCommentDto implements CommentDtoInterface {
 }
 
 export class VkCommentCreateDto
-  extends ParameterStartDto
-  implements CommentCreateDtoInterface
+  extends ParameterRequestUserDto
+  implements CommentCreateDto
 {
-  comment: VkCommentDto;
+  @Type(() => CommentDto)
+  comment: CommentDto;
 }
 
 export class VkCommentDeleteDto extends VkCommentCreateDto {}
 
 export class VkCommentEditDto
-  extends ParameterStartDto
-  implements CommentEditDtoInterface
+  extends ParameterRequestUserDto
+  implements CommentEditDto
 {
-  prevComment: VkCommentDto;
-  nextComment: VkCommentDto;
+  @Type(() => CommentDto)
+  prevComment: CommentDto;
+  @Type(() => CommentDto)
+  nextComment: CommentDto;
   changes: CommentEditChangeColumns[];
 }
