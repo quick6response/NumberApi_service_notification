@@ -1,6 +1,9 @@
 import { StatusFindNumber } from '@quick_response/number_api_event';
 
 export class MessageTagUtils {
+  getTagNumberFind(status: StatusFindNumber) {
+    return `#number_status_${status}`;
+  }
   getTagNumber(number: string, numberId: number) {
     return `#number #number_${number} #numberId_${numberId}`;
   }
@@ -13,18 +16,6 @@ export class MessageTagUtils {
   ) {
     return `#comment #commentId_${commentId} #comment_${action}`;
   }
-  getTagUserAction(userId: number, idVk: number) {
-    return `#user #userId${userId} #vk_id${idVk}`;
-  }
-  getTagAuth(type: 'login' | 'registration') {
-    return type === 'login' ? '#login' : '#registration';
-  }
-  getTagPlatform() {
-    return '#vk_mini_apps';
-  }
-  getTagNumberFind(status: StatusFindNumber) {
-    return `#number_status_${status}`;
-  }
 }
 
-export const messageTagVkMiniAppsActionUtils = new MessageTagUtils();
+export const messageTagUtils = new MessageTagUtils();

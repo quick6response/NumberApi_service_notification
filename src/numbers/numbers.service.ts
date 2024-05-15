@@ -9,7 +9,8 @@ import { getRandomId, VK } from 'vk-io';
 import { VKChatsEnum } from '../common/config/vk.chats.config';
 import { dateUtils } from '../common/utils/date.utils';
 import { ErrorTransform } from '../common/utils/error.transform';
-import { messageTagVkMiniAppsActionUtils } from '../common/utils/message.tag.utils';
+import { messageTagVkMiniAppsActionUtils } from '../common/utils/message.platform.tag.utils';
+import { messageTagUtils } from '../common/utils/message.tag.utils';
 import { VkService } from '../vk/vk.service';
 import { NumberFindDto, NumberFindErrorDto } from './dto/number.find.dto';
 
@@ -63,7 +64,7 @@ export class NumbersService {
 Время: ${dateUtils.getDateFormatNumber(parameters.date)}
 IP: ${clientInfo.ip}
 
-${messageTagVkMiniAppsActionUtils.getTagPlatform()} ${messageTagVkMiniAppsActionUtils.getTagNumber(parameters.number.number, parameters.number.numberId)} ${messageTagVkMiniAppsActionUtils.getTagNumberFind(parameters.status)} ${messageTagVkMiniAppsActionUtils.getTagUserAction(parameters.user.id, parameters.user.idVk)}`;
+${messageTagVkMiniAppsActionUtils.getTagPlatform()} ${messageTagUtils.getTagNumber(parameters.number.number, parameters.number.numberId)} ${messageTagUtils.getTagNumberFind(parameters.status)} ${messageTagVkMiniAppsActionUtils.getTagUserAction(parameters.user.id, parameters.user.idVk)}`;
     }
   }
 
@@ -74,7 +75,7 @@ ${messageTagVkMiniAppsActionUtils.getTagPlatform()} ${messageTagVkMiniAppsAction
         message: `Ошибка при поиске номера ${
           parameters.number
         }, стек ошибки: ${ErrorTransform.getMessage(parameters.errorText)}\n\n
-${messageTagVkMiniAppsActionUtils.getTagPlatform()} ${messageTagVkMiniAppsActionUtils.getTagErrorNumber(parameters.number.number, parameters.number.numberId)} ${messageTagVkMiniAppsActionUtils.getTagNumberFind(parameters.status)} ${messageTagVkMiniAppsActionUtils.getTagUserAction(parameters.user.id, parameters.user.idVk)}`,
+${messageTagVkMiniAppsActionUtils.getTagPlatform()} ${messageTagUtils.getTagErrorNumber(parameters.number.number, parameters.number.numberId)} ${messageTagUtils.getTagNumberFind(parameters.status)} ${messageTagVkMiniAppsActionUtils.getTagUserAction(parameters.user.id, parameters.user.idVk)}`,
         random_id: getRandomId(),
         disable_mentions: true,
       });

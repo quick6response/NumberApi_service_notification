@@ -1,16 +1,15 @@
 import { Controller } from '@nestjs/common';
 import { MessagePattern, Payload } from '@nestjs/microservices';
-import { RabbitmqNotificationEventsType } from '../common/rabbitmq/types/rabbitmq.notification.events.type';
+import { MainConstantEventName } from '@quick_response/number_api_event';
 import { OperatorCreateDto } from './dto/operator.create.dto';
 import { OperatorsService } from './operators.service';
 
 // todo переписать это и ДТО операторов на новые типы из АПИ
-const KEY_OPERATOR_CREATE: RabbitmqNotificationEventsType =
-  'operator_create_auto';
+
 @Controller('operators')
 export class OperatorsController {
   constructor(private readonly operatorService: OperatorsService) {}
-  @MessagePattern(KEY_OPERATOR_CREATE)
+  @MessagePattern(MainConstantEventName.notification.operator_create_auto)
   async createOperator(@Payload() data: OperatorCreateDto) {
     return this.operatorService.notificationOperatorCreateAuto(data);
   }

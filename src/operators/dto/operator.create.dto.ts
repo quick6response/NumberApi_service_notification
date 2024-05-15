@@ -1,14 +1,21 @@
+import { OperatorCreateDtoInterface } from '@quick_response/number_api_event';
+import { Type } from 'class-transformer';
 import {
   IsDate,
+  IsNumber,
   IsOptional,
   IsString,
   IsUrl,
   MaxLength,
   MinLength,
 } from 'class-validator';
-import { ParameterRequestUserDto } from '../../common/dto/parameter.request.user.dto';
 
-export class OperatorCreateDto extends ParameterRequestUserDto {
+type OperatorEventDto = OperatorCreateDtoInterface['operator'];
+
+export class OperatorDto implements OperatorEventDto {
+  @IsNumber()
+  id: number;
+
   @IsString({ message: 'Должно быть строкой' })
   @MinLength(1, {
     message: 'Должно быть длиннее $constraint1 символов',
@@ -22,7 +29,7 @@ export class OperatorCreateDto extends ParameterRequestUserDto {
   photo: string;
 
   @IsString({ message: 'Должно быть строкой' })
-  @MinLength(1, {
+  @MinLength(0, {
     message: 'Должно быть длиннее $constraint1 символов',
   })
   @MaxLength(255, {
@@ -33,4 +40,11 @@ export class OperatorCreateDto extends ParameterRequestUserDto {
 
   @IsDate({ message: 'Должно быть датой' })
   foundingDate?: string;
+}
+
+export class OperatorCreateDto implements OperatorCreateDtoInterface {
+  @IsNumber()
+  date: number;
+  @Type(() => OperatorDto)
+  operator: OperatorDto;
 }

@@ -8,7 +8,8 @@ import { InjectVkApi } from 'nestjs-vk';
 import { getRandomId, Keyboard, VK } from 'vk-io';
 import { VKChatsEnum } from '../common/config/vk.chats.config';
 import { dateUtils } from '../common/utils/date.utils';
-import { messageTagVkMiniAppsActionUtils } from '../common/utils/message.tag.utils';
+import { messageTagVkMiniAppsActionUtils } from '../common/utils/message.platform.tag.utils';
+import { messageTagUtils } from '../common/utils/message.tag.utils';
 import { NumbersService } from '../numbers/numbers.service';
 import { VkService } from '../vk/vk.service';
 import {
@@ -126,7 +127,7 @@ export class CommentsService {
 Время: ${dateUtils.getDateFormatNumber(parameters.date)}
 IP: ${clientInfo.ip}
 
-${messageTagVkMiniAppsActionUtils.getTagPlatform()} ${messageTagVkMiniAppsActionUtils.getTagComment(parameters.comment.commentId, 'create')} ${messageTagVkMiniAppsActionUtils.getTagNumber(parameters.comment.number, parameters.comment.numberId)} ${messageTagVkMiniAppsActionUtils.getTagUserAction(parameters.comment.userId, clientInfo.vk_user_id)}`;
+${messageTagVkMiniAppsActionUtils.getTagPlatform()} ${messageTagUtils.getTagComment(parameters.comment.commentId, 'create')} ${messageTagUtils.getTagNumber(parameters.comment.number, parameters.comment.numberId)} ${messageTagVkMiniAppsActionUtils.getTagUserAction(parameters.comment.userId, clientInfo.vk_user_id)}`;
     }
   }
 
@@ -149,7 +150,7 @@ ${messageTagVkMiniAppsActionUtils.getTagPlatform()} ${messageTagVkMiniAppsAction
 Время: ${dateUtils.getDateFormatNumber(parameters.date)}
 IP: ${clientInfo.ip}
 
-${messageTagVkMiniAppsActionUtils.getTagPlatform()} ${messageTagVkMiniAppsActionUtils.getTagComment(parameters.comment.commentId, 'delete')} ${messageTagVkMiniAppsActionUtils.getTagNumber(parameters.comment.number, parameters.comment.numberId)} ${messageTagVkMiniAppsActionUtils.getTagUserAction(parameters.comment.userId, clientInfo.vk_user_id)}`;
+${messageTagVkMiniAppsActionUtils.getTagPlatform()} ${messageTagUtils.getTagComment(parameters.comment.commentId, 'delete')} ${messageTagUtils.getTagNumber(parameters.comment.number, parameters.comment.numberId)} ${messageTagVkMiniAppsActionUtils.getTagUserAction(parameters.comment.userId, clientInfo.vk_user_id)}`;
     }
   }
 
@@ -176,7 +177,7 @@ ${messageTagVkMiniAppsActionUtils.getTagPlatform()} ${messageTagVkMiniAppsAction
 Время: ${dateUtils.getDateFormatNumber(parameters.date)}
 IP: ${clientInfo.ip}
 
-${messageTagVkMiniAppsActionUtils.getTagPlatform()} ${messageTagVkMiniAppsActionUtils.getTagComment(parameters.nextComment.commentId, 'edit')} ${messageTagVkMiniAppsActionUtils.getTagNumber(parameters.nextComment.number, parameters.nextComment.numberId)} ${messageTagVkMiniAppsActionUtils.getTagUserAction(parameters.nextComment.userId, clientInfo.vk_user_id)}`;
+${messageTagVkMiniAppsActionUtils.getTagPlatform()} ${messageTagUtils.getTagComment(parameters.nextComment.commentId, 'edit')} ${messageTagUtils.getTagNumber(parameters.nextComment.number, parameters.nextComment.numberId)} ${messageTagVkMiniAppsActionUtils.getTagUserAction(parameters.nextComment.userId, clientInfo.vk_user_id)}`;
     }
   }
 
@@ -199,7 +200,7 @@ ${messageTagVkMiniAppsActionUtils.getTagPlatform()} ${messageTagVkMiniAppsAction
 Время: ${dateUtils.getDateFormatNumber(parameters.date)}
 IP: ${clientInfo.ip}
 
-${messageTagVkMiniAppsActionUtils.getTagPlatform()} ${messageTagVkMiniAppsActionUtils.getTagComment(parameters.comment.commentId, 'moderation')} ${messageTagVkMiniAppsActionUtils.getTagNumber(parameters.comment.number, parameters.comment.numberId)} ${messageTagVkMiniAppsActionUtils.getTagUserAction(parameters.user.id, parameters.user.idVk)}`;
+${messageTagVkMiniAppsActionUtils.getTagPlatform()} ${messageTagUtils.getTagComment(parameters.comment.commentId, 'moderation')} ${messageTagUtils.getTagNumber(parameters.comment.number, parameters.comment.numberId)} ${messageTagVkMiniAppsActionUtils.getTagUserAction(parameters.user.id, parameters.user.idVk)}`;
 
       return text;
     }

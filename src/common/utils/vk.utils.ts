@@ -73,13 +73,13 @@ const vk_refs = {
 
   // Уведомления
   notifications: 'внешний экран уведомлений;',
-  notifications_grouped: 'экран сгрупированных уведомлений',
+  notifications_grouped: 'экран сгруппированных уведомлений',
 
   profile: 'из профиля',
   article_read: 'из статьи',
   music_playlist: 'из музыкального плейлиста',
   video_carousel: 'из видео [iOS]',
-  photo_browser: 'из поста после нативного просмотрщика [iOS]',
+  photo_browser: 'из поста после нативного просмотра [iOS]',
   shopping_center: 'из ленты товаров [iOS]',
   market_item: 'из экрана товара',
 
