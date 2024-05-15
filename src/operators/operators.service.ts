@@ -3,6 +3,7 @@ import { InjectVkApi } from 'nestjs-vk';
 import { getRandomId, VK } from 'vk-io';
 import { VKChatsEnum } from '../common/config/vk.chats.config';
 import { dateUtils } from '../common/utils/date.utils';
+import { messageTagUtils } from '../common/utils/message.tag.utils';
 import { OperatorCreateDto } from './dto/operator.create.dto';
 
 @Injectable()
@@ -19,7 +20,9 @@ export class OperatorsService {
       \nФото: ${parameters.operator.photo}
       \nОписание: ${parameters.operator.description || 'Нет описания'}
       \nДата основания: ${dateUtils.getDateFormatNumber(parameters.operator.foundingDate)}
-      `,
+      
+      
+      ${messageTagUtils.getTagOperatorCreate(parameters.operator.id)}`,
       chat_id: VKChatsEnum.LOGS_CHAT_DEV,
       random_id: getRandomId(),
     });

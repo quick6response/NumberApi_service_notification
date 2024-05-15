@@ -16,6 +16,12 @@ export class MessageTagUtils {
   ) {
     return `#comment #commentId_${commentId} #comment_${action}`;
   }
+  getTagOperator(operatorId: number) {
+    return `#operator #operatorId_${operatorId}`;
+  }
+  getTagOperatorCreate(operatorId: number) {
+    return this.getTagOperator(operatorId) + ' #operator_create';
+  }
 }
 
 export const messageTagUtils = new MessageTagUtils();
