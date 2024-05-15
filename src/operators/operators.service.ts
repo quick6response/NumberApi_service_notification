@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { InjectVkApi } from 'nestjs-vk';
 import { getRandomId, VK } from 'vk-io';
 import { VKChatsEnum } from '../common/config/vk.chats.config';
@@ -8,11 +8,13 @@ import { OperatorCreateDto } from './dto/operator.create.dto';
 
 @Injectable()
 export class OperatorsService {
+  private readonly logger = new Logger(OperatorsService.name);
   constructor(@InjectVkApi() private readonly vk: VK) {}
 
   async notificationOperatorCreateAuto(parameters: OperatorCreateDto) {
-    return this.vk.api.messages.send({
-      message: `Создан новый оператор в базе:
+    try {
+      const sendMessage = await this.vk.api.messages.send({
+        message: `Создан новый оператор в базе:
       \n\nВремя: ${dateUtils.getDateFormatNumber(parameters.date)}
       \n\nИнформация:
       \nID: ${parameters.operator.id}
@@ -23,8 +25,19 @@ export class OperatorsService {
       
       
       ${messageTagUtils.getTagOperatorCreate(parameters.operator.id)}`,
-      chat_id: VKChatsEnum.LOGS_CHAT_DEV,
-      random_id: getRandomId(),
-    });
+        chat_id: VKChatsEnum.LOGS_CHAT_DEV,
+        random_id: getRandomId(),
+      });
+
+      return {
+        result: true,
+      };
+    } catch (error) {
+      this.logger.error(error);
+
+      return {
+        result: false,
+      };
+    }
   }
 }

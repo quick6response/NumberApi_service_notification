@@ -6,7 +6,7 @@
   "private": true,
   "license": "UNLICENSED",
   "scripts": {
-    "build": "rimraf dist && nest build",
+    "build": "rimraf dist && nest build && pnpm sentry:sourcemaps",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
     "start": "nest start",
     "start:dev": "SET NODE_ENV=development & nest start --watch",
@@ -18,7 +18,8 @@
     "test:watch": "jest --watch",
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
-    "test:e2e": "jest --config ./test/jest-e2e.json"
+    "test:e2e": "jest --config ./test/jest-e2e.json",
+    "sentry:sourcemaps": "sentry-cli sourcemaps inject --org quick6response --project called_id_notification dist && sentry-cli sourcemaps upload --org quick6response --project called_id_notification dist"
   },
   "dependencies": {
     "@nestjs/cache-manager": "^2.2.2",
@@ -29,6 +30,9 @@
     "@nestjs/microservices": "^10.3.8",
     "@nestjs/platform-express": "^10.3.8",
     "@quick_response/number_api_event": "^1.2.0",
+    "@sentry/cli": "^2.31.2",
+    "@sentry/node": "^8.0.0",
+    "@sentry/tracing": "^7.114.0",
     "@vk-io/hear": "^1.1.1",
     "@vk-io/scenes": "^1.2.1",
     "@vk-io/session": "^2.2.1",
