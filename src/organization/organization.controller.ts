@@ -14,6 +14,7 @@ import { OrganizationService } from './organization.service';
 export class OrganizationController {
   constructor(private readonly organizationService: OrganizationService) {}
 
+  // todo lобавить тут проверку на верный отет и только тогда подтвердить сообщение, как это сделано в друх местах
   @MessagePattern(MainConstantEventName.notification.organization_create_system)
   async createOrganization(@Payload() data: OrganizationCreateDto) {
     return this.organizationService.notificationOrganizationCreate(data);
