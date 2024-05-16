@@ -22,6 +22,29 @@ export class MessageTagUtils {
   getTagOperatorCreate(operatorId: number) {
     return this.getTagOperator(operatorId) + ' #operator_create';
   }
+  getTagOrganization(operatorId: number) {
+    return `#operator #operatorId_${operatorId}`;
+  }
+  getTagOrganizationCreate(operatorId: number) {
+    return this.getTagOrganization(operatorId) + ' #organization_create';
+  }
+  getTagOrganizationCreateError() {
+    return '#organization_create_error';
+  }
+  getTagOrganizationUpdate(operatorId: number, isError: boolean = false) {
+    return (
+      this.getTagOrganization(operatorId) +
+      ' #organization_update' +
+      (isError ? '_error' : '')
+    );
+  }
+  getTagOrganizationPinNumber(operatorId: number, numberId: number) {
+    return (
+      this.getTagOrganization(operatorId) +
+      ' #organization_pin_numberId_' +
+      numberId
+    );
+  }
 }
 
 export const messageTagUtils = new MessageTagUtils();

@@ -4,7 +4,7 @@ import { getRandomId, VK } from 'vk-io';
 import { VKChatsEnum } from '../common/config/vk.chats.config';
 import { dateUtils } from '../common/utils/date.utils';
 import { messageTagUtils } from '../common/utils/message.tag.utils';
-import { OperatorCreateDto } from './dto/operator.create.dto';
+import { OperatorCreateDto } from '../organization/dto/operator.create.dto';
 
 @Injectable()
 export class OperatorsService {

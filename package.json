@@ -29,7 +29,7 @@
     "@nestjs/mapped-types": "^2.0.5",
     "@nestjs/microservices": "^10.3.8",
     "@nestjs/platform-express": "^10.3.8",
-    "@quick_response/number_api_event": "^1.2.0",
+    "@quick_response/number_api_event": "^1.2.3",
     "@sentry/cli": "^2.31.2",
     "@sentry/node": "^8.0.0",
     "@sentry/tracing": "^7.114.0",
