@@ -1,36 +1,39 @@
 import { Injectable, Logger } from '@nestjs/common';
+import {
+  NumberOrganizationPinDto,
+  OrganizationCreateDtoInterface,
+  OrganizationCreateErrorDtoInterface,
+  OrganizationUpdateDtoInterface,
+  OrganizationUpdateErrorDtoInterface,
+} from '@quick_response/number_api_event';
 import { InjectVkApi } from 'nestjs-vk';
 import { getRandomId, VK } from 'vk-io';
 import { VKChatsEnum } from '../common/config/vk.chats.config';
 import { dateUtils } from '../common/utils/date.utils';
 import { messageTagUtils } from '../common/utils/message.tag.utils';
-import {
-  OrganizationCreateDto,
-  OrganizationCreateErrorDto,
-  OrganizationPinNumberDto,
-  OrganizationUpdateDto,
-  OrganizationUpdateErrorDto,
-} from '../operators/dto/organization.dto';
 
 @Injectable()
 export class OrganizationService {
   private readonly logger = new Logger(OrganizationService.name);
   constructor(@InjectVkApi() private readonly vk: VK) {}
 
-  // todo написать соотбещния пол события создания организации, изменение организации и вывода ошибки в случае ошибки создания/изменения
-  async notificationOrganizationCreate(parameters: OrganizationCreateDto) {
+  async notificationOrganizationCreate(dto: OrganizationCreateDtoInterface) {
     try {
-      const sendMessage = await this.vk.api.messages.send({
-        message: `Создана новая организация в базе:
-      \nИнформация:
-      \nID: ${parameters.organization.id}
-      \nНазвание: ${parameters.organization.name}
-      \nФото: ${parameters.organization.photo}
-      \nОписание: ${parameters.organization.description || 'Нет описания'}
-      \nДата основания: ${dateUtils.getDateFormatNumber(parameters.organization.foundingDate)}
-      \n\nВремя: ${dateUtils.getDateFormatNumber(parameters.date)}
-      
-      ${messageTagUtils.getTagOrganizationCreate(parameters.organization.id)}`,
+      const formattedMessage = `
+Создана новая организация:
+
+ID: ${dto.organization.id}
+Название: ${dto.organization.name}
+Описание: ${dto.organization.description}
+Фото: ${dto.organization.photo.link} (ID: ${dto.organization.photo.id})
+
+Время: ${dateUtils.getDateFormatNumber(dto.date)}
+
+${messageTagUtils.getTagOrganizationCreate(dto.organization.id)}
+`;
+
+      await this.vk.api.messages.send({
+        message: formattedMessage,
         chat_id: VKChatsEnum.LOGS_CHAT_DEV,
         random_id: getRandomId(),
       });
@@ -47,19 +50,22 @@ export class OrganizationService {
     }
   }
 
-  async notificationOrganizationUpdate(parameters: OrganizationUpdateDto) {
+  async notificationOrganizationUpdate(dto: OrganizationUpdateDtoInterface) {
     try {
-      const sendMessage = await this.vk.api.messages.send({
-        message: `Обновлена организация в базе:
-      \nИнформация:
-      \nID: ${parameters.nextValue.id}
-      \nНазвание: ${parameters.prevValue.name} -> ${parameters.nextValue.name}
-      \nФото: ${parameters.prevValue.photo} -> ${parameters.nextValue.photo}
-      \nОписание: ${parameters.prevValue.description || 'Нет описания'} ->  ${parameters.nextValue.description || 'Нет описания'}
-      \nДата основания: ${dateUtils.getDateFormatNumber(parameters.prevValue.foundingDate)} -> ${dateUtils.getDateFormatNumber(parameters.nextValue.foundingDate)}
-      \n\nВремя: ${dateUtils.getDateFormatNumber(parameters.date)}
-      
-      ${messageTagUtils.getTagOrganizationUpdate(parameters.nextValue.id)}`,
+      const formattedMessage = `
+Обновлена организация id: ${dto.prevValue.id}
+
+Название: ${dto.prevValue.name} → ${dto.nextValue.name}
+Описание: ${dto.prevValue.description} → ${dto.nextValue.description}
+Фото: ${dto.prevValue.photo.link} (ID: ${dto.prevValue.photo.id}) -> ${dto.nextValue.photo.link} (ID: ${dto.nextValue.photo.id})
+
+Время: ${dateUtils.getDateFormatNumber(dto.date)}
+
+${messageTagUtils.getTagOrganizationUpdate(dto.nextValue.id)}
+`;
+
+      await this.vk.api.messages.send({
+        message: formattedMessage,
         chat_id: VKChatsEnum.LOGS_CHAT_DEV,
         random_id: getRandomId(),
       });
@@ -77,17 +83,22 @@ export class OrganizationService {
   }
 
   async notificationOrganizationCreateError(
-    parameters: OrganizationCreateErrorDto,
+    dto: OrganizationCreateErrorDtoInterface,
   ) {
     try {
-      const sendMessage = await this.vk.api.messages.send({
-        message: `Ошибка создания организации в базе:
-        
-      \nИнформация:
-      \nПричина: ${parameters.message}
-      \n\nВремя: ${dateUtils.getDateFormatNumber(parameters.date)}
-      
-      ${messageTagUtils.getTagOrganizationCreateError()}`,
+      const formattedMessage = `
+Ошибка создания организации в базе
+
+Причина: ${dto.message}
+Значение: ${dto.value}
+
+Время: ${dateUtils.getDateFormatNumber(dto.date)}
+
+${messageTagUtils.getTagOrganizationCreateError()}
+`;
+
+      await this.vk.api.messages.send({
+        message: formattedMessage,
         chat_id: VKChatsEnum.LOGS_CHAT_DEV,
         random_id: getRandomId(),
       });
@@ -105,18 +116,23 @@ export class OrganizationService {
   }
 
   async notificationOrganizationUpdateError(
-    parameters: OrganizationUpdateErrorDto,
+    dto: OrganizationUpdateErrorDtoInterface,
   ) {
     try {
-      const sendMessage = await this.vk.api.messages.send({
-        message: `Ошибка обновления организации в базе:
-        
-      \nИнформация:
-      \nID: ${parameters.organizationId}
-      \nПричина: ${parameters.message}
-      \n\nВремя: ${dateUtils.getDateFormatNumber(parameters.date)}
-      
-      ${messageTagUtils.getTagOrganizationUpdate(parameters.organizationId)}`,
+      const formattedMessage = `
+Ошибка обновления организации в базе
+
+ID: ${dto.organizationId}
+Причина: ${dto.message}
+Значение: ${dto.value}
+
+Время: ${dateUtils.getDateFormatNumber(dto.date)}
+
+${messageTagUtils.getTagOrganizationUpdate(dto.organizationId, true)}
+`;
+
+      await this.vk.api.messages.send({
+        message: formattedMessage,
         chat_id: VKChatsEnum.LOGS_CHAT_DEV,
         random_id: getRandomId(),
       });
@@ -133,12 +149,21 @@ export class OrganizationService {
     }
   }
 
-  async notificationOrganizationPinNumber(
-    parameters: OrganizationPinNumberDto,
-  ) {
+  async notificationOrganizationPinNumber(dto: NumberOrganizationPinDto) {
     try {
-      const sendMessage = await this.vk.api.messages.send({
-        message: `Прикреплен номер ${parameters.number.number} (ID: ${parameters.number.numberId}) к организации ${parameters.organization.name} (ID: ${parameters.organization.id}) (Название: ${parameters.organization.name})\n\nВремя: ${dateUtils.getDateFormatNumber(parameters.date)}\n\n${messageTagUtils.getTagNumber(parameters.number.number, parameters.number.numberId)} ${messageTagUtils.getTagOrganizationPinNumber(parameters.organization.id, parameters.number.numberId)}`,
+      const formattedMessage = `
+Прикреплен номер к организации
+
+Номер: ${dto.number.number} (ID: ${dto.number.numberId})
+Организация: ${dto.organization.name} (ID: ${dto.organization.id})
+
+Время: ${dateUtils.getDateFormatNumber(dto.date)}
+
+${messageTagUtils.getTagNumber(dto.number.number, dto.number.numberId)} ${messageTagUtils.getTagOrganizationPinNumber(dto.organization.id, dto.number.numberId)}
+`;
+
+      await this.vk.api.messages.send({
+        message: formattedMessage,
         chat_id: VKChatsEnum.LOGS_CHAT_DEV,
         random_id: getRandomId(),
       });

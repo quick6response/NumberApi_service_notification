@@ -22,8 +22,8 @@ export class MessageTagUtils {
   getTagOperatorCreate(operatorId: number) {
     return this.getTagOperator(operatorId) + ' #operator_create';
   }
-  getTagOrganization(operatorId: number) {
-    return `#operator #operatorId_${operatorId}`;
+  getTagOrganization(organizationId: number) {
+    return `#organization #organizationId_${organizationId}`;
   }
   getTagOrganizationCreate(operatorId: number) {
     return this.getTagOrganization(operatorId) + ' #organization_create';
