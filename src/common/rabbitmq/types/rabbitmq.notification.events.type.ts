@@ -1,3 +1,3 @@
-import { RabbitmqNotificationEventKey } from '@quick_response/number_api_event/dist/microservice/notification/types/rabbitmq.number.api.service.type';
+import { RabbitmqNotificationEventKey } from '@quick_response/number_api_event';
 
 export type RabbitmqNotificationEventsType = RabbitmqNotificationEventKey;
