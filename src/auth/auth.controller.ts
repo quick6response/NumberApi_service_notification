@@ -1,6 +1,6 @@
 import { Controller } from '@nestjs/common';
 import { MessagePattern, Payload, RmqContext } from '@nestjs/microservices';
-import { MainConstantEventName } from '@quick_response/number_api_event';
+import { MicroservicesEventConstant } from '@quick_response/number_api_event';
 import { Ctx } from 'nestjs-vk';
 import { AuthService } from './auth.service';
 import { VkAuthRegistrationDto } from './dto/vk.auth.dto';
@@ -9,7 +9,7 @@ import { VkAuthRegistrationDto } from './dto/vk.auth.dto';
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
-  @MessagePattern(MainConstantEventName.notification.auth_login_user)
+  @MessagePattern(MicroservicesEventConstant.notification.auth_login_user)
   async login(
     @Payload() data: VkAuthRegistrationDto,
     @Ctx() context: RmqContext,
@@ -23,7 +23,7 @@ export class AuthController {
     }
   }
 
-  @MessagePattern(MainConstantEventName.notification.auth_register_user)
+  @MessagePattern(MicroservicesEventConstant.notification.auth_register_user)
   async registration(
     @Payload() data: VkAuthRegistrationDto,
     @Ctx() context: RmqContext,

@@ -1,6 +1,6 @@
 import { Controller } from '@nestjs/common';
 import { MessagePattern, Payload, RmqContext } from '@nestjs/microservices';
-import { MainConstantEventName } from '@quick_response/number_api_event';
+import { MicroservicesEventConstant } from '@quick_response/number_api_event';
 import { Ctx } from 'nestjs-vk';
 import { RabbitmqNotificationEventsType } from '../common/rabbitmq/types/rabbitmq.notification.events.type';
 import { CommentsService } from './comments.service';
@@ -16,7 +16,7 @@ export class CommentsController {
   constructor(private readonly commentsService: CommentsService) {}
 
   @MessagePattern<RabbitmqNotificationEventsType>(
-    MainConstantEventName.notification.comment_create,
+    MicroservicesEventConstant.notification.comment_create,
   )
   async commentCreate(
     @Payload() data: VkCommentCreateDto,
@@ -32,7 +32,7 @@ export class CommentsController {
   }
 
   @MessagePattern<RabbitmqNotificationEventsType>(
-    MainConstantEventName.notification.comment_delete,
+    MicroservicesEventConstant.notification.comment_delete,
   )
   async commentDelete(
     @Payload() data: VkCommentDeleteDto,
@@ -48,7 +48,7 @@ export class CommentsController {
   }
 
   @MessagePattern<RabbitmqNotificationEventsType>(
-    MainConstantEventName.notification.comment_edit,
+    MicroservicesEventConstant.notification.comment_edit,
   )
   async commentEdit(
     @Payload() data: VkCommentEditDto,
@@ -64,7 +64,7 @@ export class CommentsController {
   }
 
   @MessagePattern<RabbitmqNotificationEventsType>(
-    MainConstantEventName.notification.comment_moderation_number,
+    MicroservicesEventConstant.notification.comment_moderation_number,
   )
   async moderationCommentNumber(
     @Payload() data: VkModerationCommentDto,

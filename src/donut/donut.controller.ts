@@ -1,6 +1,6 @@
 import { Controller } from '@nestjs/common';
 import { MessagePattern, Payload, RmqContext } from '@nestjs/microservices';
-import { MainConstantEventName } from '@quick_response/number_api_event';
+import { MicroservicesEventConstant } from '@quick_response/number_api_event';
 import { Ctx } from 'nestjs-vk';
 import { DonutService } from './donut.service';
 import { DonutUserEventDto } from './dto/donut.user.event.dto';
@@ -8,7 +8,9 @@ import { DonutUserEventDto } from './dto/donut.user.event.dto';
 @Controller('donut')
 export class DonutController {
   constructor(private readonly donutService: DonutService) {}
-  @MessagePattern(MainConstantEventName.notification.donut_subscriptionIssuance)
+  @MessagePattern(
+    MicroservicesEventConstant.notification.donut_subscriptionIssuance,
+  )
   async subscriptionIssuance(
     @Payload() data: DonutUserEventDto,
     @Ctx() context: RmqContext,
@@ -20,7 +22,9 @@ export class DonutController {
     return channel.ack(originalMessage);
   }
 
-  @MessagePattern(MainConstantEventName.notification.donut_subscriptionExpired)
+  @MessagePattern(
+    MicroservicesEventConstant.notification.donut_subscriptionExpired,
+  )
   async subscriptionExpired(
     @Payload() data: DonutUserEventDto,
     @Ctx() context: RmqContext,
