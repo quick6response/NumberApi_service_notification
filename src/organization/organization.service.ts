@@ -90,7 +90,7 @@ ${messageTagUtils.getTagOrganizationUpdate(dto.nextValue.id)}
 Ошибка создания организации в базе
 
 Причина: ${dto.message}
-Значение: ${dto.value}
+Значение: ${JSON.stringify(dto.value)}
 
 Время: ${dateUtils.getDateFormatNumber(dto.date)}
 
@@ -124,7 +124,7 @@ ${messageTagUtils.getTagOrganizationCreateError()}
 
 ID: ${dto.organizationId}
 Причина: ${dto.message}
-Значение: ${dto.value}
+Значение: ${JSON.stringify(dto.value)}
 
 Время: ${dateUtils.getDateFormatNumber(dto.date)}
 

@@ -1,7 +1,7 @@
 import { ConfigService } from '@nestjs/config';
 import { HttpAdapterHost, NestFactory } from '@nestjs/core';
 import { MicroserviceOptions, Transport } from '@nestjs/microservices';
-import { RabbitmqQueueConfig } from '@quick_response/number_api_event';
+import { RabbitmqQueueConstant } from '@quick_response/number_api_event';
 import * as Sentry from '@sentry/node';
 import { AppModule } from './app.module';
 import { SentryFilter } from './common/filters/sentry.filter';
@@ -13,7 +13,6 @@ async function bootstrap() {
     {
       transport: Transport.RMQ,
       options: {
-        noAck: false,
         urls: [
           {
             hostname: process.env.RABBITMQ_HOST,
@@ -22,38 +21,13 @@ async function bootstrap() {
             username: process.env.RABBITMQ_USER,
           },
         ],
-        queue: RabbitmqQueueConfig.notification,
+        queue: RabbitmqQueueConstant.notification,
         queueOptions: {
           durable: true,
         },
       },
     },
   );
-
-  // app.useGlobalPipes(
-  //   new ValidationPipe({
-  //     whitelist: true,
-  //     enableDebugMessages: true,
-  //     forbidUnknownValues: false,
-  //     validationError: {
-  //       target: true,
-  //       value: true,
-  //     },
-  //     forbidNonWhitelisted: true,
-  //     validateCustomDecorators: true,
-  //     skipUndefinedProperties: true,
-  //
-  //     transform: true,
-  //     exceptionFactory: (array) => {
-  //       const message = array.map((error) => {
-  //         return `${error.property} - ${Object.values(error.constraints).join(
-  //           ', ',
-  //         )}`;
-  //       });
-  //       throw new RpcException(message);
-  //     },
-  //   }),
-  // );
 
   const configService = app.get<ConfigService>(ConfigService);
 

@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import {
-  ClientPlatformEnum,
+  ClientPlatform,
   getClientInfoByPlatform,
 } from '@quick_response/number_api_event';
 import { InjectVkApi } from 'nestjs-vk';
@@ -30,7 +30,7 @@ export class CommentsService {
   ) {}
 
   async commentCreate(parameters: VkCommentCreateDto) {
-    if (parameters.clientPlatform === ClientPlatformEnum.VK) {
+    if (parameters.clientPlatform === ClientPlatform.VK) {
       const { clientInfo } = getClientInfoByPlatform(
         parameters.clientPlatform,
         parameters.clientInfo,
@@ -54,7 +54,7 @@ export class CommentsService {
   }
 
   async commentDelete(parameters: VkCommentDeleteDto) {
-    if (parameters.clientPlatform === ClientPlatformEnum.VK) {
+    if (parameters.clientPlatform === ClientPlatform.VK) {
       const { clientInfo } = getClientInfoByPlatform(
         parameters.clientPlatform,
         parameters.clientInfo,
@@ -71,7 +71,7 @@ export class CommentsService {
   }
 
   async commentEdit(parameters: VkCommentEditDto) {
-    if (parameters.clientPlatform === ClientPlatformEnum.VK) {
+    if (parameters.clientPlatform === ClientPlatform.VK) {
       const { clientInfo } = getClientInfoByPlatform(
         parameters.clientPlatform,
         parameters.clientInfo,
@@ -88,7 +88,7 @@ export class CommentsService {
   }
 
   async moderationCommentNumber(parameters: VkModerationCommentDto) {
-    if (parameters.clientPlatform === ClientPlatformEnum.VK) {
+    if (parameters.clientPlatform === ClientPlatform.VK) {
       const { clientInfo } = getClientInfoByPlatform(
         parameters.clientPlatform,
         parameters.clientInfo,
@@ -105,7 +105,7 @@ export class CommentsService {
   }
 
   private async getTextCommentCreate(parameters: VkCommentCreateDto) {
-    if (parameters.clientPlatform === ClientPlatformEnum.VK) {
+    if (parameters.clientPlatform === ClientPlatform.VK) {
       const { clientInfo } = getClientInfoByPlatform(
         parameters.clientPlatform,
         parameters.clientInfo,
@@ -132,7 +132,7 @@ ${messageTagVkMiniAppsActionUtils.getTagPlatform()} ${messageTagUtils.getTagComm
   }
 
   private async getTextCommentDelete(parameters: VkCommentDeleteDto) {
-    if (parameters.clientPlatform === ClientPlatformEnum.VK) {
+    if (parameters.clientPlatform === ClientPlatform.VK) {
       const { clientInfo } = getClientInfoByPlatform(
         parameters.clientPlatform,
         parameters.clientInfo,
@@ -155,7 +155,7 @@ ${messageTagVkMiniAppsActionUtils.getTagPlatform()} ${messageTagUtils.getTagComm
   }
 
   private async getTextCommentEdit(parameters: VkCommentEditDto) {
-    if (parameters.clientPlatform === ClientPlatformEnum.VK) {
+    if (parameters.clientPlatform === ClientPlatform.VK) {
       const { clientInfo } = getClientInfoByPlatform(
         parameters.clientPlatform,
         parameters.clientInfo,
@@ -182,7 +182,7 @@ ${messageTagVkMiniAppsActionUtils.getTagPlatform()} ${messageTagUtils.getTagComm
   }
 
   private async getTextModerationComment(parameters: VkModerationCommentDto) {
-    if (parameters.clientPlatform === ClientPlatformEnum.VK) {
+    if (parameters.clientPlatform === ClientPlatform.VK) {
       const { clientInfo } = getClientInfoByPlatform(
         parameters.clientPlatform,
         parameters.clientInfo,
@@ -200,7 +200,7 @@ ${messageTagVkMiniAppsActionUtils.getTagPlatform()} ${messageTagUtils.getTagComm
 Время: ${dateUtils.getDateFormatNumber(parameters.date)}
 IP: ${clientInfo.ip}
 
-${messageTagVkMiniAppsActionUtils.getTagPlatform()} ${messageTagUtils.getTagComment(parameters.comment.commentId, 'moderation')} ${messageTagUtils.getTagNumber(parameters.comment.number, parameters.comment.numberId)} ${messageTagVkMiniAppsActionUtils.getTagUserAction(parameters.user.id, parameters.user.idVk)}`;
+${messageTagVkMiniAppsActionUtils.getTagPlatform()} ${messageTagUtils.getTagComment(parameters.comment.commentId, 'moderation')} ${messageTagUtils.getTagNumber(parameters.comment.number, parameters.comment.numberId)} ${messageTagVkMiniAppsActionUtils.getTagUserAction(parameters.user.id, clientInfo.vk_user_id)}`;
 
       return text;
     }

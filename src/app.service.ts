@@ -16,7 +16,7 @@ export class AppService {
     return 'Hello World!';
   }
 
-  async sendMessageDefaultEventOrMessagePattern(data: any) {
+  async sendMessageDefaultEventOrEventPattern(data: any) {
     await this.vk.api.messages.send({
       chat_id: VKChatsEnum.LOGS_CHAT_DEV,
       message: `data: ${JSON.stringify(data)}\n\n#notifion_not_pattern`,

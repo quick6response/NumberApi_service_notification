@@ -1,14 +1,9 @@
-import { ClientPlatformEnum, User } from '@quick_response/number_api_event';
+import { ClientPlatform, User } from '@quick_response/number_api_event';
 import { ParameterClientInfoActionEventAllPlatformInterface } from '@quick_response/number_api_event/dist/microservice/notification/types/parameter.client.info.type';
 import { ParameterRequestTelegramUserEventInterface } from '@quick_response/number_api_event/dist/microservice/notification/types/parameter.request.tg.type';
 import { ParameterRequestVkUserEventInterface } from '@quick_response/number_api_event/dist/microservice/notification/types/parameter.request.vk.type';
 import { Type } from 'class-transformer';
-import {
-  IsNumber,
-  IsString,
-  ValidateNested,
-  validateSync,
-} from 'class-validator';
+import { IsNumber, IsString, ValidateNested } from 'class-validator';
 
 type ParameterRequestUserVkontakteEventType =
   ParameterRequestVkUserEventInterface['clientInfo'];
@@ -59,7 +54,7 @@ export class ParameterRequestUserDto
   implements ParameterClientInfoActionEventAllPlatformInterface
 {
   user?: User;
-  clientPlatform: ClientPlatformEnum.VK | ClientPlatformEnum.TELEGRAM;
+  clientPlatform: ClientPlatform.VK | ClientPlatform.TELEGRAM;
   date: number;
 
   @ValidateNested({ each: true })
@@ -67,18 +62,4 @@ export class ParameterRequestUserDto
   clientInfo:
     | ParameterRequestUserVkontakteEvent
     | ParameterRequestUserTelegramEvent;
-
-  static customValidation(value: any): boolean {
-    if (value.clientPlatform === ClientPlatformEnum.VK) {
-      return validateSync(value.clientInfo).length === 0;
-    } else if (value.clientPlatform === ClientPlatformEnum.TELEGRAM) {
-      return validateSync(value.clientInfo).length === 0;
-    }
-    // Add logic for other platforms here
-    return false;
-  }
-}
-
-function doSomething<T, K extends keyof T>(target: T, propName: keyof T): T[K] {
-  return this[propName];
 }

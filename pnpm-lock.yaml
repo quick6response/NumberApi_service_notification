@@ -27,8 +27,8 @@ dependencies:
     specifier: ^10.3.8
     version: 10.3.8(@nestjs/common@10.3.8)(@nestjs/core@10.3.8)
   '@quick_response/number_api_event':
-    specifier: 1.5.2-4
-    version: 1.5.2-4
+    specifier: 1.5.2-5
+    version: 1.5.2-5
   '@sentry/cli':
     specifier: ^2.31.2
     version: 2.31.2
@@ -1623,8 +1623,8 @@ packages:
       - supports-color
     dev: false
 
-  /@quick_response/number_api_event@1.5.2-4:
-    resolution: {integrity: sha512-o12Yuy+9VZPP7EfILD+a18TIs5/wraPOc/LtVCGV9cMehCO0bKOktBdrx4K6rP+jta0e3r25pfUoiJGuUtIpqQ==}
+  /@quick_response/number_api_event@1.5.2-5:
+    resolution: {integrity: sha512-BzJ7QDtugByK+bDJA/B4Dq/iJ23J0CUJLrKN4i53Mf5uVpHJwTuWO8dBKEYYCsCBKXzwPxlJfWFoGikjFoo1lA==}
     engines: {node: '>= 16'}
     dev: false
 

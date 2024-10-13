@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import {
-  ClientPlatformEnum,
+  ClientPlatform,
   getClientInfoByPlatform,
   StatusFindNumber,
 } from '@quick_response/number_api_event';
@@ -46,7 +46,7 @@ export class NumbersService {
   }
 
   private async getTextNumberInfo(parameters: NumberFindDto) {
-    if (parameters.clientPlatform === ClientPlatformEnum.VK) {
+    if (parameters.clientPlatform === ClientPlatform.VK) {
       const { clientInfo } = getClientInfoByPlatform(
         parameters.clientPlatform,
         parameters.clientInfo,
@@ -64,18 +64,22 @@ export class NumbersService {
 Время: ${dateUtils.getDateFormatNumber(parameters.date)}
 IP: ${clientInfo.ip}
 
-${messageTagVkMiniAppsActionUtils.getTagPlatform()} ${messageTagUtils.getTagNumber(parameters.number.number, parameters.number.numberId)} ${messageTagUtils.getTagNumberFind(parameters.status)} ${messageTagVkMiniAppsActionUtils.getTagUserAction(parameters.user.id, parameters.user.idVk)}`;
+${messageTagVkMiniAppsActionUtils.getTagPlatform()} ${messageTagUtils.getTagNumber(parameters.number.number, parameters.number.numberId)} ${messageTagUtils.getTagNumberFind(parameters.status)} ${messageTagVkMiniAppsActionUtils.getTagUserAction(parameters.user.id, clientInfo.vk_user_id)}`;
     }
   }
 
   async numberFindError(parameters: NumberFindErrorDto) {
-    if (parameters.clientPlatform === ClientPlatformEnum.VK) {
+    if (parameters.clientPlatform === ClientPlatform.VK) {
+      const { clientInfo } = getClientInfoByPlatform(
+        parameters.clientPlatform,
+        parameters.clientInfo,
+      );
       await this.vk.api.messages.send({
         chat_id: VKChatsEnum.LOGS_CHAT_DEV,
         message: `Ошибка при поиске номера ${
           parameters.number
         }, стек ошибки: ${ErrorTransform.getMessage(parameters.errorText)}\n\n
-${messageTagVkMiniAppsActionUtils.getTagPlatform()} ${messageTagUtils.getTagErrorNumber(parameters.number.number, parameters.number.numberId)} ${messageTagUtils.getTagNumberFind(parameters.status)} ${messageTagVkMiniAppsActionUtils.getTagUserAction(parameters.user.id, parameters.user.idVk)}`,
+${messageTagVkMiniAppsActionUtils.getTagPlatform()} ${messageTagUtils.getTagErrorNumber(parameters.number.number, parameters.number.numberId)} ${messageTagUtils.getTagNumberFind(parameters.status)} ${messageTagVkMiniAppsActionUtils.getTagUserAction(parameters.user.id, clientInfo.vk_user_id)}`,
         random_id: getRandomId(),
         disable_mentions: true,
       });

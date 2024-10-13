@@ -1,5 +1,5 @@
 import { Controller } from '@nestjs/common';
-import { MessagePattern, Payload } from '@nestjs/microservices';
+import { EventPattern, Payload } from '@nestjs/microservices';
 import {
   MicroservicesEventConstant,
   NumberOrganizationPinDto,
@@ -15,14 +15,14 @@ import { OrganizationService } from './organization.service';
 export class OrganizationController {
   constructor(private readonly organizationService: OrganizationService) {}
 
-  @MessagePattern(
+  @EventPattern(
     MicroservicesEventConstant.notification.organization_create_system,
   )
   async createOrganization(@Payload() data: OrganizationCreateDtoInterface) {
     await this.organizationService.notificationOrganizationCreate(data);
   }
 
-  @MessagePattern(
+  @EventPattern(
     MicroservicesEventConstant.notification.organization_create_system_error,
   )
   async createOrganizationError(
@@ -31,14 +31,14 @@ export class OrganizationController {
     await this.organizationService.notificationOrganizationCreateError(data);
   }
 
-  @MessagePattern(
+  @EventPattern(
     MicroservicesEventConstant.notification.organization_update_system,
   )
   async updateOrganization(@Payload() data: OrganizationUpdateDtoInterface) {
     await this.organizationService.notificationOrganizationUpdate(data);
   }
 
-  @MessagePattern(
+  @EventPattern(
     MicroservicesEventConstant.notification.organization_update_error,
   )
   async updateOrganizationError(
@@ -47,9 +47,7 @@ export class OrganizationController {
     await this.organizationService.notificationOrganizationUpdateError(data);
   }
 
-  @MessagePattern(
-    MicroservicesEventConstant.notification.number_organization_pin,
-  )
+  @EventPattern(MicroservicesEventConstant.notification.number_organization_pin)
   async organizationPinNumber(@Payload() data: NumberOrganizationPinDto) {
     await this.organizationService.notificationOrganizationPinNumber(data);
   }

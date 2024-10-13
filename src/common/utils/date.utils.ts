@@ -1,5 +1,8 @@
 export const dateUtils = {
-  getDateFormatNumber: (date: string | number, isSeconds = true): string => {
+  getDateFormatNumber: (
+    date: string | number | Date,
+    isSeconds = true,
+  ): string => {
     return `${dateUtils.convertDateToFormat(
       date,
     )} в ${dateUtils.convertTimeToFormat(date, isSeconds)}`;
@@ -8,7 +11,7 @@ export const dateUtils = {
    * Делаем из даты формат 04.01.2023
    * @param date
    */
-  convertDateToFormat: (date: string | number): string => {
+  convertDateToFormat: (date: string | number | Date): string => {
     const inputDate = new Date(date);
     const dayInputDate = inputDate.getDate();
     const monthInputDate = inputDate.getMonth() + 1; // месяцы начинаются с 0
@@ -30,7 +33,10 @@ export const dateUtils = {
    * @param date
    * @param isSeconds время с секундами
    */
-  convertTimeToFormat: (date: string | number, isSeconds = false): string => {
+  convertTimeToFormat: (
+    date: string | number | Date,
+    isSeconds = false,
+  ): string => {
     const inputDate = new Date(date);
     const minutesInputDate = inputDate.getMinutes();
     const hoursInputDate = inputDate.getHours();

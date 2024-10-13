@@ -3,11 +3,11 @@ import {
   CommentDtoInterface,
   CommentEditChangeColumns,
   CommentEditDto,
+  CommentNumberStatus,
 } from '@quick_response/number_api_event';
 import { Type } from 'class-transformer';
 import { IsBoolean, IsDate, IsNumber, IsString } from 'class-validator';
 import { ParameterRequestUserDto } from '../../common/dto/parameter.request.user.dto';
-import { CommentStatusEnum } from '../type/comment.status.enum';
 
 export class CommentDto implements CommentDtoInterface {
   @IsNumber()
@@ -21,7 +21,7 @@ export class CommentDto implements CommentDtoInterface {
   @IsDate()
   createdAt: Date;
   @IsString()
-  status: CommentStatusEnum;
+  status: CommentNumberStatus;
   @IsDate()
   updatedAt: Date;
   @IsNumber()

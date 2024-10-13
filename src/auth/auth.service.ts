@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import {
-  ClientPlatformEnum,
+  ClientPlatform,
   getClientInfoByPlatform,
 } from '@quick_response/number_api_event';
 import { InjectVkApi } from 'nestjs-vk';
@@ -23,7 +23,7 @@ export class AuthService {
   ) {}
 
   async loginUser(parameters: VkAuthLoginDto) {
-    if (parameters.clientPlatform === ClientPlatformEnum.VK) {
+    if (parameters.clientPlatform === ClientPlatform.VK) {
       const { clientInfo } = getClientInfoByPlatform(
         parameters.clientPlatform,
         parameters.clientInfo,
@@ -44,7 +44,7 @@ export class AuthService {
   }
 
   async registrationUser(parameters: VkAuthRegistrationDto) {
-    if (parameters.clientPlatform === ClientPlatformEnum.VK) {
+    if (parameters.clientPlatform === ClientPlatform.VK) {
       const { clientInfo } = getClientInfoByPlatform(
         parameters.clientPlatform,
         parameters.clientInfo,
@@ -67,7 +67,7 @@ export class AuthService {
   private async getTextRegistration(
     parameters: VkAuthRegistrationDto,
   ): Promise<string> {
-    if (parameters.clientPlatform === ClientPlatformEnum.VK) {
+    if (parameters.clientPlatform === ClientPlatform.VK) {
       const { clientInfo } = getClientInfoByPlatform(
         parameters.clientPlatform,
         parameters.clientInfo,
@@ -87,7 +87,7 @@ ${messageTagVkMiniAppsActionUtils.getTagPlatform()} ${messageTagVkMiniAppsAction
   }
 
   private async getTextLogin(parameters: VkAuthLoginDto): Promise<string> {
-    if (parameters.clientPlatform === ClientPlatformEnum.VK) {
+    if (parameters.clientPlatform === ClientPlatform.VK) {
       const { clientInfo } = getClientInfoByPlatform(
         parameters.clientPlatform,
         parameters.clientInfo,

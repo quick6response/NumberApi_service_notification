@@ -1,5 +1,5 @@
 import { Controller } from '@nestjs/common';
-import { MessagePattern, Payload } from '@nestjs/microservices';
+import { EventPattern, Payload } from '@nestjs/microservices';
 import { MicroservicesEventConstant } from '@quick_response/number_api_event';
 import { RabbitmqNotificationEventsType } from '../common/rabbitmq/types/rabbitmq.notification.events.type';
 import { UserNumberNotificationDto } from './dto/user.number.notification.dto';
@@ -9,7 +9,7 @@ import { UserNumberService } from './user.number.service';
 export class UserNumberController {
   constructor(private readonly userNumberService: UserNumberService) {}
 
-  @MessagePattern<RabbitmqNotificationEventsType>(
+  @EventPattern<RabbitmqNotificationEventsType>(
     MicroservicesEventConstant.notification.user_another_number_find,
   )
   async notificationNumberFind(@Payload() data: UserNumberNotificationDto) {
