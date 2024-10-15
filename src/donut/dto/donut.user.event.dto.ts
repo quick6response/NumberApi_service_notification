@@ -11,7 +11,7 @@ export class DonutUserSubscriptionIssuanceEventDto {
   amount?: number;
   // цена подписки за месяц
   price?: number;
-  //
+  // дата события
   date: number;
 }
 
@@ -20,6 +20,6 @@ export class DonutUserEventDto {
   userId: number;
   // айди пользователя вк
   userVkId: number;
-  //
+  // дата события
   date: number;
 }

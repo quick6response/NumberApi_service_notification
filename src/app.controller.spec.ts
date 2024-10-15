@@ -15,8 +15,6 @@ describe('AppController', () => {
   });
 
   describe('root', () => {
-    it('should return "Hello World!"', () => {
-      console.log('tesst');
-    });
+    it('should return "Hello World!"', () => {});
   });
 });

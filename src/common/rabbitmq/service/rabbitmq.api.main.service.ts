@@ -1,8 +1,9 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { ClientProxy } from '@nestjs/microservices';
+import { RabbitmqMainMessageKey } from '@quick_response/number_api_event/dist/_types';
+import { RabbitmqMainMessages } from '@quick_response/number_api_event/dist/microservice/main/types/rabbitmq.events.data.type';
 import { Observable } from 'rxjs';
 import { rabbitNameConfig } from '../config/rabbit.name.config';
-import { RabbitmqApiSendEventsType } from '../types/rabbitmq.api.send.events.type';
 
 @Injectable()
 export class RabbitmqApiMainService {
@@ -12,21 +13,21 @@ export class RabbitmqApiMainService {
   ) {}
 
   // TODO: Написать возвращаемые типы
-  async send<
-    K extends keyof RabbitmqApiSendEventsType,
-    V extends RabbitmqApiSendEventsType[K],
-  >(routingKey: K, message: V) {
-    return this.client.send<K, V>(routingKey, {
+  send<K extends RabbitmqMainMessageKey, V extends RabbitmqMainMessages[K]>(
+    routingKey: K,
+    message: V,
+  ) {
+    return this.client.emit<K, V>(routingKey, {
       ...message,
       date: new Date().toString(),
     });
   }
 
   // Событие
-  emit<
-    K extends keyof RabbitmqApiSendEventsType,
-    V extends RabbitmqApiSendEventsType[K],
-  >(routingKey: K, message: V): Observable<K> {
+  emit<K extends keyof RabbitmqMainMessages, V extends RabbitmqMainMessages[K]>(
+    routingKey: K,
+    message: V,
+  ): Observable<K> {
     try {
       return this.client.emit<K, V>(routingKey, {
         ...message,

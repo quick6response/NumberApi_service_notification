@@ -8,11 +8,7 @@ import { UserCreateDto, UserEditDto } from './dto/users.dto';
 
 @Injectable()
 export class UsersService {
-  constructor(@InjectVkApi() private readonly vk: VK) {
-    vk.updates.on('message_new', (ctx) => {
-      console.log(ctx);
-    });
-  }
+  constructor(@InjectVkApi() private readonly vk: VK) {}
 
   async notificationUserCreate(dto: UserCreateDto) {
     await this.vk.api.messages.send({

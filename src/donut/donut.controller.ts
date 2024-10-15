@@ -1,35 +1,28 @@
-import { Controller } from '@nestjs/common';
-import { EventPattern, Payload, RmqContext } from '@nestjs/microservices';
+import { EventPattern, Payload } from '@nestjs/microservices';
 import { MicroservicesEventConstant } from '@quick_response/number_api_event';
-import { Ctx } from 'nestjs-vk';
-import { DonutService } from './donut.service';
 import { DonutUserEventDto } from './dto/donut.user.event.dto';
+import { DonutNotificationService } from './service/donut.notification.service';
 
-@Controller('donut')
 export class DonutController {
-  constructor(private readonly donutService: DonutService) {}
+  constructor(private readonly donutService: DonutNotificationService) {}
   @EventPattern(
     MicroservicesEventConstant.notification.donut_subscriptionIssuance,
   )
-  async subscriptionIssuance(
-    @Payload() data: DonutUserEventDto,
-    @Ctx() context: RmqContext,
-  ) {
+  async subscriptionIssuance(@Payload() data: DonutUserEventDto) {
     return await this.donutService.subscriptionIssuance(data);
   }
 
   @EventPattern(
     MicroservicesEventConstant.notification.donut_subscriptionExpired,
   )
-  async subscriptionExpired(
-    @Payload() data: DonutUserEventDto,
-    @Ctx() context: RmqContext,
-  ) {
+  async subscriptionExpired(@Payload() data: DonutUserEventDto) {
     return await this.donutService.subscriptionExpired(data);
   }
-  // todo событие о изменение стоимости подписки
-  // @EventPattern('donut_subscriptionExpired')
-  // async subscriptionExpired(@Payload() data: DonutUserDto) {
-  //   return this.donutService.subscriptionExpired(data);
-  // }
+
+  @EventPattern(
+    MicroservicesEventConstant.notification.donut_subscriptionProlonged,
+  )
+  async subscriptionProlonged(@Payload() data: DonutUserEventDto) {
+    return await this.donutService.subscriptionProlonged(data);
+  }
 }

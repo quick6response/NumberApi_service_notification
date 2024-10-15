@@ -1,3 +1,4 @@
+import { Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { HttpAdapterHost, NestFactory } from '@nestjs/core';
 import { MicroserviceOptions, Transport } from '@nestjs/microservices';
@@ -46,10 +47,10 @@ async function bootstrap() {
   );
 
   app
-    .listen()
-    .then(() => console.log(`Start microservice`))
+    .init()
+    .then(() => Logger.log(`Start microservice`))
     .catch((error) => {
-      console.error('Error Start microservice', error);
+      Logger.error('Error Start microservice', error);
       app.close();
     });
 }

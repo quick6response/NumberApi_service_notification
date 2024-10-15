@@ -11,7 +11,6 @@ export class VkController {
   constructor(@InjectVkApi() private vk: VK) {}
   @Post()
   async callback(@Query() query, @Body() body) {
-    console.log(query, body);
     return vk.updates.getWebhookCallback();
   }
 }
