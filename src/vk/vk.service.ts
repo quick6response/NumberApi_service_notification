@@ -23,7 +23,7 @@ export class VkService {
     try {
       const userCache = await this.getCacheUserVk(idVk);
 
-      if (userCache !== null) {
+      if (userCache) {
         return userCache;
       }
 
@@ -31,7 +31,7 @@ export class VkService {
         user_id: idVk,
       })) as UserVkInterface[];
 
-      if (!userCache && !userVk) {
+      if (userVk) {
         await this.setCacheUserVk(idVk, userVk);
       }
 

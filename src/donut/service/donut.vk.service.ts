@@ -13,9 +13,10 @@ import {
 } from 'vk-io';
 import { MessagesSendParams } from 'vk-io/lib/api/schemas/params';
 import { DonutSubscriptionPriceContext } from 'vk-io/lib/structures/contexts/donut-subscription-price';
+
 import { VKChatsEnum } from '../../common/config/vk.chats.config';
+import { TagMessageActionUserVk } from '../../common/constants/TagMessageActionUserVk';
 import { RabbitmqApiMainService } from '../../common/rabbitmq/service/rabbitmq.api.main.service';
-import { TagMessageActionUserVk } from '../../common/TagMessageActionUserVk';
 import { amountUtils } from '../../common/utils/amount.utils';
 import { dateUtils } from '../../common/utils/date.utils';
 import { VkService } from '../../vk/vk.service';
@@ -60,7 +61,7 @@ export class DonutVkService {
       \n#donut_create #donutSubscriptionCreate #${TagMessageActionUserVk.VK_ID}${ctx.userId}`;
       await this.sendMessageChat(textChat, [VKChatsEnum.ADMIN_CHAT_DEV]);
 
-      await this.rabbitmqMainApiService.send(
+      await this.rabbitmqMainApiService.emit(
         MicroservicesEventConstant.mainServiceApi.message.donutCreate,
         data,
       );
@@ -91,7 +92,7 @@ export class DonutVkService {
     \n#donut_prolonged #donutSubscriptionProlonged #${TagMessageActionUserVk.VK_ID}${ctx.userId}`;
     await this.sendMessageChat(textChat, [VKChatsEnum.ADMIN_CHAT]);
 
-    await this.rabbitmqMainApiService.send(
+    await this.rabbitmqMainApiService.emit(
       MicroservicesEventConstant.mainServiceApi.message.donutProlonged,
       {
         userId: user.id,
@@ -113,7 +114,7 @@ export class DonutVkService {
     \n\n#donut_expired #donutSubscriptionExpired #${TagMessageActionUserVk.VK_ID}${ctx.userId}}`;
     await this.sendMessageChat(textChat, [VKChatsEnum.ADMIN_CHAT_DEV]);
 
-    await this.rabbitmqMainApiService.send(
+    await this.rabbitmqMainApiService.emit(
       MicroservicesEventConstant.mainServiceApi.message.donutExpired,
       {
         userId: user.id,
@@ -156,7 +157,7 @@ export class DonutVkService {
     }`;
     await this.sendMessageChat(textChat, [VKChatsEnum.ADMIN_CHAT]);
 
-    await this.rabbitmqMainApiService.send(
+    await this.rabbitmqMainApiService.emit(
       MicroservicesEventConstant.mainServiceApi.message.donutChangePrice,
       {
         userId: user.id,

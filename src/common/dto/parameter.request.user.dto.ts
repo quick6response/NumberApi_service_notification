@@ -2,8 +2,7 @@ import { ClientPlatform, User } from '@quick_response/number_api_event';
 import { ParameterClientInfoActionEventAllPlatformInterface } from '@quick_response/number_api_event/dist/microservice/notification/types/parameter.client.info.type';
 import { ParameterRequestTelegramUserEventInterface } from '@quick_response/number_api_event/dist/microservice/notification/types/parameter.request.tg.type';
 import { ParameterRequestVkUserEventInterface } from '@quick_response/number_api_event/dist/microservice/notification/types/parameter.request.vk.type';
-import { Type } from 'class-transformer';
-import { IsNumber, IsString, ValidateNested } from 'class-validator';
+import { IsNumber, IsString } from 'class-validator';
 
 type ParameterRequestUserVkontakteEventType =
   ParameterRequestVkUserEventInterface['clientInfo'];
@@ -56,9 +55,6 @@ export class ParameterRequestUserDto
   user?: User;
   clientPlatform: ClientPlatform.VK | ClientPlatform.TELEGRAM;
   date: number;
-
-  @ValidateNested({ each: true })
-  @Type(() => ParameterRequestUserVkontakteEvent)
   clientInfo:
     | ParameterRequestUserVkontakteEvent
     | ParameterRequestUserTelegramEvent;

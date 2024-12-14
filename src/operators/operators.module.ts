@@ -1,9 +1,12 @@
 import { Module } from '@nestjs/common';
-import { OperatorsController } from './operators.controller';
+
+import { RabbitmqModule } from 'src/common/rabbitmq/rabbitmq.module';
+
+import { OperatorsNotificationRabbitmq } from './operators.notification.rabbitmq';
 import { OperatorsService } from './operators.service';
 
 @Module({
-  providers: [OperatorsService],
-  controllers: [OperatorsController],
+  providers: [OperatorsService, OperatorsNotificationRabbitmq],
+  imports: [RabbitmqModule],
 })
 export class OperatorsModule {}

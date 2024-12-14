@@ -1,10 +1,11 @@
 import { Injectable } from '@nestjs/common';
 import { InjectVkApi } from 'nestjs-vk';
 import { getRandomId, VK } from 'vk-io';
+
+import { UserCreateDto, UserEditDto } from './dto/users.dto';
 import { VKChatsEnum } from '../common/config/vk.chats.config';
 import { dateUtils } from '../common/utils/date.utils';
 import { messageTagVkMiniAppsActionUtils } from '../common/utils/message.platform.tag.utils';
-import { UserCreateDto, UserEditDto } from './dto/users.dto';
 
 @Injectable()
 export class UsersService {

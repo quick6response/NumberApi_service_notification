@@ -1,10 +1,12 @@
 import { Injectable } from '@nestjs/common';
-import { VkService } from 'src/vk/vk.service';
 import { Keyboard } from 'vk-io';
+
+import { VkService } from 'src/vk/vk.service';
+
+import { DonutVkService } from './donut.vk.service';
 import { VKChatsEnum } from '../../common/config/vk.chats.config';
 import { dateUtils } from '../../common/utils/date.utils';
 import { DonutUserEventDto } from '../dto/donut.user.event.dto';
-import { DonutVkService } from './donut.vk.service';
 
 @Injectable()
 export class DonutNotificationService {

@@ -7,9 +7,10 @@ import {
   MessageContext,
   VK,
 } from 'vk-io';
+
+import { DonutVkService } from './service/donut.vk.service';
 import { VkExceptionFilter } from '../common/filters/vk-exception.filter';
 import { VkAdminGuard } from '../common/guards/vk.admin.guard';
-import { DonutVkService } from './service/donut.vk.service';
 
 @Update()
 @UseFilters(VkExceptionFilter)

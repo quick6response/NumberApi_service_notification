@@ -1,4 +1,4 @@
-import { TagMessageActionUserVk } from '../TagMessageActionUserVk';
+import { TagMessageActionUserVk } from '../constants/TagMessageActionUserVk';
 
 export class MessagePlatformTagUtils {
   getTagUserAction(userId: number, idVk: number) {

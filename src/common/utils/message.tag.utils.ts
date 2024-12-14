@@ -31,7 +31,7 @@ export class MessageTagUtils {
   getTagOrganizationCreateError() {
     return '#organization_create_error';
   }
-  getTagOrganizationUpdate(operatorId: number, isError: boolean = false) {
+  getTagOrganizationUpdate(operatorId: number, isError = false) {
     return (
       this.getTagOrganization(operatorId) +
       ' #organization_update' +

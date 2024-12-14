@@ -1,12 +1,14 @@
 import { Module } from '@nestjs/common';
-import { VkHelpModule } from '../vk/vk.help.module';
-import { NumbersController } from './numbers.controller';
+
+import { NumbersNotificationRabbitmq } from './numbers.notification.rabbitmq';
 import { NumbersService } from './numbers.service';
+import { RabbitmqModule } from '../common/rabbitmq/rabbitmq.module';
+import { VkHelpModule } from '../vk/vk.help.module';
 
 @Module({
-  controllers: [NumbersController],
-  providers: [NumbersService],
-  imports: [VkHelpModule],
+  controllers: [],
+  providers: [NumbersService, NumbersNotificationRabbitmq],
   exports: [NumbersService],
+  imports: [VkHelpModule, RabbitmqModule],
 })
 export class NumbersModule {}
