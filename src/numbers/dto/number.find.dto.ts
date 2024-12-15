@@ -3,7 +3,7 @@ import {
   NumberFindDto as NumberFindDtoEvent,
   NumberFindErrorDto as NumberFindErrorDtoEvent,
   StatusFindNumber,
-} from '@quick_response/number_api_event';
+} from 'microservice';
 
 import { ParameterRequestUserDto } from '../../common/dto/parameter.request.user.dto';
 

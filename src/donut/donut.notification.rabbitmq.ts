@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import {
   MicroservicesEventConstant,
   RabbitmqExchangesConstant,
-} from '@quick_response/number_api_event';
+} from 'microservice';
 
 import { DonutUserEventDto } from './dto/donut.user.event.dto';
 import { DonutNotificationService } from './service/donut.notification.service';

@@ -1,5 +1,5 @@
 import { Injectable, Logger } from '@nestjs/common';
-import { OperatorCreateDtoInterface } from '@quick_response/number_api_event';
+import { OperatorCreateDtoInterface } from 'microservice';
 import { InjectVkApi } from 'nestjs-vk';
 import { getRandomId, VK } from 'vk-io';
 

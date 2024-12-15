@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import {
   MicroservicesEventConstant,
   RabbitmqExchangesConstant,
-} from '@quick_response/number_api_event';
+} from 'microservice';
 
 import { NumberFindDto, NumberFindErrorDto } from './dto/number.find.dto';
 import { NumbersService } from './numbers.service';
