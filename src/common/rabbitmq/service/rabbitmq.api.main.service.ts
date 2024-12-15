@@ -1,8 +1,7 @@
 import { AmqpConnection } from '@golevelup/nestjs-rabbitmq';
 import { Injectable, Logger } from '@nestjs/common';
 import { RabbitmqExchangesConstant } from 'microservice';
-import { RabbitmqMainMessageKey } from 'microservice/dist/_types';
-import { RabbitmqMainMessages } from 'microservice/dist/microservice/main/types/rabbitmq.events.data.type';
+import { RabbitmqMainMessageKey, RabbitmqMainMessages } from 'microservice/api';
 
 @Injectable()
 export class RabbitmqApiMainService {

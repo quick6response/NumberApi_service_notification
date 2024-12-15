@@ -1,11 +1,10 @@
 import { IsNumber, IsString } from 'class-validator';
 import {
-  ClientPlatform,
   ParameterClientInfoActionEventAllPlatformInterface,
   ParameterRequestTelegramUserEventInterface,
   ParameterRequestVkUserEventInterface,
 } from 'microservice/notification';
-import { User } from 'microservice/share';
+import { ClientPlatform, User } from 'microservice/share';
 
 type ParameterRequestUserVkontakteEventType =
   ParameterRequestVkUserEventInterface['clientInfo'];
