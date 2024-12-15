@@ -1,4 +1,4 @@
-import { StatusFindNumber } from '@quick_response/number_api_event';
+import { StatusFindNumber } from 'microservice';
 
 export class MessageTagUtils {
   getTagNumberFind(status: StatusFindNumber) {

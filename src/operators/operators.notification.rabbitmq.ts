@@ -3,7 +3,7 @@ import {
   MicroservicesEventConstant,
   OperatorCreateDtoInterface,
   RabbitmqExchangesConstant,
-} from '@quick_response/number_api_event';
+} from 'microservice';
 
 import { OperatorsService } from './operators.service';
 import { RabbitmqSubscribeNotificationService } from '../common/rabbitmq/decorators/rabbitmqSubscribeNotificationService';

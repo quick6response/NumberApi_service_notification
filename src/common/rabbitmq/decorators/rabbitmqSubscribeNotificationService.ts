@@ -3,7 +3,7 @@ import {
   getQueueName,
   getRoutingKeyName,
   RabbitmqQueueConstant,
-} from '@quick_response/number_api_event';
+} from 'microservice';
 
 export function RabbitmqSubscribeNotificationService({
   exchange,

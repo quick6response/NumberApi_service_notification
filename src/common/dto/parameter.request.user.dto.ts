@@ -1,8 +1,11 @@
-import { ClientPlatform, User } from '@quick_response/number_api_event';
-import { ParameterClientInfoActionEventAllPlatformInterface } from '@quick_response/number_api_event/dist/microservice/notification/types/parameter.client.info.type';
-import { ParameterRequestTelegramUserEventInterface } from '@quick_response/number_api_event/dist/microservice/notification/types/parameter.request.tg.type';
-import { ParameterRequestVkUserEventInterface } from '@quick_response/number_api_event/dist/microservice/notification/types/parameter.request.vk.type';
 import { IsNumber, IsString } from 'class-validator';
+import {
+  ClientPlatform,
+  ParameterClientInfoActionEventAllPlatformInterface,
+  ParameterRequestTelegramUserEventInterface,
+  ParameterRequestVkUserEventInterface,
+} from 'microservice/notification';
+import { User } from 'microservice/share';
 
 type ParameterRequestUserVkontakteEventType =
   ParameterRequestVkUserEventInterface['clientInfo'];

@@ -1,12 +1,12 @@
+import { Type } from 'class-transformer';
+import { IsBoolean, IsDate, IsNumber, IsString } from 'class-validator';
 import {
   CommentCreateDto,
   CommentDtoInterface,
   CommentEditChangeColumns,
   CommentEditDto,
   CommentNumberStatus,
-} from '@quick_response/number_api_event';
-import { Type } from 'class-transformer';
-import { IsBoolean, IsDate, IsNumber, IsString } from 'class-validator';
+} from 'microservice';
 
 import { ParameterRequestUserDto } from '../../common/dto/parameter.request.user.dto';
 

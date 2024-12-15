@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import {
   MicroservicesEventConstant,
   RabbitmqExchangesConstant,
-} from '@quick_response/number_api_event';
+} from 'microservice';
 
 import { UserCreateDto, UserEditDto } from './dto/users.dto';
 import { UsersService } from './users.service';

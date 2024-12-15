@@ -7,7 +7,7 @@ import {
   OrganizationUpdateDtoInterface,
   OrganizationUpdateErrorDtoInterface,
   RabbitmqExchangesConstant,
-} from '@quick_response/number_api_event';
+} from 'microservice';
 
 import { OrganizationService } from './organization.service';
 import { RabbitmqSubscribeNotificationService } from '../common/rabbitmq/decorators/rabbitmqSubscribeNotificationService';

@@ -1,4 +1,4 @@
-import { OperatorCreateDtoInterface } from '@quick_response/number_api_event';
+import { OperatorCreateDtoInterface } from 'microservice';
 
 type OperatorEventDto = OperatorCreateDtoInterface['operator'];
 

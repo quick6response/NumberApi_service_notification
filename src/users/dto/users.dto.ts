@@ -3,7 +3,7 @@ import {
   UserDtoInterface,
   UserUpdateDtoInterface,
   UserVkDtoInterface,
-} from '@quick_response/number_api_event';
+} from 'microservice';
 
 export class UserCreateDto implements UserCreateDtoInterface {
   date: number;

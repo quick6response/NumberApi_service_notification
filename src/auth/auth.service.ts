@@ -1,10 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import {
-  ClientPlatform,
-  getClientInfoByPlatform,
-} from '@quick_response/number_api_event';
-import type { ParameterRequestVkUserEventInterface } from '@quick_response/number_api_event/dist/microservice/notification/types/parameter.request.vk.type';
+import { ClientPlatform, getClientInfoByPlatform } from 'microservice';
+import { ParameterRequestVkUserEventInterface } from 'microservice/notification';
 import { InjectVkApi } from 'nestjs-vk';
 import { getRandomId, Keyboard, VK } from 'vk-io';
 

@@ -1,8 +1,5 @@
-import {
-  NumberEssence,
-  UserAnotherFindNumberDtoInterface,
-} from '@quick_response/number_api_event';
 import { IsBoolean, IsNumber, IsString } from 'class-validator';
+import { NumberEssence, UserAnotherFindNumberDtoInterface } from 'microservice';
 
 import { ParameterRequestUserDto } from '../../common/dto/parameter.request.user.dto';
 
