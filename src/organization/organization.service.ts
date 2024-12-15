@@ -5,9 +5,10 @@ import {
   OrganizationCreateErrorDtoInterface,
   OrganizationUpdateDtoInterface,
   OrganizationUpdateErrorDtoInterface,
-} from '@quick_response/number_api_event';
+} from 'microservice';
 import { InjectVkApi } from 'nestjs-vk';
 import { getRandomId, VK } from 'vk-io';
+
 import { VKChatsEnum } from '../common/config/vk.chats.config';
 import { dateUtils } from '../common/utils/date.utils';
 import { messageTagUtils } from '../common/utils/message.tag.utils';

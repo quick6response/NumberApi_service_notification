@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectVkApi } from 'nestjs-vk';
 import { getRandomId, VK } from 'vk-io';
+
 import { VKChatsEnum } from './common/config/vk.chats.config';
 import { VkService } from './vk/vk.service';
 

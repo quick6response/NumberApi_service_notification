@@ -1,41 +1,38 @@
-import { Inject, Injectable } from '@nestjs/common';
-import { ClientProxy } from '@nestjs/microservices';
-import { Observable } from 'rxjs';
-import { rabbitNameConfig } from '../config/rabbit.name.config';
-import { RabbitmqApiSendEventsType } from '../types/rabbitmq.api.send.events.type';
+import { AmqpConnection } from '@golevelup/nestjs-rabbitmq';
+import { Injectable, Logger } from '@nestjs/common';
+import { RabbitmqExchangesConstant } from 'microservice';
+import { RabbitmqMainMessageKey, RabbitmqMainMessages } from 'microservice/api';
 
 @Injectable()
 export class RabbitmqApiMainService {
-  constructor(
-    @Inject(rabbitNameConfig.SERVICE_API)
-    private readonly client: ClientProxy,
-  ) {}
+  private readonly logger = new Logger(RabbitmqApiMainService.name);
 
-  // TODO: Написать возвращаемые типы
-  async send<
-    K extends keyof RabbitmqApiSendEventsType,
-    V extends RabbitmqApiSendEventsType[K],
+  constructor(private readonly amqpConnection: AmqpConnection) {}
+
+  async emit<
+    K extends RabbitmqMainMessageKey,
+    V extends RabbitmqMainMessages[K],
   >(routingKey: K, message: V) {
-    return this.client.send<K, V>(routingKey, {
-      ...message,
-      date: new Date().toString(),
-    });
-  }
-
-  // Событие
-  emit<
-    K extends keyof RabbitmqApiSendEventsType,
-    V extends RabbitmqApiSendEventsType[K],
-  >(routingKey: K, message: V): Observable<K> {
     try {
-      return this.client.emit<K, V>(routingKey, {
+      const data = {
         ...message,
         date: new Date().toString(),
-        time: Date.now(),
-        messageId: Date.now(),
-      });
+      };
+      const result = await this.amqpConnection.publish(
+        RabbitmqExchangesConstant.notification,
+        routingKey,
+        data,
+      );
+
+      return result;
     } catch (error) {
-      console.error('ошибка отправки события в rabbitmq', error);
+      this.logger.error({
+        err: error,
+        extra: {
+          routingKey,
+          message,
+        },
+      });
     }
   }
 }

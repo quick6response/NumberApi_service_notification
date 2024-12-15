@@ -1,4 +1,4 @@
-const vk_platforms: Record<string, string> = {
+const vk_platforms = {
   desktop_web: 'браузерная (десктопная) версия',
   mobile_android: 'официальное приложение для Android',
   mobile_android_messenger: 'мобильный мессенджер для Android',
@@ -6,7 +6,7 @@ const vk_platforms: Record<string, string> = {
   mobile_iphone: 'официальное приложение для iPhone',
   mobile_iphone_messenger: 'мобильный мессенджер для iPhone',
   mobile_web: 'браузерная (мобильная) версия',
-};
+} as const;
 
 const vk_refs = {
   ' ': 'Пусто :(',
@@ -91,7 +91,7 @@ const vk_refs = {
   quick_search: 'результаты быстрого поиска;',
   menu: 'переход из недавних через пятый таб в мобильном вебе.',
   other: 'прочие переходы',
-};
+} as const;
 
 export const VkUtils = {
   getPlatform: (key: string) => {

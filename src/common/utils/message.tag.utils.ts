@@ -1,4 +1,4 @@
-import { StatusFindNumber } from '@quick_response/number_api_event';
+import { StatusFindNumber } from 'microservice';
 
 export class MessageTagUtils {
   getTagNumberFind(status: StatusFindNumber) {
@@ -31,7 +31,7 @@ export class MessageTagUtils {
   getTagOrganizationCreateError() {
     return '#organization_create_error';
   }
-  getTagOrganizationUpdate(operatorId: number, isError: boolean = false) {
+  getTagOrganizationUpdate(operatorId: number, isError = false) {
     return (
       this.getTagOrganization(operatorId) +
       ' #organization_update' +

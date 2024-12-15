@@ -61,7 +61,6 @@ export const dateUtils = {
 interface IConvertDate {
   day: string;
   month: string;
-
   year: string;
 }
 

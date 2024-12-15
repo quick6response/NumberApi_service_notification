@@ -1,18 +1,15 @@
 import { Injectable } from '@nestjs/common';
 import { InjectVkApi } from 'nestjs-vk';
 import { getRandomId, VK } from 'vk-io';
+
+import { UserCreateDto, UserEditDto } from './dto/users.dto';
 import { VKChatsEnum } from '../common/config/vk.chats.config';
 import { dateUtils } from '../common/utils/date.utils';
 import { messageTagVkMiniAppsActionUtils } from '../common/utils/message.platform.tag.utils';
-import { UserCreateDto, UserEditDto } from './dto/users.dto';
 
 @Injectable()
 export class UsersService {
-  constructor(@InjectVkApi() private readonly vk: VK) {
-    vk.updates.on('message_new', (ctx) => {
-      console.log(ctx);
-    });
-  }
+  constructor(@InjectVkApi() private readonly vk: VK) {}
 
   async notificationUserCreate(dto: UserCreateDto) {
     await this.vk.api.messages.send({

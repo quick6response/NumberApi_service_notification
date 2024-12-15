@@ -1,13 +1,21 @@
 import { Module } from '@nestjs/common';
-import { MainApiClientModule } from '../common/rabbitmq/main.api.client.module';
-import { VkHelpModule } from '../vk/vk.help.module';
-import { DonutController } from './donut.controller';
-import { DonutService } from './donut.service';
+
+import { DonutNotificationRabbitmq } from './donut.notification.rabbitmq';
 import { DonutUpdate } from './donut.update';
+import { DonutNotificationService } from './service/donut.notification.service';
+import { DonutVkService } from './service/donut.vk.service';
+import { MainApiClientModule } from '../common/rabbitmq/main.api.client.module';
+import { RabbitmqModule } from '../common/rabbitmq/rabbitmq.module';
+import { VkHelpModule } from '../vk/vk.help.module';
 
 @Module({
-  controllers: [DonutUpdate, DonutController],
-  providers: [DonutService],
-  imports: [VkHelpModule, MainApiClientModule],
+  controllers: [],
+  providers: [
+    DonutNotificationService,
+    DonutVkService,
+    DonutUpdate,
+    DonutNotificationRabbitmq,
+  ],
+  imports: [VkHelpModule, MainApiClientModule, RabbitmqModule],
 })
 export class DonutModule {}

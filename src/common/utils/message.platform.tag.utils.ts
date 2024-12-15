@@ -1,6 +1,8 @@
+import { TagMessageActionUserVk } from '../constants/TagMessageActionUserVk';
+
 export class MessagePlatformTagUtils {
   getTagUserAction(userId: number, idVk: number) {
-    return `#user #userId${userId} #vk_id${idVk}`;
+    return `#user #${TagMessageActionUserVk.USER_ID}${userId} #${TagMessageActionUserVk.VK_ID}${idVk}`;
   }
   getTagAuth(type: 'login' | 'registration') {
     return type === 'login' ? '#login' : '#registration';
