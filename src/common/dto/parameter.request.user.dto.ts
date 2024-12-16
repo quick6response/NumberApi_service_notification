@@ -1,10 +1,10 @@
-import { IsNumber, IsString } from 'class-validator';
 import {
   ParameterClientInfoActionEventAllPlatformInterface,
   ParameterRequestTelegramUserEventInterface,
   ParameterRequestVkUserEventInterface,
-} from 'microservice/notification';
-import { ClientPlatform, User } from 'microservice/share';
+} from '@numberapi/microservices/notification';
+import { ClientPlatform, User } from '@numberapi/microservices/share';
+import { IsNumber, IsString } from 'class-validator';
 
 type ParameterRequestUserVkontakteEventType =
   ParameterRequestVkUserEventInterface['clientInfo'];

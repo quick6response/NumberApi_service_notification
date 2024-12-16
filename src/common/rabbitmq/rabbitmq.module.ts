@@ -1,7 +1,10 @@
 import { RabbitMQModule } from '@golevelup/nestjs-rabbitmq';
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import { RabbitmqExchangesConstant, RabbitmqQueueConstant } from 'microservice';
+import {
+  RabbitmqExchangesConstant,
+  RabbitmqQueueConstant,
+} from '@numberapi/microservices';
 
 @Module({
   imports: [

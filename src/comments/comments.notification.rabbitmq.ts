@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import {
   MicroservicesEventConstant,
   RabbitmqExchangesConstant,
-} from 'microservice';
+} from '@numberapi/microservices';
 
 import { CommentsService } from './comments.service';
 import {

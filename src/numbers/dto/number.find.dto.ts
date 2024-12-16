@@ -1,9 +1,9 @@
+import { NumberEssence } from '@numberapi/microservices';
 import {
-  NumberEssence,
   NumberFindDto as NumberFindDtoEvent,
   NumberFindErrorDto as NumberFindErrorDtoEvent,
   StatusFindNumber,
-} from 'microservice';
+} from '@numberapi/microservices/notification';
 
 import { ParameterRequestUserDto } from '../../common/dto/parameter.request.user.dto';
 

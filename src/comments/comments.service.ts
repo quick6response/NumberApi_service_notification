@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { ClientPlatform, getClientInfoByPlatform } from 'microservice';
+import { ClientPlatform } from '@numberapi/microservices';
+import { getClientInfoByPlatform } from '@numberapi/microservices/notification';
 import { InjectVkApi } from 'nestjs-vk';
 import { getRandomId, Keyboard, VK } from 'vk-io';
 
