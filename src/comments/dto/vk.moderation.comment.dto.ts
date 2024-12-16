@@ -1,4 +1,5 @@
-import { CommentNumberModerateDto, CommentNumberStatus } from 'microservice';
+import { CommentNumberStatus } from '@numberapi/microservices';
+import { CommentNumberModerateDto } from '@numberapi/microservices/notification';
 
 import { ParameterRequestUserDto } from '../../common/dto/parameter.request.user.dto';
 

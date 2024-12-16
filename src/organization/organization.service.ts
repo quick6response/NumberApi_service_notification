@@ -5,7 +5,7 @@ import {
   OrganizationCreateErrorDtoInterface,
   OrganizationUpdateDtoInterface,
   OrganizationUpdateErrorDtoInterface,
-} from 'microservice';
+} from '@numberapi/microservices/notification';
 import { InjectVkApi } from 'nestjs-vk';
 import { getRandomId, VK } from 'vk-io';
 

@@ -3,7 +3,7 @@ import {
   UserDtoInterface,
   UserUpdateDtoInterface,
   UserVkDtoInterface,
-} from 'microservice';
+} from '@numberapi/microservices/notification';
 
 export class UserCreateDto implements UserCreateDtoInterface {
   date: number;

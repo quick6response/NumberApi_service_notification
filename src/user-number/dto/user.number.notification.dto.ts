@@ -1,5 +1,6 @@
+import { NumberEssence } from '@numberapi/microservices';
+import { UserAnotherFindNumberDtoInterface } from '@numberapi/microservices/notification';
 import { IsBoolean, IsNumber, IsString } from 'class-validator';
-import { NumberEssence, UserAnotherFindNumberDtoInterface } from 'microservice';
 
 import { ParameterRequestUserDto } from '../../common/dto/parameter.request.user.dto';
 

@@ -1,6 +1,7 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { MicroservicesEventConstant, RabbitmqMainMessages } from 'microservice';
+import { MicroservicesEventConstant } from '@numberapi/microservices';
+import { RabbitmqMainMessages } from '@numberapi/microservices/api';
 import { InjectVkApi } from 'nestjs-vk';
 import {
   DonutSubscriptionContext,

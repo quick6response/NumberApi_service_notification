@@ -1,5 +1,8 @@
+import {
+  AuthLoginDto,
+  AuthRegistrationDto,
+} from '@numberapi/microservices/notification';
 import { IsNumber } from 'class-validator';
-import { AuthLoginDto, AuthRegistrationDto } from 'microservice';
 
 import { ParameterStartDateDto } from '../../common/rabbitmq/types/parameter.start.date.dto';
 

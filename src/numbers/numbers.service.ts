@@ -1,9 +1,9 @@
 import { Injectable } from '@nestjs/common';
+import { ClientPlatform } from '@numberapi/microservices';
 import {
-  ClientPlatform,
   getClientInfoByPlatform,
   StatusFindNumber,
-} from 'microservice';
+} from '@numberapi/microservices/notification';
 import { InjectVkApi } from 'nestjs-vk';
 import { getRandomId, VK } from 'vk-io';
 
