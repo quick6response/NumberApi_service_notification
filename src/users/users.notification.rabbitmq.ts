@@ -14,7 +14,6 @@ export class UsersNotificationRabbitmq {
 
   @RabbitmqSubscribeNotificationService({
     exchange: RabbitmqExchangesConstant.mainServiceApi,
-
     routingKey: MicroservicesEventConstant.notification.user_create,
   })
   async notificationUserCreate(data: UserCreateDto) {
@@ -23,7 +22,6 @@ export class UsersNotificationRabbitmq {
 
   @RabbitmqSubscribeNotificationService({
     exchange: RabbitmqExchangesConstant.mainServiceApi,
-
     routingKey: MicroservicesEventConstant.notification.user_edit,
   })
   async notificationUserEdit(data: UserEditDto) {

@@ -3,7 +3,6 @@ import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import {
   RabbitmqExchangesConstant,
-  RabbitmqQueueConstant,
 } from '@numberapi/microservices';
 
 @Module({
@@ -14,14 +13,8 @@ import {
       useFactory: async (configService: ConfigService) => ({
         exchanges: [
           {
-            name: RabbitmqExchangesConstant.notification,
+            name: RabbitmqExchangesConstant.vkPayment,
             type: 'direct',
-          },
-        ],
-        queues: [
-          {
-            name: RabbitmqQueueConstant.notification,
-            exchange: RabbitmqQueueConstant.notification,
           },
         ],
         uri: configService.get<string>('RABBITMQ_URL_CONNECT'),

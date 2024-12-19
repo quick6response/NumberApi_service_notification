@@ -11,16 +11,16 @@ export function RabbitmqSubscribeNotificationService({
 }: {
   exchange: string;
   routingKey: string;
-}): any {
-  const routingKeyCreate = getRoutingKeyName(exchange, routingKey);
-  const queueCreate = getQueueName(
+}) {
+  const routingKeyStrGenerate = getRoutingKeyName(exchange, routingKey);
+  const queueStrGenerate = getQueueName(
     RabbitmqQueueConstant.notification,
     routingKey,
   );
 
   return RabbitSubscribe({
     exchange: exchange,
-    routingKey: routingKeyCreate,
-    queue: queueCreate,
+    routingKey: routingKeyStrGenerate,
+    queue: queueStrGenerate,
   });
 }

@@ -1,9 +1,12 @@
 import { AmqpConnection } from '@golevelup/nestjs-rabbitmq';
 import { Injectable, Logger } from '@nestjs/common';
-import { RabbitmqExchangesConstant } from '@numberapi/microservices';
 import {
-  RabbitmqMainMessageKey,
-  RabbitmqMainMessages,
+  getRoutingKeyName,
+  RabbitmqExchangesConstant,
+} from '@numberapi/microservices';
+import {
+  RabbitmqServiceApiEventsKeys,
+  RabbitmqServiceApiEventsDtoData,
 } from '@numberapi/microservices/api';
 
 @Injectable()
@@ -13,17 +16,21 @@ export class RabbitmqApiMainService {
   constructor(private readonly amqpConnection: AmqpConnection) {}
 
   async emit<
-    K extends RabbitmqMainMessageKey,
-    V extends RabbitmqMainMessages[K],
+    K extends RabbitmqServiceApiEventsKeys,
+    V extends RabbitmqServiceApiEventsDtoData[K],
   >(routingKey: K, message: V) {
     try {
       const data = {
         ...message,
         date: new Date().toString(),
       };
-      const result = await this.amqpConnection.publish(
+      const routingKeyCreate = getRoutingKeyName(
         RabbitmqExchangesConstant.notification,
         routingKey,
+      );
+      const result = await this.amqpConnection.publish(
+        RabbitmqExchangesConstant.notification,
+        routingKeyCreate,
         data,
       );
 

@@ -15,6 +15,6 @@ export class UserCreateDto implements UserCreateDtoInterface {
 export class UserEditDto implements UserUpdateDtoInterface {
   date: number;
   nextValue: UserDtoInterface;
-  preValue: UserDtoInterface;
+  prevValue: UserDtoInterface;
   reason: string;
 }
