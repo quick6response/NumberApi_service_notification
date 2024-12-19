@@ -51,20 +51,18 @@ ${messageTagVkMiniAppsActionUtils.getTagUserAction(dto.userInfo.id, dto.userInfo
   }
 
   private getTextNotificationUserEdit(dto: UserEditDto) {
-    const text = `Изменилась информация о пользователе userId${dto.nextValue.id}
+    const text = `Изменилась информация о пользователе @id${dto.nextValue.idVk}
     
-    Информация о пользователе:
-    Айди: ${dto.nextValue.id}
-    Имя: ${dto.preValue.firstName} -> ${dto.nextValue.firstName}
-    Фамилия: ${dto.preValue.lastName} -> ${dto.nextValue.lastName}
-    Подписка ВК Донута: пока не приходит
-  
-    Время: ${dateUtils.getDateFormatNumber(dto.date)}
-    
-    Причина: ${dto.reason ?? 'Не указана'}
-    
-${messageTagVkMiniAppsActionUtils.getTagUserAction(dto.nextValue.id, dto.nextValue.idVk)}
-    `;
+Информация:
+Айди профиля: ${dto.nextValue.id}
+Фамилия Имя: (${dto.prevValue.firstName} ${dto.prevValue.lastName}) -> (${dto.nextValue.firstName} ${dto.nextValue.lastName})
+Наличие подписки VK Donut: ${+dto.prevValue.donut} -> ${+dto.nextValue.donut}
+
+Время: ${dateUtils.getDateFormatNumber(dto.date)}
+
+Причина: ${dto.reason ?? 'Не указана'}
+
+${messageTagVkMiniAppsActionUtils.getTagUserAction(dto.nextValue.id, dto.nextValue.idVk)}`;
 
     return text;
   }
