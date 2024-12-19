@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { Keyboard } from 'vk-io';
 
+import { messageTagVkMiniAppsActionUtils } from 'src/common/utils/message.platform.tag.utils';
 import { VkService } from 'src/vk/vk.service';
 
 import { DonutVkService } from './donut.vk.service';
@@ -19,9 +20,10 @@ export class DonutNotificationService {
    * Подписка продлена сервисом
    */
   async subscriptionProlonged(data: DonutUserEventDto) {
-    const user = await this.vkHelpService.getInfoUserVk(data.userId);
+    const user = await this.vkHelpService.getInfoUserVk(data.userVkId);
 
     const textUser = `&#129395; ${user.first_name}, благодарим Вас за продление подписки VK Donut! Все Ваши преимущества сохранены, также о них можно узнать в [https://vk.com/@id_called-donut|статье].`;
+
     await this.donutVkService.sendMessageUser(user.id, textUser, {
       keyboard: this.getKeyboardAboutBenefits(),
     });
@@ -30,7 +32,8 @@ export class DonutNotificationService {
       data.userId
     } (${user.first_name} ${user.last_name}) подписка продлена.
     ${this.donutVkService.getTextDisableMessageSendUserDonut()}
-    \n\n#donut_prolonged #donutSubscriptionProlonged #id${data.userId}`;
+    \n#donut_prolonged #donutSubscriptionProlonged ${messageTagVkMiniAppsActionUtils.getTagUserAction(data.userId, data.userVkId)}`;
+
     await this.donutVkService.sendMessageChat(textChat, [
       VKChatsEnum.LOGS_CHAT_DEV,
     ]);
@@ -40,19 +43,20 @@ export class DonutNotificationService {
    * Подписка выдана сервисом
    */
   async subscriptionIssuance(data: DonutUserEventDto) {
-    const user = await this.vkHelpService.getInfoUserVk(data.userId);
+    const user = await this.vkHelpService.getInfoUserVk(data.userVkId);
 
     const textUser = `&#129395; ${user.first_name}, благодарим Вас за оформление подписки VK Donut!\nО преимуществах подписки, можно узнать в [https://vk.com/@id_called-donut|статье].`;
     await this.donutVkService.sendMessageUser(user.id, textUser, {
       keyboard: this.getKeyboardAboutBenefits(),
     });
 
-    const textChat = `Пользователю @id${data.userId} (${user.first_name} ${
+    const textChat = `Пользователю @id${user.id} (${user.first_name} ${
       user.last_name
     }) была выдана подписка VK Donut.
     \nВремя: ${dateUtils.getDateFormatNumber(data.date)}
     ${this.donutVkService.getTextDisableMessageSendUserDonut()}
-    \n\n#donut_issuance #subscriptionIssuance #id${data.userId}`;
+    \n#donut_issuance #subscriptionIssuance ${messageTagVkMiniAppsActionUtils.getTagUserAction(data.userId, data.userVkId)}`;
+
     await this.donutVkService.sendMessageChat(textChat, [
       VKChatsEnum.LOGS_CHAT_DEV,
     ]);
@@ -62,7 +66,7 @@ export class DonutNotificationService {
    * Подписка отключена сервисом
    */
   async subscriptionExpired(data: DonutUserEventDto) {
-    const user = await this.vkHelpService.getInfoUserVk(data.userId);
+    const user = await this.vkHelpService.getInfoUserVk(data.userVkId);
 
     const textUser = `&#128553; ${user.first_name}, подписка VK Donut истекла. Все преимущества были выключены.`;
     await this.donutVkService.sendMessageUser(user.id, textUser);
@@ -72,7 +76,8 @@ export class DonutNotificationService {
     } ${user.last_name}) была выключена.
     \n\nВремя: ${dateUtils.getDateFormatNumber(data.date)}
     ${this.donutVkService.getTextDisableMessageSendUserDonut()}
-    \n\n#donut_Expired #subscriptionExpired #id${data.userId} #vk_id${data.userVkId}`;
+    \n\n#donut_Expired #subscriptionExpired ${messageTagVkMiniAppsActionUtils.getTagUserAction(data.userId, data.userVkId)}`;
+
     await this.donutVkService.sendMessageChat(textChat, [
       VKChatsEnum.LOGS_CHAT_DEV,
     ]);
