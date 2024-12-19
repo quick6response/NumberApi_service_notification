@@ -1,7 +1,7 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { MicroservicesEventConstant } from '@numberapi/microservices';
-import { RabbitmqMainMessages } from '@numberapi/microservices/api';
+import { RabbitmqServiceApiEventsDtoData } from '@numberapi/microservices/api';
 import { InjectVkApi } from 'nestjs-vk';
 import {
   DonutSubscriptionContext,
@@ -34,7 +34,7 @@ export class DonutVkService {
   ) {}
 
   getTextDisableMessageSendUserDonut() {
-    return this.isMessageSendUserDonut
+    return !this.isMessageSendUserDonut
       ? '\n\n❗️❗️Отправка сообщений пользователям выключена в настройках'
       : '';
   }
@@ -42,7 +42,7 @@ export class DonutVkService {
   // оформление подписки вк донут
   async create(ctx: DonutSubscriptionContext) {
     const date = Date.now();
-    const data: RabbitmqMainMessages['donutCreate'] = {
+    const data: RabbitmqServiceApiEventsDtoData['donutCreate'] = {
       userId: ctx.userId,
       amount: ctx.amount,
       amountWithoutFee: ctx.amountWithoutFee,
@@ -60,7 +60,7 @@ export class DonutVkService {
       await this.sendMessageChat(textChat, [VKChatsEnum.ADMIN_CHAT_DEV]);
 
       await this.rabbitmqMainApiService.emit(
-        MicroservicesEventConstant.mainServiceApi.message.donutCreate,
+        MicroservicesEventConstant.api.events.donutCreate,
         data,
       );
     } catch (error) {
@@ -91,7 +91,7 @@ export class DonutVkService {
     await this.sendMessageChat(textChat, [VKChatsEnum.ADMIN_CHAT]);
 
     await this.rabbitmqMainApiService.emit(
-      MicroservicesEventConstant.mainServiceApi.message.donutProlonged,
+      MicroservicesEventConstant.api.events.donutProlonged,
       {
         userId: user.id,
         json: ctx.toJSON(),
@@ -113,7 +113,7 @@ export class DonutVkService {
     await this.sendMessageChat(textChat, [VKChatsEnum.ADMIN_CHAT_DEV]);
 
     await this.rabbitmqMainApiService.emit(
-      MicroservicesEventConstant.mainServiceApi.message.donutExpired,
+      MicroservicesEventConstant.api.events.donutExpired,
       {
         userId: user.id,
         json: ctx.toJSON(),
@@ -156,7 +156,7 @@ export class DonutVkService {
     await this.sendMessageChat(textChat, [VKChatsEnum.ADMIN_CHAT]);
 
     await this.rabbitmqMainApiService.emit(
-      MicroservicesEventConstant.mainServiceApi.message.donutChangePrice,
+      MicroservicesEventConstant.api.events.donutChangePrice,
       {
         userId: user.id,
         diffAmount: ctx.diffAmount,
@@ -219,7 +219,7 @@ export class DonutVkService {
       });
     } catch (error) {
       return this.vk.api.messages.send({
-        message: `Ошибка отправки сообщения о донате. ${error?.message}`,
+        message: `Ошибка отправки сообщения о донате. ${error}`,
         chat_id: VKChatsEnum.LOGS_CHAT_DEV,
         random_id: getRandomId(),
         disable_mentions: false,
@@ -251,7 +251,7 @@ export class DonutVkService {
       });
     } catch (error) {
       return this.vk.api.messages.send({
-        message: `Ошибка отправки сообщения о донате пользователю @id${userId}. ${error?.message}`,
+        message: `Ошибка отправки сообщения о донате пользователю @id${userId}. ${error}`,
         chat_id: VKChatsEnum.LOGS_CHAT_DEV,
         random_id: getRandomId(),
       });
