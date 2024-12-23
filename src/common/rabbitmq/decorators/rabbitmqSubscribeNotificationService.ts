@@ -1,18 +1,23 @@
-import { RabbitSubscribe } from '@golevelup/nestjs-rabbitmq';
 import {
-  getQueueName,
-  getRoutingKeyName,
-  RabbitmqQueueConstant,
-} from '@numberapi/microservices';
+  MessageHandlerOptions,
+  RabbitHandlerConfig,
+  RabbitSubscribe,
+} from '@golevelup/nestjs-rabbitmq';
+import { getQueueName, RabbitmqQueueConstant } from '@numberapi/microservices';
 
 export function RabbitmqSubscribeNotificationService({
   exchange,
   routingKey,
+  queueOptions = {},
+  errorHandler,
+  batchOptions,
 }: {
   exchange: string;
   routingKey: string;
+  queueOptions?: RabbitHandlerConfig['queueOptions'];
+  errorHandler?: RabbitHandlerConfig['errorHandler'];
+  batchOptions?: MessageHandlerOptions['batchOptions'];
 }) {
-  const routingKeyStrGenerate = getRoutingKeyName(exchange, routingKey);
   const queueStrGenerate = getQueueName(
     RabbitmqQueueConstant.notification,
     routingKey,
@@ -20,7 +25,10 @@ export function RabbitmqSubscribeNotificationService({
 
   return RabbitSubscribe({
     exchange: exchange,
-    routingKey: routingKeyStrGenerate,
+    routingKey: routingKey,
     queue: queueStrGenerate,
+    queueOptions,
+    errorHandler,
+    batchOptions,
   });
 }
