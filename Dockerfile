@@ -1,14 +1,16 @@
 FROM node:18-alpine
+
+WORKDIR /numberapi-vk-notification-stage
+
 ENV NODE_ENV=production
-
-WORKDIR /numberapi-vk-notification-production
-
-COPY ["package.json", "./"]
-
-RUN npm install pnpm -g --save
-RUN pnpm ci
-
 
 COPY . .
 
-CMD [ "node", "dist/main.js" ]
+RUN npm install pnpm -g --save
+
+RUN --mount=type=ssh pnpm ci
+
+RUN npm run build
+RUN npm run sentry:sourcemaps
+
+CMD ["npm", "run", "start:prod"]
