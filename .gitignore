@@ -41,5 +41,5 @@ lerna-debug.log*
 !/.env.prod
 !/.env.dev
 
-# Sentry Config File
-.sentryclirc
+# Docker files
+/docker
