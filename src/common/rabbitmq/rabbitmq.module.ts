@@ -1,9 +1,7 @@
 import { RabbitMQModule } from '@golevelup/nestjs-rabbitmq';
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import {
-  RabbitmqExchangesConstant,
-} from '@numberapi/microservices';
+import { RabbitmqExchangesConstant } from '@numberapi/microservices';
 
 @Module({
   imports: [
@@ -24,3 +22,5 @@ import {
   exports: [RabbitMQModule],
 })
 export class RabbitmqModule {}
+
+console.log(process.env);
