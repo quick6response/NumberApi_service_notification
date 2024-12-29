@@ -1,4 +1,5 @@
 version: "3.8"
+
 services:
   notification-stage:
     build:
@@ -9,8 +10,6 @@ services:
     volumes:
       - .:/numberapi-vk-notification-stage
       - /numberapi-vk-notification-stage/node_modules
-    env_file:
-      - .env
 
 networks:
   default:
