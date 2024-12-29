@@ -22,5 +22,3 @@ import { RabbitmqExchangesConstant } from '@numberapi/microservices';
   exports: [RabbitMQModule],
 })
 export class RabbitmqModule {}
-
-console.log(process.env);
