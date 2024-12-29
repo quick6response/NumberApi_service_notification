@@ -7,14 +7,12 @@ services:
     restart: always
     command: ["node", "dist/main"]
     volumes:
-      - .:/app
-      - /app/node_modules
-    environment:
-      FLASK_ENV: production
+      - .:/numberapi-vk-notification-production
+      - /numberapi-vk-notification-production/node_modules
     env_file:
       - .env
 
 networks:
   default:
-    name: network-numberapi
+    name: network-numberapi-production
     external: true
