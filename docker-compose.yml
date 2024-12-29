@@ -6,7 +6,6 @@ services:
       context: ./
       dockerfile: Dockerfile
     restart: always
-    command: ["node", "dist/main"]
     volumes:
       - .:/numberapi-vk-notification-stage
       - /numberapi-vk-notification-stage/node_modules
