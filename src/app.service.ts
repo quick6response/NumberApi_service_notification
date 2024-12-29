@@ -1,18 +1,12 @@
-import { Injectable } from '@nestjs/common';
-import { InjectVkApi } from 'nestjs-vk';
-import { VK } from 'vk-io';
-
-import { VkService } from './vk/vk.service';
+import { Injectable, Logger } from '@nestjs/common';
 
 @Injectable()
 export class AppService {
-  constructor(
-    @InjectVkApi()
-    private readonly vk: VK,
-    private readonly vkHelpService: VkService,
-  ) {}
+  private readonly logger = new Logger(AppService.name);
 
-  getHello(): string {
-    return 'Hello World!';
+  listenUncaughtError(event: string) {
+    process.on(event, (error) => {
+      this.logger.error(error);
+    });
   }
 }

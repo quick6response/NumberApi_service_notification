@@ -9,7 +9,7 @@ import { createCache } from 'cache-manager';
  */
 @Module({
   imports: [
-    NestCacheModule.registerAsync<any>({
+    NestCacheModule.registerAsync({
       isGlobal: true,
       imports: [ConfigModule],
       useFactory: async (configService: ConfigService) => {

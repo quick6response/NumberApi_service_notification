@@ -3,24 +3,21 @@ import { ConfigService } from '@nestjs/config';
 import { NestFactory } from '@nestjs/core';
 
 import { AppModule } from './app.module';
+import { AppService } from './app.service';
+import { SentryFilter } from './common/filters/sentry.filter';
+import { SentryInterceptor } from './common/interceptors/sentry.interceptor';
 
 async function bootstrap() {
   const app = await NestFactory.createMicroservice(AppModule, {
+    logger: new Logger(),
     bufferLogs: true,
+    abortOnError: false,
   });
 
   const configService = app.get<ConfigService>(ConfigService);
+  const appService = app.get(AppService);
 
-  // Sentry.init({
-  //   dsn: process.env.SENTRY_DNS,
-  //   // Performance Monitoring
-  //   tracesSampleRate: 0.9, //  Capture 100% of the transactions
-  // });
-
-  // Import the filter globally, capturing all exceptions on all routes
-  // const { httpAdapter } = app.get(HttpAdapterHost);
-  // app.useGlobalFilters(new SentryFilter(httpAdapter));
-  //
+  // app.useGlobalFilters(new SentryFilter());
   // app.useGlobalInterceptors(
   //   new SentryInterceptor(configService.get<string>('NODE_ENV')),
   // );
@@ -31,7 +28,9 @@ async function bootstrap() {
     .then(() => Logger.log(`Start microservice`))
     .catch((error) => {
       Logger.error('Error Start microservice', error);
-      app.close();
     });
+
+  appService.listenUncaughtError('uncaughtException');
+  appService.listenUncaughtError('unhandledRejection');
 }
 bootstrap();
