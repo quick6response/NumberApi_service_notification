@@ -86,9 +86,14 @@ import { VkHelpModule } from './vk/vk.help.module';
         const isProduction = configService.get('NODE_ENV') == 'production';
 
         if (isProduction) {
+          const sentryDsn = configService.get<string>('SENTRY_DSN');
           const version = configService.get<string>('VERSION');
+
+          if (!sentryDsn) throw new Error('No sentry dsn in .env');
+          if (!version) throw new Error('No version in .env');
+
           stream = createWriteStream({
-            dsn: configService.get<string>('SENTRY_DSN'),
+            dsn: sentryDsn,
             release: version,
             normalizeDepth: 5,
             maxBreadcrumbs: 0,
