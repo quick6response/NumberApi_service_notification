@@ -24,5 +24,5 @@ export class NumberFindErrorDto
 {
   number: { number: NumberEssence['number']; numberId: NumberEssence['id'] };
   status: StatusFindNumber;
-  errorText: unknown;
+  errorText: string;
 }
