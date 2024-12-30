@@ -7,7 +7,7 @@ services:
       dockerfile: Dockerfile
     restart: always
     volumes:
-			- .:/numberapi-vk-notification-stage
+      - .:/numberapi-vk-notification-stage
       - /numberapi-vk-notification-stage/node_modules
 
 networks:
