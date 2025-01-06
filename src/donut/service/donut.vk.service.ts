@@ -6,15 +6,15 @@ import { InjectVkApi } from 'nestjs-vk';
 import {
   DonutSubscriptionContext,
   DonutWithdrawContext,
+  DonutSubscriptionPriceContext,
   getRandomId,
   VK,
+  IMessageContextSendOptions,
 } from 'vk-io';
-import { MessagesSendParams } from 'vk-io/lib/api/schemas/params';
-import { DonutSubscriptionPriceContext } from 'vk-io/lib/structures/contexts/donut-subscription-price';
 
 import { VKChatsEnum } from '../../common/config/vk.chats.config';
 import { TagMessageActionUserVk } from '../../common/constants/TagMessageActionUserVk';
-import { RabbitmqApiMainService } from '../../common/rabbitmq/service/rabbitmq.api.main.service';
+import { RabbitmqVkPaymentService } from '../../common/rabbitmq/service/rabbitmq.vk.payment.service';
 import { amountUtils } from '../../common/utils/amount.utils';
 import { dateUtils } from '../../common/utils/date.utils';
 import { VkService } from '../../vk/vk.service';
@@ -30,7 +30,7 @@ export class DonutVkService {
     @InjectVkApi() private readonly vk: VK,
     private readonly configService: ConfigService,
     private readonly vkHelpService: VkService,
-    private readonly rabbitmqMainApiService: RabbitmqApiMainService,
+    private readonly rabbitmqMainApiService: RabbitmqVkPaymentService,
   ) {}
 
   getTextDisableMessageSendUserDonut() {
@@ -205,7 +205,7 @@ export class DonutVkService {
   async sendMessageChat(
     text: string,
     chatIds: VKChatsEnum[] = [VKChatsEnum.LOGS_CHAT_DEV],
-    options?: MessagesSendParams,
+    options?: IMessageContextSendOptions,
   ) {
     const peersId = chatIds.map((chatId) => 2e9 + chatId);
     try {
@@ -230,7 +230,7 @@ export class DonutVkService {
   async sendMessageUser(
     userId: number,
     text: string,
-    options?: MessagesSendParams,
+    options?: IMessageContextSendOptions,
   ) {
     if (!this.isMessageSendUserDonut) {
       return;
