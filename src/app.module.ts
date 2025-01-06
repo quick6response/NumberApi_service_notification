@@ -87,7 +87,7 @@ import { VkHelpModule } from './vk/vk.help.module';
 
         if (isProduction) {
           const sentryDsn = configService.get<string>('SENTRY_DSN');
-          const version = configService.get<string>('VERSION');
+          const version = configService.get<string>('APP_VERSION');
 
           if (!sentryDsn) throw new Error('No sentry dsn in .env');
           if (!version) throw new Error('No version in .env');
