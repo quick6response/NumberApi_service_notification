@@ -1,33 +1,29 @@
-import { Logger } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
 import { NestFactory } from '@nestjs/core';
+import { Logger as LoggerPino } from 'nestjs-pino';
 
 import { AppModule } from './app.module';
 import { AppService } from './app.service';
-import { SentryFilter } from './common/filters/sentry.filter';
-import { SentryInterceptor } from './common/interceptors/sentry.interceptor';
+import { Logger } from './common/logger/logger.config.factory';
 
 async function bootstrap() {
+  const logger = new Logger();
+
   const app = await NestFactory.createMicroservice(AppModule, {
-    logger: new Logger(),
-    bufferLogs: true,
+    // с буферизацией в дев моде логи не выводятся почему-то
+    // bufferLogs: true,
+    logger: logger,
     abortOnError: false,
   });
+  app.useLogger(app.get(LoggerPino));
 
-  const configService = app.get<ConfigService>(ConfigService);
   const appService = app.get(AppService);
 
-  // app.useGlobalFilters(new SentryFilter());
-  // app.useGlobalInterceptors(
-  //   new SentryInterceptor(configService.get<string>('NODE_ENV')),
-  // );
-
-  app.flushLogs();
+  // app.flushLogs();
   app
     .init()
-    .then(() => Logger.log(`Start microservice`))
+    .then(() => logger.log(`Start microservice`))
     .catch((error) => {
-      Logger.error('Error Start microservice', error);
+      logger.error(error);
     });
 
   appService.listenUncaughtError('uncaughtException');
