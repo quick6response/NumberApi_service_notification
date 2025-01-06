@@ -1,27 +1,32 @@
-import { CacheModule as NestCacheModule } from '@nestjs/cache-manager';
-import { Module } from '@nestjs/common';
+import {
+  CacheModule as NestCacheModule,
+  CacheStore,
+} from '@nestjs/cache-manager';
+import { Global, Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import { createCache } from 'cache-manager';
+import { redisStore } from 'cache-manager-redis-store';
 
-/**
- * CacheModule от Nest не умеет глобально регистрироваться,
- * поэтому регистрируем его тут со всеми настройками и экспортируем
- */
+import { CacheService } from './cache.service';
+
+@Global()
 @Module({
+  providers: [CacheService],
   imports: [
     NestCacheModule.registerAsync({
       isGlobal: true,
       imports: [ConfigModule],
       useFactory: async (configService: ConfigService) => {
-        // const store = await redisStore({
-        //   url: configService.get('REDIS_URL'),
-        //   ttl: 60 * 1000 * 10,
-        // });
-        return createCache;
+        const store = await redisStore({
+          url: configService.get<string>('REDIS_URL'),
+        });
+
+        return {
+          store: store as unknown as CacheStore,
+        };
       },
       inject: [ConfigService],
     }),
   ],
-  exports: [NestCacheModule],
+  exports: [NestCacheModule, CacheService],
 })
 export class CacheModule {}

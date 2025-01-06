@@ -1,7 +1,17 @@
 import { RabbitMQModule } from '@golevelup/nestjs-rabbitmq';
-import { Module } from '@nestjs/common';
+import { Logger, Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { RabbitmqExchangesConstant } from '@numberapi/microservices';
+
+class LoggerCustom extends Logger {
+  constructor() {
+    super();
+  }
+
+  log(msg: string, context?: string) {
+    super.debug(msg, context);
+  }
+}
 
 @Module({
   imports: [
@@ -15,6 +25,7 @@ import { RabbitmqExchangesConstant } from '@numberapi/microservices';
             type: 'direct',
           },
         ],
+        logger: new LoggerCustom(),
         uri: configService.get<string>('RABBITMQ_URL_CONNECT'),
       }),
     }),

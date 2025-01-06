@@ -1,11 +1,6 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import {
-  LoggerModule as PinoLoggerModule,
-  Params as PinoParameters,
-} from 'nestjs-pino';
 import { InjectVkApi, VkModule } from 'nestjs-vk';
-import { createWriteStream } from 'pino-sentry';
 import { getRandomId, VK } from 'vk-io';
 
 import { AppService } from './app.service';
@@ -13,6 +8,7 @@ import { AuthModule } from './auth/auth.module';
 import { CommentsModule } from './comments/comments.module';
 import { CacheModule } from './common/cache/cache.module';
 import { VKChatsEnum } from './common/config/vk.chats.config';
+import { LoggerModule } from './common/logger/logger.module';
 import { FeaturesMiddleware } from './common/middleware/features.middleware';
 import { MainMiddleware } from './common/middleware/main.middleware';
 import { MainApiClientModule } from './common/rabbitmq/main.api.client.module';
@@ -78,41 +74,7 @@ import { VkHelpModule } from './vk/vk.help.module';
       inject: [ConfigService],
       imports: [ConfigModule],
     }),
-    PinoLoggerModule.forRootAsync({
-      imports: [ConfigModule],
-      inject: [ConfigService],
-      useFactory: (configService: ConfigService) => {
-        let stream;
-        const isProduction = configService.get('NODE_ENV') == 'production';
-
-        if (isProduction) {
-          const sentryDsn = configService.get<string>('SENTRY_DSN');
-          const version = configService.get<string>('VERSION');
-
-          if (!sentryDsn) throw new Error('No sentry dsn in .env');
-          if (!version) throw new Error('No version in .env');
-
-          stream = createWriteStream({
-            dsn: sentryDsn,
-            release: version,
-            normalizeDepth: 5,
-            maxBreadcrumbs: 0,
-            extraAttributeKeys: ['extra'],
-            stackAttributeKey: 'err.stack',
-          });
-        }
-
-        const options: PinoParameters = {
-          pinoHttp: {
-            level: isProduction ? 'info' : 'debug',
-            transport: isProduction ? undefined : { target: 'pino-pretty' },
-            stream: stream,
-          },
-        };
-
-        return options;
-      },
-    }),
+    LoggerModule,
   ],
   exports: [FeaturesMiddleware],
 })

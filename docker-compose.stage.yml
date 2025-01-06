@@ -1,5 +1,7 @@
 version: "3.8"
 
+name: number-api-stage
+
 services:
   notification-stage:
     build:
@@ -9,8 +11,14 @@ services:
     volumes:
       - .:/numberapi-vk-notification-stage
       - /numberapi-vk-notification-stage/node_modules
+    networks:
+      - default
+      - numberapi
 
 networks:
   default:
     name: network-numberapi-stage
+    external: true
+  numberapi:
+    name: network-numberapi
     external: true

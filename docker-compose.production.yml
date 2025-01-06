@@ -1,0 +1,24 @@
+version: "3.8"
+
+name: number-api-production
+
+services:
+  notification-production:
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    restart: always
+    volumes:
+      - .:/numberapi-vk-notification-production
+      - /numberapi-vk-notification-stage/node_modules
+    networks:
+      - default
+      - numberapi
+
+networks:
+  default:
+    name: network-numberapi-production
+    external: true
+  numberapi:
+    name: network-numberapi
+    external: true

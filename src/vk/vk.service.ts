@@ -1,8 +1,8 @@
-import { CACHE_MANAGER } from '@nestjs/cache-manager';
-import { Inject, Injectable, Logger } from '@nestjs/common';
-import { Cache } from 'cache-manager';
+import { Injectable, Logger } from '@nestjs/common';
 import { InjectVkApi } from 'nestjs-vk';
 import { VK } from 'vk-io';
+
+import { CacheService } from '../common/cache/cache.service';
 
 @Injectable()
 export class VkService {
@@ -11,7 +11,7 @@ export class VkService {
   constructor(
     @InjectVkApi()
     private readonly vk: VK,
-    @Inject(CACHE_MANAGER) private readonly cacheManager: Cache,
+    private readonly cacheService: CacheService,
   ) {}
 
   /**
@@ -50,7 +50,7 @@ export class VkService {
 
   private async setCacheUserVk(idVk: number, userVk: UserVkInterface) {
     try {
-      await this.cacheManager.set(`user_vk_id${idVk}`, userVk, 1000 * 60 * 60);
+      await this.cacheService.set(`user_vk_id${idVk}`, userVk, 1000 * 60 * 60);
     } catch (err) {
       this.logger.error(`Error set cache user vk ${idVk}`, err);
       return null;
@@ -59,7 +59,7 @@ export class VkService {
 
   private async getCacheUserVk(idVk: number) {
     try {
-      const userCache = await this.cacheManager.get<UserVkInterface>(
+      const userCache = await this.cacheService.get<UserVkInterface>(
         `user_vk_id${idVk}`,
       );
       return userCache;
