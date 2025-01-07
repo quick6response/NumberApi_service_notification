@@ -13,6 +13,9 @@ COPY pnpm-lock.yaml ./
 
 
 RUN npm i -g pnpm
+
+RUN mkdir -p -m 0700 ~/.ssh && ssh-keyscan github.com >> ~/.ssh/known_hosts
+
 RUN --mount=type=ssh pnpm i
 
 COPY --chown=node:node . .
