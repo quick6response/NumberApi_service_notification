@@ -23,8 +23,9 @@ import { VkService } from '../../vk/vk.service';
 export class DonutVkService {
   private readonly logger = new Logger(DonutVkService.name);
 
-  private readonly isMessageSendUserDonut =
-    this.configService.get('IS_SEND_MESSAGE_USER_DONUT') === 'true';
+  private readonly isEnableSendMessageUserEventsDonut =
+    this.configService.get('IS_ENABLE_SEND_MESSAGE_USER_EVENTS_DONUT') ===
+    'true';
 
   constructor(
     @InjectVkApi() private readonly vk: VK,
@@ -34,9 +35,9 @@ export class DonutVkService {
   ) {}
 
   getTextDisableMessageSendUserDonut() {
-    return !this.isMessageSendUserDonut
-      ? '\n\n❗️❗️Отправка сообщений пользователям выключена в настройках'
-      : '';
+    return this.isEnableSendMessageUserEventsDonut
+      ? ''
+      : '\n\n❗️❗️Отправка сообщений пользователям выключена в настройках';
   }
 
   // оформление подписки вк донут
@@ -232,7 +233,7 @@ export class DonutVkService {
     text: string,
     options?: IMessageContextSendOptions,
   ) {
-    if (!this.isMessageSendUserDonut) {
+    if (!this.isEnableSendMessageUserEventsDonut) {
       return;
     }
     try {
