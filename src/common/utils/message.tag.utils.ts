@@ -22,6 +22,9 @@ export class MessageTagUtils {
   getTagOperatorCreate(operatorId: number) {
     return this.getTagOperator(operatorId) + ' #operator_create';
   }
+  getTagOperatorBindIntegration(operatorId: number, integrationId: number) {
+    return `${this.getTagOperator(operatorId)} #operator_bind #operatorintegrationId_${integrationId}`;
+  }
   getTagOrganization(organizationId: number) {
     return `#organization #organizationId_${organizationId}`;
   }
