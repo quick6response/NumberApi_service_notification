@@ -1,5 +1,8 @@
 import { Injectable, Logger } from '@nestjs/common';
-import { OperatorCreateDtoInterface } from '@numberapi/microservices/notification';
+import {
+  OperatorCreateDtoInterface,
+  OperatorBindIntegrationDtoInterface,
+} from '@numberapi/microservices/notification';
 import { InjectVkApi } from 'nestjs-vk';
 import { getRandomId, VK } from 'vk-io';
 
@@ -14,7 +17,7 @@ export class OperatorsService {
 
   async notificationOperatorCreateAuto(dto: OperatorCreateDtoInterface) {
     try {
-      const sendMessage = await this.vk.api.messages.send({
+      await this.vk.api.messages.send({
         message: `Создан новый оператор в базе:
       \n\nВремя: ${dateUtils.getDateFormatNumber(dto.date)}
       \n\nИнформация:
@@ -29,16 +32,33 @@ export class OperatorsService {
         chat_id: VKChatsEnum.LOGS_CHAT_DEV,
         random_id: getRandomId(),
       });
-
-      return {
-        result: true,
-      };
     } catch (error) {
       this.logger.error(error);
+    }
+  }
 
-      return {
-        result: false,
-      };
+  async notificationOperatorBindIntegration(
+    dto: OperatorBindIntegrationDtoInterface,
+  ) {
+    try {
+      await this.vk.api.messages.send({
+        message: `
+К оператору ${dto.operator.name} успешно привязан оператор из интеграции.
+
+Информация об операторе:
+ID: ${dto.operator.id}
+Название: ${dto.operator.name}
+Интеграция: ${dto.integrationId}
+
+Время: ${dateUtils.getDateFormatNumber(dto.date)}
+
+${messageTagUtils.getTagOperatorBindIntegration(dto.operator.id, dto.integrationId)}
+`,
+        chat_id: VKChatsEnum.LOGS_CHAT_DEV,
+        random_id: getRandomId(),
+      });
+    } catch (error) {
+      this.logger.error(error);
     }
   }
 }
