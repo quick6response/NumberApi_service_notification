@@ -3,7 +3,6 @@ FROM node:20-alpine AS builder
 RUN apk add git
 RUN apk add openssh-client
 
-ENV TZ=Europe/Moscow
 ENV NODE_ENV=build
 
 WORKDIR /home/node
@@ -26,6 +25,7 @@ RUN npm run sentry:sourcemaps
 
 FROM node:20-alpine
 
+ENV TZ=Europe/Moscow
 ENV NODE_ENV=production
 
 USER node
