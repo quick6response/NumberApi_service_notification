@@ -39,7 +39,7 @@ export class AuthService {
         random_id: getRandomId(),
         disable_mentions: true,
         keyboard: this.getKeyboardFindUser(
-          parameters.user.id,
+          parameters.user.userId,
           clientInfo.vk_app_id,
         ),
       });
@@ -60,7 +60,7 @@ export class AuthService {
         random_id: getRandomId(),
         disable_mentions: true,
         keyboard: this.getKeyboardFindUser(
-          parameters.user.id,
+          parameters.user.userId,
           clientInfo.vk_app_id,
         ),
       });
@@ -82,11 +82,11 @@ export class AuthService {
       );
       return `@id${clientInfo.vk_user_id} (${user.first_name} ${
         user.last_name
-      }) зарегистрировался в приложение (${parameters.user.id}).\n\n
+      }) зарегистрировался в приложение (${parameters.user.userId}).\n\n
 Время: ${dateUtils.getDateFormatNumber(parameters.date)}\nIP: ${clientInfo.ip}\n\n
 vk_ref — ${VkUtils.getRef(clientInfo.vk_ref)} (${clientInfo.vk_ref})
 vk_platform — ${VkUtils.getPlatform(clientInfo.vk_platform)} (${clientInfo.vk_platform})\n\n
-${messageTagVkMiniAppsActionUtils.getTagPlatform()} ${messageTagVkMiniAppsActionUtils.getTagAuth('registration')} ${messageTagVkMiniAppsActionUtils.getTagUserAction(parameters.user.id, clientInfo.vk_user_id)}`;
+${messageTagVkMiniAppsActionUtils.getTagPlatform()} ${messageTagVkMiniAppsActionUtils.getTagAuth('registration')} ${messageTagVkMiniAppsActionUtils.getTagUserAction(parameters.user.userId, clientInfo.vk_user_id)}`;
     }
   }
 
@@ -106,7 +106,7 @@ ${messageTagVkMiniAppsActionUtils.getTagPlatform()} ${messageTagVkMiniAppsAction
 \n\nВремя: ${dateUtils.getDateFormatNumber(parameters.date)}\nIP: ${clientInfo.ip}\n\n
 vk_ref — ${VkUtils.getRef(clientInfo.vk_ref)} (${clientInfo.vk_ref})
 vk_platform — ${VkUtils.getPlatform(clientInfo.vk_platform)} (${clientInfo.vk_platform})
-\n\n${messageTagVkMiniAppsActionUtils.getTagPlatform()} ${messageTagVkMiniAppsActionUtils.getTagAuth('login')} ${messageTagVkMiniAppsActionUtils.getTagUserAction(parameters.user.id, clientInfo.vk_user_id)}`;
+\n\n${messageTagVkMiniAppsActionUtils.getTagPlatform()} ${messageTagVkMiniAppsActionUtils.getTagAuth('login')} ${messageTagVkMiniAppsActionUtils.getTagUserAction(parameters.user.userId, clientInfo.vk_user_id)}`;
     }
   }
 

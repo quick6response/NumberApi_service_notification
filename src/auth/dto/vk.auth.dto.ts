@@ -2,22 +2,15 @@ import {
   AuthLoginDto,
   AuthRegistrationDto,
 } from '@numberapi/microservices/notification';
-import { IsNumber } from 'class-validator';
 
 import { ParameterStartDateDto } from '../../common/rabbitmq/types/parameter.start.date.dto';
 
-export class VkAuthLoginDto
-  extends ParameterStartDateDto
-  implements AuthLoginDto
-{
-  @IsNumber()
+export interface VkAuthLoginDto extends ParameterStartDateDto, AuthLoginDto {
   userId: number;
 }
 
-export class VkAuthRegistrationDto
-  extends ParameterStartDateDto
-  implements AuthRegistrationDto
-{
-  @IsNumber()
+export interface VkAuthRegistrationDto
+  extends ParameterStartDateDto,
+    AuthRegistrationDto {
   userId: number;
 }
