@@ -21,7 +21,6 @@ export interface ParameterRequestUserDataDto {
   userId: number;
 }
 
-// todo исправить типизацию в либе
 export interface ParameterRequestUserDto
   extends ParameterClientInfoActionEventAllPlatformInterface {
   user?: ParameterRequestUserDataDto;
