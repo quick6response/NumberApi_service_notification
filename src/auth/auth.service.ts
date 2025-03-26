@@ -98,11 +98,7 @@ ${messageTagVkMiniAppsActionUtils.getTagPlatform()} ${messageTagVkMiniAppsAction
     if (parameters.clientPlatform === ClientPlatform.VK) {
       return `@id${user.id} (${user.first_name} ${
         user.last_name
-      }) авторизация в приложение (${
-        clientInfo.vk_app_id == this.configService.get<number>('APP_ID')
-          ? 'Dev'
-          : 'Prod'
-      })
+      }) авторизация в приложение (${VkUtils.getApplicationNameByAppId(clientInfo.vk_app_id)})
 \n\nВремя: ${dateUtils.getDateFormatNumber(parameters.date)}\nIP: ${clientInfo.ip}\n\n
 vk_ref — ${VkUtils.getRef(clientInfo.vk_ref)} (${clientInfo.vk_ref})
 vk_platform — ${VkUtils.getPlatform(clientInfo.vk_platform)} (${clientInfo.vk_platform})
