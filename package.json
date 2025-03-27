@@ -30,6 +30,7 @@
     "@numberapi/microservices": "github:quick6response/number_api_event#9b60bb5",
     "@sentry/node": "^9.9.0",
     "@sentry/types": "^9.9.0",
+    "@sentry/cli": "^2.43.0",
     "@vk-io/hear": "^1.1.1",
     "@vk-io/scenes": "^1.2.1",
     "@vk-io/session": "^2.2.1",
