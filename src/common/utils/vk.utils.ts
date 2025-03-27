@@ -1,5 +1,3 @@
-import { Logger } from '../logger/logger.config.factory';
-
 const vk_platforms = {
   desktop_web: 'браузерная (десктопная) версия',
   mobile_android: 'официальное приложение для Android',
@@ -95,9 +93,6 @@ const vk_refs = {
   other: 'прочие переходы',
 } as const;
 
-const prodApplicationId = Number(process.env.PROD_APP_ID);
-const devApplicationId = Number(process.env.DEV_APP_ID);
-
 export const VkUtils = {
   getPlatform: (key: string) => {
     return vk_platforms[key] ?? 'Пусто :(';
@@ -108,16 +103,8 @@ export const VkUtils = {
   },
 
   getApplicationNameByAppId: (appId: number | string) => {
-    const logger = new Logger();
-
-    logger.info({
-      msg: 'getApplicationNameByAppId',
-      extra: {
-        appId,
-        prodApplicationId,
-        devApplicationId,
-      },
-    });
+    const prodApplicationId = Number(process.env.PROD_APP_ID);
+    const devApplicationId = Number(process.env.DEV_APP_ID);
 
     switch (Number(appId)) {
       case prodApplicationId:
