@@ -42,7 +42,7 @@ export class CommentsService {
         keyboard: this.getKeyboardModerationComment(
           {
             number: parameters.comment.number,
-            userId: parameters.user.id,
+            userId: parameters.user.userId,
           },
           clientInfo.vk_app_id,
         ),
@@ -191,7 +191,7 @@ ${messageTagVkMiniAppsActionUtils.getTagPlatform()} ${messageTagUtils.getTagComm
       );
       const text = `@id${user.id} (${user.first_name} ${
         user.last_name
-      }) (Роль ${parameters.user.role}) выполнил модерацию комментария с текстом: "${parameters.comment.text}"
+      }) выполнил модерацию комментария с текстом: "${parameters.comment.text}"
     
 Статус изменен с "${parameters.comment.prevStatus}" на "${
         parameters.comment.status
@@ -199,7 +199,7 @@ ${messageTagVkMiniAppsActionUtils.getTagPlatform()} ${messageTagUtils.getTagComm
 Время: ${dateUtils.getDateFormatNumber(parameters.date)}
 IP: ${clientInfo.ip}
 
-${messageTagVkMiniAppsActionUtils.getTagPlatform()} ${messageTagUtils.getTagComment(parameters.comment.commentId, 'moderation')} ${messageTagUtils.getTagNumber(parameters.comment.number, parameters.comment.numberId)} ${messageTagVkMiniAppsActionUtils.getTagUserAction(parameters.user.id, clientInfo.vk_user_id)}`;
+${messageTagVkMiniAppsActionUtils.getTagPlatform()} ${messageTagUtils.getTagComment(parameters.comment.commentId, 'moderation')} ${messageTagUtils.getTagNumber(parameters.comment.number, parameters.comment.numberId)} ${messageTagVkMiniAppsActionUtils.getTagUserAction(parameters.user.userId, clientInfo.vk_user_id)}`;
 
       return text;
     }

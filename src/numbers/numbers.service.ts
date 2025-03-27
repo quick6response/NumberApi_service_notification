@@ -65,7 +65,7 @@ export class NumbersService {
 Время: ${dateUtils.getDateFormatNumber(parameters.date)}
 IP: ${clientInfo.ip}
 
-${messageTagVkMiniAppsActionUtils.getTagPlatform()} ${messageTagUtils.getTagNumber(parameters.number.number, parameters.number.numberId)} ${messageTagUtils.getTagNumberFind(parameters.status)} ${messageTagVkMiniAppsActionUtils.getTagUserAction(parameters.user.id, clientInfo.vk_user_id)}`;
+${messageTagVkMiniAppsActionUtils.getTagPlatform()} ${messageTagUtils.getTagNumber(parameters.number.number, parameters.number.numberId)} ${messageTagUtils.getTagNumberFind(parameters.status)} ${messageTagVkMiniAppsActionUtils.getTagUserAction(parameters.user.userId, clientInfo.vk_user_id)}`;
     }
   }
 
@@ -80,7 +80,7 @@ ${messageTagVkMiniAppsActionUtils.getTagPlatform()} ${messageTagUtils.getTagNumb
         message: `Ошибка при поиске номера ${
           parameters.number
         }, стек ошибки: ${ErrorTransform.getMessage(parameters.errorText)}\n\n
-${messageTagVkMiniAppsActionUtils.getTagPlatform()} ${messageTagUtils.getTagErrorNumber(parameters.number.number, parameters.number.numberId)} ${messageTagUtils.getTagNumberFind(parameters.status)} ${messageTagVkMiniAppsActionUtils.getTagUserAction(parameters.user.id, clientInfo.vk_user_id)}`,
+${messageTagVkMiniAppsActionUtils.getTagPlatform()} ${messageTagUtils.getTagErrorNumber(parameters.number.number, parameters.number.numberId)} ${messageTagUtils.getTagNumberFind(parameters.status)} ${messageTagVkMiniAppsActionUtils.getTagUserAction(parameters.user.userId, clientInfo.vk_user_id)}`,
         random_id: getRandomId(),
         disable_mentions: true,
       });

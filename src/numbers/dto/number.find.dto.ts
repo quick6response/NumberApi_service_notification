@@ -10,18 +10,16 @@ import { ParameterRequestUserDto } from '../../common/dto/parameter.request.user
 /**
  * Для поиска номера
  */
-export class NumberFindDto
-  extends ParameterRequestUserDto
-  implements NumberFindDtoEvent
-{
+export interface NumberFindDto
+  extends ParameterRequestUserDto,
+    NumberFindDtoEvent {
   number: { number: NumberEssence['number']; numberId: NumberEssence['id'] };
   status: StatusFindNumber;
 }
 
-export class NumberFindErrorDto
-  extends ParameterRequestUserDto
-  implements NumberFindErrorDtoEvent
-{
+export interface NumberFindErrorDto
+  extends ParameterRequestUserDto,
+    NumberFindErrorDtoEvent {
   number: { number: NumberEssence['number']; numberId: NumberEssence['id'] };
   status: StatusFindNumber;
   errorText: string;

@@ -15,7 +15,7 @@ class LoggerCustom extends Logger {
 
 @Module({
   imports: [
-    RabbitMQModule.forRootAsync(RabbitMQModule, {
+    RabbitMQModule.forRootAsync({
       imports: [ConfigModule],
       inject: [ConfigService],
       useFactory: async (configService: ConfigService) => ({

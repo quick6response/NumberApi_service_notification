@@ -3,10 +3,9 @@ import { CommentNumberModerateDto } from '@numberapi/microservices/notification'
 
 import { ParameterRequestUserDto } from '../../common/dto/parameter.request.user.dto';
 
-export class VkModerationCommentDto
-  extends ParameterRequestUserDto
-  implements CommentNumberModerateDto
-{
+export interface VkModerationCommentDto
+  extends ParameterRequestUserDto,
+    CommentNumberModerateDto {
   // комментарий
   comment: {
     commentId: number;

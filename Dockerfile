@@ -7,18 +7,15 @@ ENV NODE_ENV=build
 
 WORKDIR /home/node
 
-COPY package.json ./
-COPY pnpm-lock.yaml ./
-
-
-RUN npm i -g pnpm
+COPY package*.json ./
 
 RUN mkdir -p -m 0700 ~/.ssh && ssh-keyscan github.com >> ~/.ssh/known_hosts
 
-RUN --mount=type=ssh pnpm i
+RUN --mount=type=ssh npm ci
 
 COPY --chown=node:node . .
-RUN npm run build \ && pnpm prune --prod
+RUN npm run build \
+                        && npm prune --omit=dev
 
 RUN npm run sentry:sourcemaps
 

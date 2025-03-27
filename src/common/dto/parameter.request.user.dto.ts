@@ -4,60 +4,46 @@ import {
   ParameterRequestVkUserEventInterface,
 } from '@numberapi/microservices/notification';
 import { ClientPlatform, User } from '@numberapi/microservices/share';
-import { IsNumber, IsString } from 'class-validator';
 
 type ParameterRequestUserVkontakteEventType =
   ParameterRequestVkUserEventInterface['clientInfo'];
 
-class ParameterRequestUserVkontakteEvent
-  implements ParameterRequestUserVkontakteEventType
-{
-  @IsString()
-  vk_access_token_settings: string;
-  @IsNumber()
-  vk_app_id: number;
-  @IsNumber()
-  vk_are_notifications_enabled: number;
-  @IsNumber()
-  vk_is_app_user: number;
-  @IsNumber()
-  vk_is_favorite: number;
-  @IsString()
-  vk_language: string;
-  @IsString()
-  vk_platform: string;
-  @IsString()
-  vk_ref: string;
-  @IsString()
-  vk_ts: string;
-  @IsNumber()
-  vk_user_id: number;
-  @IsString()
-  sign: string;
-  @IsString()
-  ip: string;
-  @IsString()
-  userAgent: string;
-}
+interface ParameterRequestUserVkontakteEvent
+  extends ParameterRequestUserVkontakteEventType {}
 
 type ParameterRequestUserTelegramEventType =
   ParameterRequestTelegramUserEventInterface['clientInfo'];
 
-class ParameterRequestUserTelegramEvent
-  implements ParameterRequestUserTelegramEventType
-{
-  ip: string;
-  tg_user_id: number;
-  userAgent: string;
+interface ParameterRequestUserTelegramEvent
+  extends ParameterRequestUserTelegramEventType {}
+
+export interface ParameterRequestUserDataDto {
+  userId: number;
 }
 
-export class ParameterRequestUserDto
-  implements ParameterClientInfoActionEventAllPlatformInterface
-{
-  user?: User;
+export interface ParameterRequestUserDto
+  extends ParameterClientInfoActionEventAllPlatformInterface {
+  user?: ParameterRequestUserDataDto;
   clientPlatform: ClientPlatform.VK | ClientPlatform.TELEGRAM;
   date: number;
   clientInfo:
     | ParameterRequestUserVkontakteEvent
     | ParameterRequestUserTelegramEvent;
+}
+
+/**
+ * Функция для удаления персональной информации из объекта User
+ * Оставляет только id и idVk
+ * @param user Объект пользователя
+ * @returns Объект с ограниченной информацией
+ */
+export function stripPersonalInfo(
+  user?: User,
+): Pick<User, 'id' | 'idVk'> | undefined {
+  if (!user) return undefined;
+
+  return {
+    id: user.id,
+    idVk: user.idVk,
+  };
 }

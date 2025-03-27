@@ -93,6 +93,9 @@ const vk_refs = {
   other: 'прочие переходы',
 } as const;
 
+const prodApplicationId = Number(process.env.PROD_APP_ID);
+const devApplicationId = Number(process.env.DEV_APP_ID);
+
 export const VkUtils = {
   getPlatform: (key: string) => {
     return vk_platforms[key] ?? 'Пусто :(';
@@ -100,5 +103,16 @@ export const VkUtils = {
 
   getRef: (key: string) => {
     return vk_refs[key] ?? 'Пусто :(';
+  },
+
+  getApplicationNameByAppId: (appId: number) => {
+    switch (appId) {
+      case prodApplicationId:
+        return 'Prod';
+      case devApplicationId:
+        return 'Dev';
+      default:
+        return 'Unknown';
+    }
   },
 };
