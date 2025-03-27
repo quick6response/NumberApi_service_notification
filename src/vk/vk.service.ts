@@ -8,6 +8,10 @@ import { CacheService } from '../common/cache/cache.service';
 export class VkService {
   private readonly logger = new Logger(VkService.name);
 
+  private getVkUserProfileCacheKey(idVk: number) {
+    return `user_vk_id:${idVk}`;
+  }
+
   constructor(
     @InjectVkApi()
     private readonly vk: VK,
@@ -50,7 +54,11 @@ export class VkService {
 
   private async setCacheUserVk(idVk: number, userVk: UserVkInterface) {
     try {
-      await this.cacheService.set(`user_vk_id${idVk}`, userVk, 1000 * 60 * 60);
+      await this.cacheService.set(
+        this.getVkUserProfileCacheKey(idVk),
+        userVk,
+        60 * 60 * 48,
+      );
     } catch (err) {
       this.logger.error(`Error set cache user vk ${idVk}`, err);
       return null;
@@ -60,7 +68,7 @@ export class VkService {
   private async getCacheUserVk(idVk: number) {
     try {
       const userCache = await this.cacheService.get<UserVkInterface>(
-        `user_vk_id${idVk}`,
+        this.getVkUserProfileCacheKey(idVk),
       );
       return userCache;
     } catch (err) {
