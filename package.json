@@ -27,7 +27,7 @@
     "@nestjs/common": "^11.0.12",
     "@nestjs/config": "^4.0.1",
     "@nestjs/core": "^11.0.12",
-    "@numberapi/microservices": "file:../number_api_share_rabbitmq",
+    "@numberapi/microservices": "github:quick6response/number_api_event#9b60bb5",
     "@sentry/node": "^9.9.0",
     "@sentry/types": "^9.9.0",
     "@vk-io/hear": "^1.1.1",
