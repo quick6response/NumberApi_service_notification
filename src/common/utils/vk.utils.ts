@@ -1,3 +1,5 @@
+import { Logger } from '../logger/logger.config.factory';
+
 const vk_platforms = {
   desktop_web: 'браузерная (десктопная) версия',
   mobile_android: 'официальное приложение для Android',
@@ -105,8 +107,19 @@ export const VkUtils = {
     return vk_refs[key] ?? 'Пусто :(';
   },
 
-  getApplicationNameByAppId: (appId: number) => {
-    switch (appId) {
+  getApplicationNameByAppId: (appId: number | string) => {
+    const logger = new Logger();
+
+    logger.info({
+      msg: 'getApplicationNameByAppId',
+      extra: {
+        appId,
+        prodApplicationId,
+        devApplicationId,
+      },
+    });
+
+    switch (Number(appId)) {
       case prodApplicationId:
         return 'Prod';
       case devApplicationId:
