@@ -1,5 +1,8 @@
 export const ErrorTransform = {
   getMessage: (error: unknown): string => {
-    return 'Не удалось определить';
+    if (error instanceof Error) {
+      return error.message;
+    }
+    return String(error);
   },
 };

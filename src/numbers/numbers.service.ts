@@ -77,8 +77,8 @@ ${messageTagVkMiniAppsActionUtils.getTagPlatform()} ${messageTagUtils.getTagNumb
       );
       await this.vk.api.messages.send({
         chat_id: VKChatsEnum.LOGS_CHAT_DEV,
-        message: `Ошибка при поиске номера ${
-          parameters.number
+        message: `@all Ошибка при поиске номера ${
+          parameters.number.number
         }, стек ошибки: ${ErrorTransform.getMessage(parameters.errorText)}\n\n
 ${messageTagVkMiniAppsActionUtils.getTagPlatform()} ${messageTagUtils.getTagErrorNumber(parameters.number.number, parameters.number.numberId)} ${messageTagUtils.getTagNumberFind(parameters.status)} ${messageTagVkMiniAppsActionUtils.getTagUserAction(parameters.user.userId, clientInfo.vk_user_id)}`,
         random_id: getRandomId(),
