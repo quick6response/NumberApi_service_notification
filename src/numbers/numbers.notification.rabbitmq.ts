@@ -4,8 +4,8 @@ import {
   RabbitmqExchangesConstant,
 } from '@numberapi/microservices';
 import {
-  NumberScheduleUpdateErrorDto,
-  NumberScheduleUpdateSuccessDto,
+  NumberScheduleUpdatedErrorDto,
+  NumberScheduleUpdatedSuccessDto,
 } from '@numberapi/microservices/notification';
 
 import { NumberFindDto, NumberFindErrorDto } from './dto/number.find.dto';
@@ -38,7 +38,7 @@ export class NumbersNotificationRabbitmq {
       MicroservicesEventConstant.notification.number_schedule_updated_success,
   })
   async notificationScheduleUpdatedSuccess(
-    data: NumberScheduleUpdateSuccessDto,
+    data: NumberScheduleUpdatedSuccessDto,
   ) {
     await this.numbersService.notificationNumberScheduleUpdateSuccess(data);
   }
@@ -48,7 +48,7 @@ export class NumbersNotificationRabbitmq {
     routingKey:
       MicroservicesEventConstant.notification.number_schedule_updated_error,
   })
-  async notificationScheduleUpdatedS(data: NumberScheduleUpdateErrorDto) {
+  async notificationScheduleUpdatedS(data: NumberScheduleUpdatedErrorDto) {
     await this.numbersService.notificationNumberScheduleUpdateError(data);
   }
 }

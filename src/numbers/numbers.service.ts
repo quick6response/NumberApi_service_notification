@@ -2,8 +2,8 @@ import { Injectable } from '@nestjs/common';
 import { ClientPlatform } from '@numberapi/microservices';
 import {
   getClientInfoByPlatform,
-  NumberScheduleUpdateErrorDto,
-  NumberScheduleUpdateSuccessDto,
+  NumberScheduleUpdatedErrorDto,
+  NumberScheduleUpdatedSuccessDto,
   StatusFindNumber,
 } from '@numberapi/microservices/notification';
 import { InjectVkApi } from 'nestjs-vk';
@@ -91,7 +91,7 @@ ${messageTagVkMiniAppsActionUtils.getTagPlatform()} ${messageTagUtils.getTagErro
   }
 
   public async notificationNumberScheduleUpdateSuccess(
-    data: NumberScheduleUpdateSuccessDto,
+    data: NumberScheduleUpdatedSuccessDto,
   ): Promise<void> {
     const message = this.getNotificationNumberScheduleUpdateSuccessText(data);
     await this.vk.api.messages.send({
@@ -103,7 +103,7 @@ ${messageTagVkMiniAppsActionUtils.getTagPlatform()} ${messageTagUtils.getTagErro
   }
 
   public async notificationNumberScheduleUpdateError(
-    data: NumberScheduleUpdateErrorDto,
+    data: NumberScheduleUpdatedErrorDto,
   ): Promise<void> {
     const message = this.getNotificationNumberScheduleUpdateErrorText(data);
     await this.vk.api.messages.send({
@@ -117,7 +117,7 @@ ${messageTagVkMiniAppsActionUtils.getTagPlatform()} ${messageTagUtils.getTagErro
   private getNotificationNumberScheduleUpdateSuccessText({
     number,
     numberId,
-  }: NumberScheduleUpdateSuccessDto) {
+  }: NumberScheduleUpdatedSuccessDto) {
     return `✅🤖 Произошло автоматическое обновление номера ${this.convertToFormat(number)}\n${messageTagUtils.getTagNumber(number, numberId)}`;
   }
 
@@ -127,7 +127,7 @@ ${messageTagVkMiniAppsActionUtils.getTagPlatform()} ${messageTagUtils.getTagErro
     errorText,
     maxCountError,
     countError,
-  }: NumberScheduleUpdateErrorDto) {
+  }: NumberScheduleUpdatedErrorDto) {
     return `❌🤖 Не удалось автоматически обновить номер ${this.convertToFormat(number)}
 \nПричина: ${errorText}
 \nТекущее количество ошибок: ${countError} (максимум ${maxCountError})
