@@ -27,7 +27,7 @@
     "@nestjs/common": "^11.0.12",
     "@nestjs/config": "^4.0.1",
     "@nestjs/core": "^11.0.12",
-    "@numberapi/microservices": "github:quick6response/number_api_event#9b60bb5",
+    "@numberapi/microservices": "github:quick6response/number_api_event#abaeef2a2d7a04239ab2c5336d2961be13b2d5f9",
     "@sentry/node": "^9.9.0",
     "@sentry/types": "^9.9.0",
     "@sentry/cli": "^2.43.0",
