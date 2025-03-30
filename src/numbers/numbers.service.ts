@@ -2,6 +2,8 @@ import { Injectable } from '@nestjs/common';
 import { ClientPlatform } from '@numberapi/microservices';
 import {
   getClientInfoByPlatform,
+  NumberScheduleUpdatedErrorDto,
+  NumberScheduleUpdatedSuccessDto,
   StatusFindNumber,
 } from '@numberapi/microservices/notification';
 import { InjectVkApi } from 'nestjs-vk';
@@ -87,6 +89,51 @@ ${messageTagVkMiniAppsActionUtils.getTagPlatform()} ${messageTagUtils.getTagErro
       return { result: true };
     }
   }
+
+  public async notificationNumberScheduleUpdateSuccess(
+    data: NumberScheduleUpdatedSuccessDto,
+  ): Promise<void> {
+    const message = this.getNotificationNumberScheduleUpdateSuccessText(data);
+    await this.vk.api.messages.send({
+      chat_id: VKChatsEnum.LOGS_CHAT_DEV,
+      message: message,
+      random_id: getRandomId(),
+      disable_mentions: true,
+    });
+  }
+
+  public async notificationNumberScheduleUpdateError(
+    data: NumberScheduleUpdatedErrorDto,
+  ): Promise<void> {
+    const message = this.getNotificationNumberScheduleUpdateErrorText(data);
+    await this.vk.api.messages.send({
+      chat_id: VKChatsEnum.LOGS_CHAT_DEV,
+      message: message,
+      random_id: getRandomId(),
+      disable_mentions: true,
+    });
+  }
+
+  private getNotificationNumberScheduleUpdateSuccessText({
+    number,
+    numberId,
+  }: NumberScheduleUpdatedSuccessDto) {
+    return `✅🤖 Произошло автоматическое обновление номера ${this.convertToFormat(number)}\n${messageTagUtils.getTagNumber(number, numberId)}`;
+  }
+
+  private getNotificationNumberScheduleUpdateErrorText({
+    number,
+    numberId,
+    errorText,
+    maxCountError,
+    countError,
+  }: NumberScheduleUpdatedErrorDto) {
+    return `❌🤖 Не удалось автоматически обновить номер ${this.convertToFormat(number)}
+\nПричина: ${errorText}
+\nТекущее количество ошибок: ${countError} (максимум ${maxCountError})
+\n${messageTagUtils.getTagNumber(number, numberId)}`;
+  }
+
   /**
    * Приводим номер к формату +7 (999) 676-65-63
    * @param number
