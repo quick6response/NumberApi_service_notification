@@ -118,7 +118,8 @@ ${messageTagVkMiniAppsActionUtils.getTagPlatform()} ${messageTagUtils.getTagErro
     number,
     numberId,
   }: NumberScheduleUpdatedSuccessDto) {
-    return `✅🤖 Произошло автоматическое обновление номера ${this.convertToFormat(number)}\n${messageTagUtils.getTagNumber(number, numberId)}`;
+    return `✅🤖 Произошло автоматическое обновление номера ${this.convertToFormat(number)}
+  \n${messageTagUtils.getTagNumberScheduleUpdateSuccess(number, numberId)}`;
   }
 
   private getNotificationNumberScheduleUpdateErrorText({
@@ -131,7 +132,7 @@ ${messageTagVkMiniAppsActionUtils.getTagPlatform()} ${messageTagUtils.getTagErro
     return `❌🤖 Не удалось автоматически обновить номер ${this.convertToFormat(number)}
 \nПричина: ${errorText}
 \nТекущее количество ошибок: ${countError} (максимум ${maxCountError})
-\n${messageTagUtils.getTagNumber(number, numberId)}`;
+\n${messageTagUtils.getTagNumberScheduleUpdateError(number, numberId)}`;
   }
 
   /**

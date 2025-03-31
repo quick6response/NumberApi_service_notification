@@ -48,6 +48,12 @@ export class MessageTagUtils {
       numberId
     );
   }
+  getTagNumberScheduleUpdateError(number: string, numberId: number) {
+    return `#number #number_schedule_update_error #number_${number} #numberId_${numberId}`;
+  }
+  getTagNumberScheduleUpdateSuccess(number: string, numberId: number) {
+    return `#number #number_schedule_update_success #number_${number} #numberId_${numberId}`;
+  }
 }
 
 export const messageTagUtils = new MessageTagUtils();
