@@ -4,6 +4,7 @@ import {
   getClientInfoByPlatform,
   NumberScheduleUpdatedErrorDto,
   NumberScheduleUpdatedSuccessDto,
+  NumberScheduleUpdatedSummaryDto,
   StatusFindNumber,
 } from '@numberapi/microservices/notification';
 import { InjectVkApi } from 'nestjs-vk';
@@ -114,6 +115,18 @@ ${messageTagVkMiniAppsActionUtils.getTagPlatform()} ${messageTagUtils.getTagErro
     });
   }
 
+  async notificationNumberScheduleUpdateSummary(
+    data: NumberScheduleUpdatedSummaryDto,
+  ): Promise<void> {
+    const message = this.getNotificationNumberScheduleUpdateSummaryText(data);
+    await this.vk.api.messages.send({
+      chat_id: VKChatsEnum.LOGS_CHAT_DEV,
+      message: message,
+      random_id: getRandomId(),
+      disable_mentions: true,
+    });
+  }
+
   private getNotificationNumberScheduleUpdateSuccessText({
     number,
     numberId,
@@ -133,6 +146,19 @@ ${messageTagVkMiniAppsActionUtils.getTagPlatform()} ${messageTagUtils.getTagErro
 \nПричина: ${errorText}
 \nТекущее количество ошибок: ${countError} (максимум ${maxCountError})
 \n${messageTagUtils.getTagNumberScheduleUpdateError(number, numberId)}`;
+  }
+
+  private getNotificationNumberScheduleUpdateSummaryText(
+    data: NumberScheduleUpdatedSummaryDto,
+  ): string {
+    return `🤖 Сводка по обновлению номеров
+\nВсего обработано номеров: ${data.totalProcessed}
+Обновлено номеров: ${data.updatedCount}
+Ошибок: ${data.errorCount}
+Завершено: ${data.wasInterrupted ? 'Нет' : 'Да'}
+\nВремя начала обновления: ${dateUtils.getDateFormatNumber(data.startDate)}
+Время завершения обновления: ${dateUtils.getDateFormatNumber(data.endDate)}
+\n${messageTagUtils.getTagNumberScheduleUpdateSummary()}`;
   }
 
   /**

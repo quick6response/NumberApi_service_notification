@@ -54,6 +54,9 @@ export class MessageTagUtils {
   getTagNumberScheduleUpdateSuccess(number: string, numberId: number) {
     return `#number #number_schedule_update_success #number_${number} #numberId_${numberId}`;
   }
+  getTagNumberScheduleUpdateSummary() {
+    return `#number #number_schedule_update_summary`;
+  }
 }
 
 export const messageTagUtils = new MessageTagUtils();
