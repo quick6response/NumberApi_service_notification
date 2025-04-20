@@ -1,6 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { ClientPlatform } from '@numberapi/microservices';
 import {
+  NumberScheduleCreatedErrorDto,
+  NumberScheduleCreatedSuccessDto,
   getClientInfoByPlatform,
   NumberScheduleUpdatedErrorDto,
   NumberScheduleUpdatedSuccessDto,
@@ -127,6 +129,32 @@ ${messageTagVkMiniAppsActionUtils.getTagPlatform()} ${messageTagUtils.getTagErro
     });
   }
 
+  async notificationNumberScheduleCreatedSuccess(
+    data: NumberScheduleCreatedSuccessDto,
+  ): Promise<void> {
+    const message = this.getNotificationNumberScheduleCreatedSuccessText(data);
+    await this.vk.api.messages.send({
+      chat_id: VKChatsEnum.LOGS_CHAT_DEV,
+      message: message,
+      random_id: getRandomId(),
+      disable_mentions: true,
+      dont_parse_links: true,
+    });
+  }
+
+  async notificationNumberScheduleCreatedError(
+    data: NumberScheduleCreatedErrorDto,
+  ): Promise<void> {
+    const message = this.getNotificationNumberScheduleCreatedErrorText(data);
+    await this.vk.api.messages.send({
+      chat_id: VKChatsEnum.LOGS_CHAT_DEV,
+      message: message,
+      random_id: getRandomId(),
+      disable_mentions: true,
+      dont_parse_links: true,
+    });
+  }
+
   private getNotificationNumberScheduleUpdateSuccessText({
     number,
     numberId,
@@ -159,6 +187,27 @@ ${messageTagVkMiniAppsActionUtils.getTagPlatform()} ${messageTagUtils.getTagErro
 \nВремя начала обновления: ${dateUtils.getDateFormatNumber(data.startDate)}
 Время завершения обновления: ${dateUtils.getDateFormatNumber(data.endDate)}
 \n${messageTagUtils.getTagNumberScheduleUpdateSummary()}`;
+  }
+
+  private getNotificationNumberScheduleCreatedSuccessText({
+    number,
+    numberId,
+    siteUrl,
+  }: NumberScheduleCreatedSuccessDto) {
+    return `✅🤖 Произошло автоматическое добавление номера ${this.convertToFormat(number)}
+\nСайт: ${siteUrl}
+  \n${messageTagUtils.getTagNumberScheduleCreatedSuccess(number, numberId)}`;
+  }
+
+  private getNotificationNumberScheduleCreatedErrorText({
+    number,
+    errorText,
+    siteUrl,
+  }: NumberScheduleCreatedErrorDto) {
+    return `❌🤖 Не удалось автоматически добавить номер ${this.convertToFormat(number)}
+\nСайт: ${siteUrl}
+\nПричина: ${errorText}
+\n${messageTagUtils.getTagNumberScheduleCreatedError(number)}`;
   }
 
   /**

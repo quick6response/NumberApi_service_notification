@@ -4,6 +4,8 @@ import {
   RabbitmqExchangesConstant,
 } from '@numberapi/microservices';
 import {
+  NumberScheduleCreatedErrorDto,
+  NumberScheduleCreatedSuccessDto,
   NumberScheduleUpdatedErrorDto,
   NumberScheduleUpdatedSuccessDto,
   NumberScheduleUpdatedSummaryDto,
@@ -62,5 +64,25 @@ export class NumbersNotificationRabbitmq {
     data: NumberScheduleUpdatedSummaryDto,
   ): Promise<void> {
     await this.numbersService.notificationNumberScheduleUpdateSummary(data);
+  }
+
+  @RabbitmqSubscribeNotificationService({
+    exchange: RabbitmqExchangesConstant.mainServiceApi,
+    routingKey:
+      MicroservicesEventConstant.notification.number_schedule_created_success,
+  })
+  async notificationScheduleCreatedSuccess(
+    data: NumberScheduleCreatedSuccessDto,
+  ) {
+    await this.numbersService.notificationNumberScheduleCreatedSuccess(data);
+  }
+
+  @RabbitmqSubscribeNotificationService({
+    exchange: RabbitmqExchangesConstant.mainServiceApi,
+    routingKey:
+      MicroservicesEventConstant.notification.number_schedule_created_error,
+  })
+  async notificationScheduleCreatedError(data: NumberScheduleCreatedErrorDto) {
+    await this.numbersService.notificationNumberScheduleCreatedError(data);
   }
 }
