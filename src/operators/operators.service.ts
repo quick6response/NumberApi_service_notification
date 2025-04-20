@@ -18,19 +18,10 @@ export class OperatorsService {
   async notificationOperatorCreateAuto(dto: OperatorCreateDtoInterface) {
     try {
       await this.vk.api.messages.send({
-        message: `Создан новый оператор в базе:
-      \n\nВремя: ${dateUtils.getDateFormatNumber(dto.date)}
-      \n\nИнформация:
-      \nID: ${dto.operator.id}
-      \nНазвание: ${dto.operator.name}
-      \nФото: ${dto.operator.photo}
-      \nОписание: ${dto.operator.description || 'Нет описания'}
-      \nДата основания: ${dto.operator.foundingDate !== null ? `${dateUtils.getDateFormatNumber(dto.operator.foundingDate)}` : 'Не указана'}
-      
-      
-      ${messageTagUtils.getTagOperatorCreate(dto.operator.id)}`,
+        message: this.getNotificationOperatorCreateAutoText(dto),
         chat_id: VKChatsEnum.LOGS_CHAT_DEV,
         random_id: getRandomId(),
+        dont_parse_links: true,
       });
     } catch (error) {
       this.logger.error(error);
@@ -42,9 +33,33 @@ export class OperatorsService {
   ) {
     try {
       await this.vk.api.messages.send({
-        message: `
-К оператору ${dto.operator.name} успешно привязан оператор из интеграции.
+        message: this.getNotificationOperatorBindIntegrationText(dto),
+        chat_id: VKChatsEnum.LOGS_CHAT_DEV,
+        random_id: getRandomId(),
+      });
+    } catch (error) {
+      this.logger.error(error);
+    }
+  }
 
+  private getNotificationOperatorCreateAutoText(
+    dto: OperatorCreateDtoInterface,
+  ) {
+    return `🤖 Создан новый оператор в базе:
+\nID: ${dto.operator.id}
+Название: ${dto.operator.name}
+Фото: ${dto.operator.photo}
+Описание: ${dto.operator.description || 'Нет описания'}
+Дата основания: ${dto.operator.foundingDate !== null ? `${dateUtils.getDateFormatNumber(dto.operator.foundingDate)}` : 'Не указана'}
+\nВремя: ${dateUtils.getDateFormatNumber(dto.date)}
+\n\n${messageTagUtils.getTagOperatorCreate(dto.operator.id)}`;
+  }
+
+  private getNotificationOperatorBindIntegrationText(
+    dto: OperatorBindIntegrationDtoInterface,
+  ) {
+    return `🤖К оператору ${dto.operator.name} привязан оператор из интеграции.
+   
 Информация об операторе:
 ID: ${dto.operator.id}
 Название: ${dto.operator.name}
@@ -53,12 +68,6 @@ ID: ${dto.operator.id}
 Время: ${dateUtils.getDateFormatNumber(dto.date)}
 
 ${messageTagUtils.getTagOperatorBindIntegration(dto.operator.id, dto.integrationId)}
-`,
-        chat_id: VKChatsEnum.LOGS_CHAT_DEV,
-        random_id: getRandomId(),
-      });
-    } catch (error) {
-      this.logger.error(error);
-    }
+`;
   }
 }
