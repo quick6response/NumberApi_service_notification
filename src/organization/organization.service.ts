@@ -58,6 +58,7 @@ ${messageTagUtils.getTagOrganizationCreate(dto.organization.id)}
 
 Название: ${dto.prevValue.name} → ${dto.nextValue.name}
 Фото: ${dto.prevValue.photo.link} (ID: ${dto.prevValue.photo.id}) -> ${dto.nextValue.photo.link} (ID: ${dto.nextValue.photo.id})
+Сайт: ${dto.prevValue.site} → ${dto.nextValue.site}
 
 Время: ${dateUtils.getDateFormatNumber(dto.date)}
 
