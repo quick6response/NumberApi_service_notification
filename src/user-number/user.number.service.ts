@@ -19,7 +19,7 @@ export class UserNumberService {
    */
   async notificationFindNumber(parameters: UserNumberNotificationDto) {
     await this.vk.api.messages.send({
-      user_id: parameters.userId,
+      user_id: parameters.userVkId,
       message: await this.getTextNotificationFind(parameters),
       random_id: getRandomId(),
       disable_mentions: true,
@@ -27,7 +27,7 @@ export class UserNumberService {
   }
 
   private async getTextNotificationFind(parameters: UserNumberNotificationDto) {
-    const user = await this.vkHelpService.getInfoUserVk(parameters.userId);
+    const user = await this.vkHelpService.getInfoUserVk(parameters.userVkId);
     if (!parameters.isBlock)
       return `💬🔔${
         user.first_name
