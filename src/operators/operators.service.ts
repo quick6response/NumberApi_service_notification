@@ -1,9 +1,9 @@
 import { Injectable, Logger } from '@nestjs/common';
+import { InjectVkApi } from 'nestjs-vk';
 import {
   OperatorCreateDtoInterface,
   OperatorBindIntegrationDtoInterface,
-} from '@numberapi/microservices/notification';
-import { InjectVkApi } from 'nestjs-vk';
+} from 'numberapi/microservice/notification';
 import { getRandomId, VK } from 'vk-io';
 
 import { VKChatsEnum } from '../common/config/vk.chats.config';

@@ -1,5 +1,5 @@
-import { NumberEssence } from '@numberapi/microservices';
-import { UserAnotherFindNumberDtoInterface } from '@numberapi/microservices/notification';
+import { NumberEssence } from 'numberapi/microservice';
+import { UserAnotherFindNumberDtoInterface } from 'numberapi/microservice/notification';
 
 import { ParameterRequestUserDto } from '../../common/dto/parameter.request.user.dto';
 

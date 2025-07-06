@@ -1,4 +1,4 @@
-import { OperatorCreateDtoInterface } from '@numberapi/microservices/notification';
+import { OperatorCreateDtoInterface } from 'numberapi/microservice/notification';
 
 type OperatorEventDto = OperatorCreateDtoInterface['operator'];
 

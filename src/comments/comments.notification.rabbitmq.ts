@@ -2,15 +2,15 @@ import { Injectable } from '@nestjs/common';
 import {
   MicroservicesEventConstant,
   RabbitmqExchangesConstant,
-} from '@numberapi/microservices';
+} from 'numberapi/microservice';
+import {
+  NumberCommentCreatedDto,
+  NumberCommentDeletedDto,
+  NumberCommentEditedDto,
+  NumberCommentModeratedDto,
+} from 'numberapi/microservice/notification';
 
 import { CommentsService } from './comments.service';
-import {
-  VkCommentCreateDto,
-  VkCommentDeleteDto,
-  VkCommentEditDto,
-} from './dto/vk.comment.dto';
-import { VkModerationCommentDto } from './dto/vk.moderation.comment.dto';
 import { RabbitmqSubscribeNotificationService } from '../common/rabbitmq/decorators/rabbitmqSubscribeNotificationService';
 
 @Injectable()
@@ -19,34 +19,34 @@ export class CommentsNotificationRabbitmq {
 
   @RabbitmqSubscribeNotificationService({
     exchange: RabbitmqExchangesConstant.mainServiceApi,
-    routingKey: MicroservicesEventConstant.notification.comment_create,
+    routingKey: MicroservicesEventConstant.notification.number_comment_create,
   })
-  public async commentCreate(data: VkCommentCreateDto) {
+  public async commentCreate(data: NumberCommentCreatedDto) {
     return await this.commentsService.commentCreate(data);
   }
 
   @RabbitmqSubscribeNotificationService({
     exchange: RabbitmqExchangesConstant.mainServiceApi,
-    routingKey: MicroservicesEventConstant.notification.comment_delete,
+    routingKey: MicroservicesEventConstant.notification.number_comment_delete,
   })
-  async commentDelete(data: VkCommentDeleteDto) {
+  async commentDelete(data: NumberCommentDeletedDto) {
     return await this.commentsService.commentDelete(data);
   }
 
   @RabbitmqSubscribeNotificationService({
     exchange: RabbitmqExchangesConstant.mainServiceApi,
-    routingKey: MicroservicesEventConstant.notification.comment_edit,
+    routingKey: MicroservicesEventConstant.notification.number_comment_edit,
   })
-  async commentEdit(data: VkCommentEditDto) {
+  async commentEdit(data: NumberCommentEditedDto) {
     return await this.commentsService.commentEdit(data);
   }
 
   @RabbitmqSubscribeNotificationService({
     exchange: RabbitmqExchangesConstant.mainServiceApi,
     routingKey:
-      MicroservicesEventConstant.notification.comment_moderation_number,
+      MicroservicesEventConstant.notification.number_comment_moderation_number,
   })
-  async moderationCommentNumber(data: VkModerationCommentDto) {
+  async moderationCommentNumber(data: NumberCommentModeratedDto) {
     return await this.commentsService.moderationCommentNumber(data);
   }
 }

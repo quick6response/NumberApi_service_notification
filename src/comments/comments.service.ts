@@ -1,8 +1,15 @@
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { ClientPlatform } from '@numberapi/microservices';
-import { getClientInfoByPlatform } from '@numberapi/microservices/notification';
 import { InjectVkApi } from 'nestjs-vk';
+import { NumberCommentStatus } from 'numberapi/database';
+import { ClientPlatform } from 'numberapi/microservice';
+import {
+  getClientInfoByPlatform,
+  NumberCommentCreatedDto,
+  NumberCommentDeletedDto,
+  NumberCommentEditedDto,
+  NumberCommentModeratedDto,
+} from 'numberapi/microservice/notification';
 import { getRandomId, Keyboard, VK } from 'vk-io';
 
 import { VKChatsEnum } from '../common/config/vk.chats.config';
@@ -11,12 +18,6 @@ import { messageTagVkMiniAppsActionUtils } from '../common/utils/message.platfor
 import { messageTagUtils } from '../common/utils/message.tag.utils';
 import { NumbersService } from '../numbers/numbers.service';
 import { VkService } from '../vk/vk.service';
-import {
-  VkCommentCreateDto,
-  VkCommentDeleteDto,
-  VkCommentEditDto,
-} from './dto/vk.comment.dto';
-import { VkModerationCommentDto } from './dto/vk.moderation.comment.dto';
 
 @Injectable()
 export class CommentsService {
@@ -28,7 +29,7 @@ export class CommentsService {
     private readonly configService: ConfigService,
   ) {}
 
-  async commentCreate(parameters: VkCommentCreateDto) {
+  async commentCreate(parameters: NumberCommentCreatedDto) {
     if (parameters.clientPlatform === ClientPlatform.VK) {
       const { clientInfo } = getClientInfoByPlatform(
         parameters.clientPlatform,
@@ -41,7 +42,7 @@ export class CommentsService {
         disable_mentions: true,
         keyboard: this.getKeyboardModerationComment(
           {
-            number: parameters.comment.number,
+            number: parameters.number.number,
             userId: parameters.user.userId,
           },
           clientInfo.vk_app_id,
@@ -52,7 +53,7 @@ export class CommentsService {
     }
   }
 
-  async commentDelete(parameters: VkCommentDeleteDto) {
+  async commentDelete(parameters: NumberCommentDeletedDto) {
     if (parameters.clientPlatform === ClientPlatform.VK) {
       const { clientInfo } = getClientInfoByPlatform(
         parameters.clientPlatform,
@@ -69,7 +70,7 @@ export class CommentsService {
     }
   }
 
-  async commentEdit(parameters: VkCommentEditDto) {
+  async commentEdit(parameters: NumberCommentEditedDto) {
     if (parameters.clientPlatform === ClientPlatform.VK) {
       const { clientInfo } = getClientInfoByPlatform(
         parameters.clientPlatform,
@@ -79,6 +80,13 @@ export class CommentsService {
         chat_id: VKChatsEnum.LOGS_CHAT_DEV,
         message: await this.getTextCommentEdit(parameters),
         random_id: getRandomId(),
+        keyboard: this.getKeyboardModerationComment(
+          {
+            number: parameters.number.number,
+            userId: parameters.user.userId,
+          },
+          clientInfo.vk_app_id,
+        ),
         disable_mentions: true,
         content_source: this.getContentSource(clientInfo.vk_app_id),
       });
@@ -86,7 +94,7 @@ export class CommentsService {
     }
   }
 
-  async moderationCommentNumber(parameters: VkModerationCommentDto) {
+  async moderationCommentNumber(parameters: NumberCommentModeratedDto) {
     if (parameters.clientPlatform === ClientPlatform.VK) {
       const { clientInfo } = getClientInfoByPlatform(
         parameters.clientPlatform,
@@ -103,7 +111,7 @@ export class CommentsService {
     }
   }
 
-  private async getTextCommentCreate(parameters: VkCommentCreateDto) {
+  private async getTextCommentCreate(parameters: NumberCommentCreatedDto) {
     if (parameters.clientPlatform === ClientPlatform.VK) {
       const { clientInfo } = getClientInfoByPlatform(
         parameters.clientPlatform,
@@ -116,21 +124,21 @@ export class CommentsService {
       return `@id${user.id} (${user.first_name} ${
         user.last_name
       }) оставил комментарий №${
-        parameters.comment.commentId
+        parameters.comment.id
       } на номер ${this.numberService.convertToFormat(
-        parameters.comment.number,
-      )}\nТекст: ${parameters.comment.text} (${
+        parameters.number.number,
+      )}\nТекст: ${parameters.comment.text} (Видимость: ${
         parameters.comment.isAnon ? 'Анонимный' : 'Обычный'
       })
     
 Время: ${dateUtils.getDateFormatNumber(parameters.date)}
 IP: ${clientInfo.ip}
 
-${messageTagVkMiniAppsActionUtils.getTagPlatform()} ${messageTagUtils.getTagComment(parameters.comment.commentId, 'create')} ${messageTagUtils.getTagNumber(parameters.comment.number, parameters.comment.numberId)} ${messageTagVkMiniAppsActionUtils.getTagUserAction(parameters.comment.userId, clientInfo.vk_user_id)}`;
+${messageTagVkMiniAppsActionUtils.getTagPlatform()} ${messageTagUtils.getTagComment(parameters.comment.id, 'create')} ${messageTagUtils.getTagNumber(parameters.number.number, parameters.number.numberId)} ${messageTagVkMiniAppsActionUtils.getTagUserAction(parameters.user.userId, clientInfo.vk_user_id)}`;
     }
   }
 
-  private async getTextCommentDelete(parameters: VkCommentDeleteDto) {
+  private async getTextCommentDelete(parameters: NumberCommentDeletedDto) {
     if (parameters.clientPlatform === ClientPlatform.VK) {
       const { clientInfo } = getClientInfoByPlatform(
         parameters.clientPlatform,
@@ -142,18 +150,16 @@ ${messageTagVkMiniAppsActionUtils.getTagPlatform()} ${messageTagUtils.getTagComm
       );
       return `@id${user.id} (${user.first_name} ${
         user.last_name
-      }) удалил комментарий №${
-        parameters.comment.commentId
-      } на номер ${this.numberService.convertToFormat(parameters.comment.number)}
+      }) удалил свой комментарий на номер ${this.numberService.convertToFormat(parameters.number.number)}
     
 Время: ${dateUtils.getDateFormatNumber(parameters.date)}
 IP: ${clientInfo.ip}
 
-${messageTagVkMiniAppsActionUtils.getTagPlatform()} ${messageTagUtils.getTagComment(parameters.comment.commentId, 'delete')} ${messageTagUtils.getTagNumber(parameters.comment.number, parameters.comment.numberId)} ${messageTagVkMiniAppsActionUtils.getTagUserAction(parameters.comment.userId, clientInfo.vk_user_id)}`;
+${messageTagVkMiniAppsActionUtils.getTagPlatform()} ${messageTagUtils.getTagComment(parameters.comment.id, 'delete')} ${messageTagUtils.getTagNumber(parameters.number.number, parameters.number.numberId)} ${messageTagVkMiniAppsActionUtils.getTagUserAction(parameters.user.userId, clientInfo.vk_user_id)}`;
     }
   }
 
-  private async getTextCommentEdit(parameters: VkCommentEditDto) {
+  private async getTextCommentEdit(parameters: NumberCommentEditedDto) {
     if (parameters.clientPlatform === ClientPlatform.VK) {
       const { clientInfo } = getClientInfoByPlatform(
         parameters.clientPlatform,
@@ -166,21 +172,22 @@ ${messageTagVkMiniAppsActionUtils.getTagPlatform()} ${messageTagUtils.getTagComm
 
       return `@id${user.id} (${user.first_name} ${
         user.last_name
-      }) изменил комментарий №${
-        parameters.nextComment.commentId
-      } на номер ${this.numberService.convertToFormat(parameters.nextComment.number)}\n
-    Изменения: ${checkChangeColumns.join(',')}\n
-    Текст: ${parameters.prevComment.text} -> ${parameters.nextComment.text}\n
-    Анонимность ${parameters.prevComment.isAnon} -> ${parameters.nextComment.isAnon}\n
+      }) отредактировал свой комментарий на номер ${this.numberService.convertToFormat(parameters.number.number)}
+      
+Изменились поля: ${checkChangeColumns.join(', ')}\n
+Текст: ${parameters.previousComment.text} -> ${parameters.updatedComment.text}
+Анонимность ${parameters.previousComment.isAnon} -> ${parameters.updatedComment.isAnon}
     
 Время: ${dateUtils.getDateFormatNumber(parameters.date)}
 IP: ${clientInfo.ip}
 
-${messageTagVkMiniAppsActionUtils.getTagPlatform()} ${messageTagUtils.getTagComment(parameters.nextComment.commentId, 'edit')} ${messageTagUtils.getTagNumber(parameters.nextComment.number, parameters.nextComment.numberId)} ${messageTagVkMiniAppsActionUtils.getTagUserAction(parameters.nextComment.userId, clientInfo.vk_user_id)}`;
+${messageTagVkMiniAppsActionUtils.getTagPlatform()} ${messageTagUtils.getTagComment(parameters.commentId, 'edit')} ${messageTagUtils.getTagNumber(parameters.number.number, parameters.number.numberId)} ${messageTagVkMiniAppsActionUtils.getTagUserAction(parameters.user.userId, clientInfo.vk_user_id)}`;
     }
   }
 
-  private async getTextModerationComment(parameters: VkModerationCommentDto) {
+  private async getTextModerationComment(
+    parameters: NumberCommentModeratedDto,
+  ) {
     if (parameters.clientPlatform === ClientPlatform.VK) {
       const { clientInfo } = getClientInfoByPlatform(
         parameters.clientPlatform,
@@ -193,9 +200,10 @@ ${messageTagVkMiniAppsActionUtils.getTagPlatform()} ${messageTagUtils.getTagComm
         user.last_name
       }) выполнил модерацию комментария с текстом: "${parameters.comment.text}"
     
-Статус изменен с "${parameters.comment.prevStatus}" на "${
-        parameters.comment.status
-      }"\n
+Статус изменен с "${this.getTextCommentStatus(parameters.comment.prevStatus)}" на "${this.getTextCommentStatus(
+        parameters.comment.status,
+      )}"
+      
 Время: ${dateUtils.getDateFormatNumber(parameters.date)}
 IP: ${clientInfo.ip}
 
@@ -205,9 +213,18 @@ ${messageTagVkMiniAppsActionUtils.getTagPlatform()} ${messageTagUtils.getTagComm
     }
   }
 
-  private getContentSource(
-    appId: number = this.configService.get<number>('APP_ID'),
-  ) {
+  getTextCommentStatus(status: NumberCommentStatus) {
+    switch (status) {
+      case NumberCommentStatus.PUBLISHED:
+        return 'опубликован';
+      case NumberCommentStatus.DECLINED:
+        return 'отклонен';
+      case NumberCommentStatus.MODERATION:
+        return 'на модерации';
+    }
+  }
+
+  getContentSource(appId: number = this.configService.get<number>('APP_ID')) {
     return JSON.stringify({
       type: 'url',
       url: `https://vk.com/app${appId}`,
@@ -216,7 +233,7 @@ ${messageTagVkMiniAppsActionUtils.getTagPlatform()} ${messageTagUtils.getTagComm
 
   getKeyboardModerationComment(
     comment: { number: string; userId: number },
-    appId: number = this.configService.get<number>('APP_ID'),
+    appId: number,
   ) {
     const builder = Keyboard.keyboard([
       // Одна кнопка
@@ -240,6 +257,7 @@ ${messageTagVkMiniAppsActionUtils.getTagPlatform()} ${messageTagUtils.getTagComm
         }),
       ],
     ]).inline();
+
     return builder;
   }
 }

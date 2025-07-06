@@ -1,4 +1,4 @@
-import { StatusFindNumber } from '@numberapi/microservices/notification';
+import { StatusFindNumber } from 'numberapi/microservice/notification';
 
 export class MessageTagUtils {
   getTagNumberFind(status: StatusFindNumber) {
