@@ -22,7 +22,7 @@ export class CommentsNotificationRabbitmq {
     routingKey: MicroservicesEventConstant.notification.number_comment_create,
   })
   public async commentCreate(data: NumberCommentCreatedDto) {
-    return await this.commentsService.commentCreate(data);
+    await this.commentsService.commentCreate(data);
   }
 
   @RabbitmqSubscribeNotificationService({
@@ -30,7 +30,7 @@ export class CommentsNotificationRabbitmq {
     routingKey: MicroservicesEventConstant.notification.number_comment_delete,
   })
   async commentDelete(data: NumberCommentDeletedDto) {
-    return await this.commentsService.commentDelete(data);
+    await this.commentsService.commentDelete(data);
   }
 
   @RabbitmqSubscribeNotificationService({
@@ -38,15 +38,15 @@ export class CommentsNotificationRabbitmq {
     routingKey: MicroservicesEventConstant.notification.number_comment_edit,
   })
   async commentEdit(data: NumberCommentEditedDto) {
-    return await this.commentsService.commentEdit(data);
+    await this.commentsService.commentEdit(data);
   }
 
   @RabbitmqSubscribeNotificationService({
     exchange: RabbitmqExchangesConstant.mainServiceApi,
     routingKey:
-      MicroservicesEventConstant.notification.number_comment_moderation_number,
+      MicroservicesEventConstant.notification.number_comment_moderation,
   })
   async moderationCommentNumber(data: NumberCommentModeratedDto) {
-    return await this.commentsService.moderationCommentNumber(data);
+    await this.commentsService.moderationCommentNumber(data);
   }
 }
