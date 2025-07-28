@@ -168,13 +168,12 @@ ${messageTagVkMiniAppsActionUtils.getTagPlatform()} ${messageTagUtils.getTagComm
       const user = await this.vkHelpService.getInfoUserVk(
         clientInfo.vk_user_id,
       );
-      const checkChangeColumns = parameters.changes;
 
       return `@id${user.id} (${user.first_name} ${
         user.last_name
       }) отредактировал свой комментарий на номер ${this.numberService.convertToFormat(parameters.number.number)}
       
-Изменились поля: ${checkChangeColumns.join(', ')}\n
+Изменились поля: ${parameters.changes.join(', ')}\n
 Текст: ${parameters.previousComment.text} -> ${parameters.updatedComment.text}
 Анонимность ${parameters.previousComment.isAnon} -> ${parameters.updatedComment.isAnon}
     
