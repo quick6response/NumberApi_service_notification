@@ -2,14 +2,14 @@ import { Injectable } from '@nestjs/common';
 import {
   MicroservicesEventConstant,
   RabbitmqExchangesConstant,
-} from 'numberapi/microservice';
+} from 'numberapi-common/microservice';
 import {
   NumberScheduleCreatedErrorDto,
   NumberScheduleCreatedSuccessDto,
   NumberScheduleUpdatedErrorDto,
   NumberScheduleUpdatedSuccessDto,
   NumberScheduleUpdatedSummaryDto,
-} from 'numberapi/microservice/notification';
+} from 'numberapi-common/microservice/notification';
 
 import { NumberFindDto, NumberFindErrorDto } from './dto/number.find.dto';
 import { NumbersService } from './numbers.service';

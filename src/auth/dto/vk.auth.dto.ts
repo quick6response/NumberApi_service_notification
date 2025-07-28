@@ -1,7 +1,7 @@
 import {
   AuthLoginDto,
   AuthRegistrationDto,
-} from 'numberapi/microservice/notification';
+} from 'numberapi-common/microservice/notification';
 
 import { ParameterStartDateDto } from '../../common/rabbitmq/types/parameter.start.date.dto';
 

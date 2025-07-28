@@ -2,13 +2,13 @@ import { Injectable } from '@nestjs/common';
 import {
   MicroservicesEventConstant,
   RabbitmqExchangesConstant,
-} from 'numberapi/microservice';
+} from 'numberapi-common/microservice';
 import {
   NumberCommentCreatedDto,
   NumberCommentDeletedDto,
   NumberCommentEditedDto,
   NumberCommentModeratedDto,
-} from 'numberapi/microservice/notification';
+} from 'numberapi-common/microservice/notification';
 
 import { CommentsService } from './comments.service';
 import { RabbitmqSubscribeNotificationService } from '../common/rabbitmq/decorators/rabbitmqSubscribeNotificationService';

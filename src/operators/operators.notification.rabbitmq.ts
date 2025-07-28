@@ -2,11 +2,11 @@ import { Injectable } from '@nestjs/common';
 import {
   MicroservicesEventConstant,
   RabbitmqExchangesConstant,
-} from 'numberapi/microservice';
+} from 'numberapi-common/microservice';
 import {
   OperatorCreateDtoInterface,
   OperatorBindIntegrationDtoInterface,
-} from 'numberapi/microservice/notification';
+} from 'numberapi-common/microservice/notification';
 
 import { OperatorsService } from './operators.service';
 import { RabbitmqSubscribeNotificationService } from '../common/rabbitmq/decorators/rabbitmqSubscribeNotificationService';

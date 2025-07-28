@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import {
   MicroservicesEventConstant,
   RabbitmqExchangesConstant,
-} from 'numberapi/microservice';
+} from 'numberapi-common/microservice';
 
 import { AuthService } from './auth.service';
 import { VkAuthLoginDto, VkAuthRegistrationDto } from './dto/vk.auth.dto';

@@ -1,11 +1,11 @@
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { InjectVkApi } from 'nestjs-vk';
-import { ClientPlatform } from 'numberapi/microservice';
+import { ClientPlatform } from 'numberapi-common/microservice';
 import {
   getClientInfoByPlatform,
   ParameterRequestVkUserEventInterface,
-} from 'numberapi/microservice/notification';
+} from 'numberapi-common/microservice/notification';
 import { getRandomId, Keyboard, VK } from 'vk-io';
 
 import { VKChatsEnum } from '../common/config/vk.chats.config';

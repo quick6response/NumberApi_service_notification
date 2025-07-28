@@ -3,11 +3,11 @@ import { Injectable, Logger } from '@nestjs/common';
 import {
   getRoutingKeyName,
   RabbitmqExchangesConstant,
-} from 'numberapi/microservice';
+} from 'numberapi-common/microservice';
 import {
   RabbitmqServiceApiEventsKeys,
   RabbitmqServiceApiEventsDtoData,
-} from 'numberapi/microservice/api';
+} from 'numberapi-common/microservice/api';
 
 @Injectable()
 export class RabbitmqVkPaymentService {

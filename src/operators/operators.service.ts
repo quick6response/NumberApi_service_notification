@@ -3,7 +3,7 @@ import { InjectVkApi } from 'nestjs-vk';
 import {
   OperatorCreateDtoInterface,
   OperatorBindIntegrationDtoInterface,
-} from 'numberapi/microservice/notification';
+} from 'numberapi-common/microservice/notification';
 import { getRandomId, VK } from 'vk-io';
 
 import { VKChatsEnum } from '../common/config/vk.chats.config';

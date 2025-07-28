@@ -2,8 +2,8 @@ import {
   ParameterClientInfoActionEventAllPlatformInterface,
   ParameterRequestTelegramUserEventInterface,
   ParameterRequestVkUserEventInterface,
-} from 'numberapi/microservice/notification';
-import { ClientPlatform, User } from 'numberapi/microservice/share';
+} from 'numberapi-common/microservice/notification';
+import { ClientPlatform, User } from 'numberapi-common/microservice/share';
 
 type ParameterRequestUserVkontakteEventType =
   ParameterRequestVkUserEventInterface['clientInfo'];

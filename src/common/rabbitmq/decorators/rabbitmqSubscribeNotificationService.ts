@@ -3,7 +3,10 @@ import {
   RabbitHandlerConfig,
   RabbitSubscribe,
 } from '@golevelup/nestjs-rabbitmq';
-import { getQueueName, RabbitmqQueueConstant } from 'numberapi/microservice';
+import {
+  getQueueName,
+  RabbitmqQueueConstant,
+} from 'numberapi-common/microservice';
 
 export function RabbitmqSubscribeNotificationService({
   exchange,

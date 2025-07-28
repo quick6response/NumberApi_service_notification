@@ -1,15 +1,15 @@
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { InjectVkApi } from 'nestjs-vk';
-import { NumberCommentStatus } from 'numberapi/database';
-import { ClientPlatform } from 'numberapi/microservice';
+import { NumberCommentStatus } from 'numberapi-common/database';
+import { ClientPlatform } from 'numberapi-common/microservice';
 import {
   getClientInfoByPlatform,
   NumberCommentCreatedDto,
   NumberCommentDeletedDto,
   NumberCommentEditedDto,
   NumberCommentModeratedDto,
-} from 'numberapi/microservice/notification';
+} from 'numberapi-common/microservice/notification';
 import { getRandomId, Keyboard, VK } from 'vk-io';
 
 import { VKChatsEnum } from '../common/config/vk.chats.config';

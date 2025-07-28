@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectVkApi } from 'nestjs-vk';
-import { ClientPlatform } from 'numberapi/microservice';
+import { ClientPlatform } from 'numberapi-common/microservice';
 import {
   NumberScheduleCreatedErrorDto,
   NumberScheduleCreatedSuccessDto,
@@ -9,7 +9,7 @@ import {
   NumberScheduleUpdatedSuccessDto,
   NumberScheduleUpdatedSummaryDto,
   StatusFindNumber,
-} from 'numberapi/microservice/notification';
+} from 'numberapi-common/microservice/notification';
 import { getRandomId, VK } from 'vk-io';
 
 import { VKChatsEnum } from '../common/config/vk.chats.config';

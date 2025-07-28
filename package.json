@@ -36,7 +36,7 @@
     "middleware-io": "^2.8.1",
     "nestjs-pino": "^4.4.0",
     "nestjs-vk": "github:quick6response/nestjs-vk#73872def",
-    "numberapi": "github:quick6response/number_api_event#607c8a6e",
+    "numberapi-common": "github:quick6response/numberapi-common#ceeb341",
     "pino-pretty": "^13.0.0",
     "pino-sentry": "^0.15.0",
     "redis": "^4.7.0",
