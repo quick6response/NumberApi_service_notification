@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import {
   MicroservicesEventConstant,
   RabbitmqExchangesConstant,
-} from '@numberapi/microservices';
+} from 'numberapi-common/microservice';
 
 import { UserCreateDto, UserEditDto } from './dto/users.dto';
 import { UsersService } from './users.service';
