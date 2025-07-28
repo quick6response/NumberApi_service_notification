@@ -40,13 +40,10 @@ export class CommentsService {
         message: await this.getTextCommentCreate(parameters),
         random_id: getRandomId(),
         disable_mentions: true,
-        keyboard: this.getKeyboardModerationComment(
-          {
-            number: parameters.number.number,
-            userId: parameters.user.userId,
-          },
-          clientInfo.vk_app_id,
-        ),
+        keyboard: this.getKeyboardModerationComment(clientInfo.vk_app_id, {
+          number: parameters.number.number,
+          userId: parameters.user.userId,
+        }),
         content_source: this.getContentSource(clientInfo.vk_app_id),
       });
       return { result: true };
@@ -80,13 +77,10 @@ export class CommentsService {
         chat_id: VKChatsEnum.LOGS_CHAT_DEV,
         message: await this.getTextCommentEdit(parameters),
         random_id: getRandomId(),
-        keyboard: this.getKeyboardModerationComment(
-          {
-            number: parameters.number.number,
-            userId: parameters.user.userId,
-          },
-          clientInfo.vk_app_id,
-        ),
+        keyboard: this.getKeyboardModerationComment(clientInfo.vk_app_id, {
+          number: parameters.number.number,
+          userId: parameters.user.userId,
+        }),
         disable_mentions: true,
         content_source: this.getContentSource(clientInfo.vk_app_id),
       });
@@ -231,14 +225,14 @@ ${messageTagVkMiniAppsActionUtils.getTagPlatform()} ${messageTagUtils.getTagComm
   }
 
   getKeyboardModerationComment(
-    comment: { number: string; userId: number },
     appId: number,
+    comment: { number: string; userId: number },
   ) {
     const builder = Keyboard.keyboard([
       // Одна кнопка
       [
         Keyboard.applicationButton({
-          label: 'Модерация комментария',
+          label: 'Модерация комментариев',
           hash: 'admin/moderation',
           appId: appId,
         }),
