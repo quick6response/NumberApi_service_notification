@@ -1,12 +1,12 @@
 import { Injectable, Logger } from '@nestjs/common';
+import { InjectVkApi } from 'nestjs-vk';
 import {
   NumberOrganizationPinDto,
   OrganizationCreateDtoInterface,
   OrganizationCreateErrorDtoInterface,
   OrganizationUpdateDtoInterface,
   OrganizationUpdateErrorDtoInterface,
-} from '@numberapi/microservices/notification';
-import { InjectVkApi } from 'nestjs-vk';
+} from 'numberapi-common/microservice/notification';
 import { getRandomId, VK } from 'vk-io';
 
 import { VKChatsEnum } from '../common/config/vk.chats.config';
@@ -21,12 +21,13 @@ export class OrganizationService {
   async notificationOrganizationCreate(dto: OrganizationCreateDtoInterface) {
     try {
       const formattedMessage = `
-Создана новая организация:
+Создана новая организация: ID: ${dto.organization.id}
 
-ID: ${dto.organization.id}
-Название: ${dto.organization.name}
+Наименование: ${dto.organization.name}
 Описание: ${dto.organization.description}
-Фото: ${dto.organization.photo.link} (ID: ${dto.organization.photo.id})
+Фото: ${dto.organization.photo}
+Сайт: ${dto.organization.site}
+Тип: ${dto.organization.type ? dto.organization.type.name : 'Не указан'}
 
 Время: ${dateUtils.getDateFormatNumber(dto.date)}
 
@@ -56,9 +57,13 @@ ${messageTagUtils.getTagOrganizationCreate(dto.organization.id)}
       const formattedMessage = `
 Обновлена организация id: ${dto.prevValue.id}
 
-Название: ${dto.prevValue.name} → ${dto.nextValue.name}
-Фото: ${dto.prevValue.photo.link} (ID: ${dto.prevValue.photo.id}) -> ${dto.nextValue.photo.link} (ID: ${dto.nextValue.photo.id})
+Наименование: ${dto.prevValue.name} → ${dto.nextValue.name}
+Описание: ${dto.prevValue.description} → ${dto.nextValue.description}
+Фото: ${dto.prevValue.photo} -> ${dto.nextValue.photo}
 Сайт: ${dto.prevValue.site} → ${dto.nextValue.site}
+Тип: ${dto.prevValue.type ? dto.prevValue.type.name : 'Не указан'} -> ${
+        dto.nextValue.type ? dto.nextValue.type.name : 'Не указан'
+      }
 
 Время: ${dateUtils.getDateFormatNumber(dto.date)}
 

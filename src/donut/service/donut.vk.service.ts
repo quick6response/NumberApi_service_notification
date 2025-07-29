@@ -1,8 +1,8 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { MicroservicesEventConstant } from '@numberapi/microservices';
-import { RabbitmqServiceApiEventsDtoData } from '@numberapi/microservices/api';
 import { InjectVkApi } from 'nestjs-vk';
+import { MicroservicesEventConstant } from 'numberapi-common/microservice';
+import { RabbitmqServiceApiEventsDtoData } from 'numberapi-common/microservice/api';
 import {
   DonutSubscriptionContext,
   DonutWithdrawContext,

@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import {
   MicroservicesEventConstant,
   RabbitmqExchangesConstant,
-} from '@numberapi/microservices';
+} from 'numberapi-common/microservice';
 
 import { ServerStartDto } from './dto/server.start.dto';
 import { ServerStopDto } from './dto/server.stop.dto';

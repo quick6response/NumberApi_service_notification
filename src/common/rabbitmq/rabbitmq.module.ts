@@ -1,7 +1,7 @@
 import { RabbitMQModule } from '@golevelup/nestjs-rabbitmq';
 import { Logger, Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import { RabbitmqExchangesConstant } from '@numberapi/microservices';
+import { RabbitmqExchangesConstant } from 'numberapi-common/microservice';
 
 class LoggerCustom extends Logger {
   constructor() {
